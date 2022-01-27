@@ -1,0 +1,27 @@
+version: '3.9'
+
+volumes:
+  db:
+
+services: 
+  postgres:
+    image: 'postgres:13.4-alpine'
+    environment: 
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_USER=worlder
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=worlder_dev
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - '3001:5432'
+
+  pgweb:
+    image: 'sosedoff/pgweb'
+    depends_on: 
+      - 'postgres'
+    environment: 
+      - DATABASE_URL=postgres://worlder:password@postgres:5432/worlder_dev?sslmode=disable
+    ports:
+      - '3002:8081'
+    restart: 'on-failure'

@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn db:generate && next build && yarn db:migrate",
     "db": "yarn prisma",
     "db:generate": "yarn prisma generate",
     "db:migrate": "yarn prisma migrate dev",

@@ -2,7 +2,7 @@
   "name": "wordler",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "yarn db:generate && next dev",
     "build": "yarn db:generate && next build && yarn db:migrate",
     "db": "yarn prisma",
     "db:generate": "yarn prisma generate",

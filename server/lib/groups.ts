@@ -1,11 +1,20 @@
 import cryptoRandomString from 'crypto-random-string'
 import { Group, GroupRole, User } from '@prisma/client'
 import db from '@server/services/db'
+import slugify from 'slugify'
 
 export function createGroup(user: User, name: string) {
+  const slug = slugify(name, {
+    lower: true,
+    replacement: '_',
+    strict: true,
+    trim: true,
+  })
+
   return db.group.create({
     data: {
       name,
+      slug,
       inviteCodes: {
         create: [
           {

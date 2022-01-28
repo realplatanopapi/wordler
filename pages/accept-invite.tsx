@@ -2,6 +2,7 @@ import { cookieConfig } from '@server/lib/auth'
 import { getGroupByInviteCode } from '@server/lib/groups'
 import { withIronSessionSsr } from 'iron-session/next'
 import { NextPage } from 'next'
+import { Flex, Heading, Link, Text } from 'theme-ui'
 
 interface Props {
   group: {
@@ -35,12 +36,20 @@ export const getServerSideProps = withIronSessionSsr<Props>(
 
 const AcceptInvitePage: NextPage<Props> = ({ group, inviteCode }) => {
   return (
-    <div>
-      <h1>You&apos;ve been invited to join {group.name}</h1>
-      <a href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}>
-        sign in with twitter to join the group
-      </a>
-    </div>
+    <Flex sx={{
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh',
+      textAlign: 'center',
+    }}>
+      <div>
+        <Text>You&apos;ve been invited to join a group</Text>
+        <Heading as="h1" mb={3}>{group.name}</Heading>
+        <Link href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}>
+          sign in with twitter to join
+        </Link>
+      </div>
+    </Flex>
   )
 }
 

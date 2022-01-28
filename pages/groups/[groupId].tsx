@@ -30,7 +30,7 @@ export const getServerSideProps = withIronSessionSsr<Props>(
 
     return {
       props: {
-        appUrl: process.env.APP_URL,
+        appUrl: process.env.APP_URL as string,
         group: {
           id: group.id,
           name: group.name,

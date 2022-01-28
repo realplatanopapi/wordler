@@ -132,14 +132,8 @@ export function getResultsForUsersConnections(user: User) {
         {
           user: {
             groupMemberships: {
-              every: {
-                group: {
-                  memberships: {
-                    every: {
-                      userId: user.id
-                    }
-                  }
-                }
+              some: {
+                userId: user.id
               }
             }
           }

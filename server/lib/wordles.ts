@@ -39,6 +39,10 @@ export async function addResultsForUser(user: User, resultsString: string): Prom
           }
         })
       }
+    },
+    include: {
+      attempts: true,
+      wordle: true
     }
   })
 }
@@ -76,7 +80,8 @@ export function getResultsForUser(user: User) {
       userId: user.id
     },
     include: {
-      attempts: true
+      attempts: true,
+      wordle: true
     }
   })
 }

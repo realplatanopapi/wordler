@@ -42,6 +42,9 @@ model WordleResult {
   userId String
 
   attempts WordleAttempt[]
+
+  // Ensure user's can't have more than one Wordle Result for a single Wordle. 
+  @@unique([userId, wordleId])
 }
 
 enum WordleGuessResult {

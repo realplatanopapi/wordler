@@ -16,6 +16,7 @@ model User {
   twitterId String? @unique
   displayName String
 
+  groupMemberships GroupMembership[]
   results WordleResult[]
 }
 
@@ -62,4 +63,36 @@ model WordleAttempt {
   wordleResultId String
 
   guesses WordleGuessResult[]
+}
+
+model Group {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships GroupMembership[]
+
+  name String
+}
+
+enum GroupRole {
+  ADMIN
+  MEMBER
+}
+
+model GroupMembership {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  group Group @relation(fields: [groupId], references: [id])
+  groupId String
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  role GroupRole
+
+  // Ensure users can only join one Group at a time
+  @@unique([userId, groupId])
 }

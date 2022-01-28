@@ -69,3 +69,14 @@ function parseResultsFromString(resultsString: string): ResultData {
     attempts: parsedAttempts
   }
 }
+
+export function getResultsForUser(user: User) {
+  return db.wordleResult.findMany({
+    where: {
+      userId: user.id
+    },
+    include: {
+      attempts: true
+    }
+  })
+}

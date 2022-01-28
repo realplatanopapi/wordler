@@ -6,7 +6,7 @@ import { NextApiHandler } from 'next';
 import { cookieConfig } from "../../server/lib/auth";
 
 const handler: NextApiHandler = async (req, res) => {
-  const user = await getById(req.session.userId)
+  const user = await getById(req.session.userId as string)
 
   const result = await addResultsForUser(user as User, req.body.results)
 

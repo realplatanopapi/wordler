@@ -1,6 +1,6 @@
 import { WordleGuessResult } from '@prisma/client'
 import { formatRelative } from 'date-fns'
-import {Text} from 'theme-ui'
+import {Box, Text} from 'theme-ui'
 
 interface Props {
   result: {
@@ -19,9 +19,15 @@ const WordleResult: React.FC<Props> = ({ result }) => {
   const submittedAtFormatted = formatRelative(submittedAt, new Date())
 
   return (
-    <div>
+    <Box sx={{
+      p: 4,
+      borderColor: 'muted',
+      borderRadius: 4,
+      borderStyle: 'solid',
+      borderWidth: 1,
+    }}>
       <Text as="p">{result.user.displayName}</Text>
-      <Text as="p" sx={{
+      <Text as="p" mb={3} sx={{
         fontSize: 1
       }}>submitted <time>{submittedAtFormatted}</time></Text>
       {result.attempts.map((attempt, index) => {
@@ -39,7 +45,7 @@ const WordleResult: React.FC<Props> = ({ result }) => {
           </div>
         )
       })}
-    </div>
+    </Box>
   )
 }
 

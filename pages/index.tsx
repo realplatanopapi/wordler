@@ -88,7 +88,7 @@ const Home: NextPage<HomePageProps> = ({
   if (user) {
     return (
       <>
-        <Box mb={4}>
+        <Box mb={3}>
           <Heading as="h1">Wordler</Heading>
           <Text as="p">
             Signed in as <strong>@{user.displayName}</strong>.
@@ -98,7 +98,44 @@ const Home: NextPage<HomePageProps> = ({
             <Link href="/api/auth/logout">Sign out</Link>
           </Text>
         </Box>
-        <Box mb={4}>
+        <Box mb={5}>
+          <Heading mb={2} as="h2">activity</Heading>
+          {wordleResults.map((result: any) => {
+            return (
+              <Box key={result.id} mb={3}>
+                <WordleResult result={result} />
+              </Box>
+            )
+          })}
+        </Box>
+        <Box mb={5}>
+          <Heading as="h2">post your results</Heading>
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault()
+              const form = event.target as HTMLFormElement
+              const data = new FormData(form)
+              const result = await axios.post('/api/results', {
+                results: data.get('results'),
+              })
+              setWordleResults([result.data.data].concat(wordleResults))
+              form.reset()
+            }}
+          >
+            <textarea
+              name="results"
+              placeholder="Paste results from Wordle here"
+              required
+              style={{
+                height: 100,
+                width: 300,
+              }}
+            ></textarea>
+            <br />
+            <button type="submit">Post</button>
+          </form>
+        </Box>
+        <Box mb={5}>
           <Heading as="h2">groups</Heading>
           {groups.length ? (
             groups.map((group) => {
@@ -129,35 +166,6 @@ const Home: NextPage<HomePageProps> = ({
             </label>
             <button type="submit">start</button>
           </form>
-        </Box>
-        <Box mb={4}>
-          <Heading as="h2">your results</Heading>
-          <form
-            onSubmit={async (event) => {
-              event.preventDefault()
-              const form = event.target as HTMLFormElement
-              const data = new FormData(form)
-              const result = await axios.post('/api/results', {
-                results: data.get('results'),
-              })
-              setWordleResults([result.data.data].concat(wordleResults))
-              form.reset()
-            }}
-          >
-            <textarea
-              name="results"
-              placeholder="Paste results from Wordle here"
-              required
-              style={{
-                height: 369,
-                width: 420,
-              }}
-            ></textarea>
-            <button type="submit">Save</button>
-          </form>
-          {wordleResults.map((result: any) => {
-            return <WordleResult key={result.id} result={result} />
-          })}
         </Box>
       </>
     )

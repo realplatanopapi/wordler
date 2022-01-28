@@ -51,6 +51,7 @@ export const getServerSideProps = withIronSessionSsr<Props>(
               id: result.user.id,
               displayName: result.user.displayName,
             },
+            createdAt: result.createdAt.toISOString()
           }
         }),
       },

@@ -21,6 +21,7 @@
     "axios": "^0.25.0",
     "convict": "^6.2.1",
     "crypto-random-string": "^4.0.0",
+    "date-fns": "^2.28.0",
     "formik": "^2.2.9",
     "iron-session": "^6.0.5",
     "lodash": "^4.17.21",

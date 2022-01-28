@@ -61,6 +61,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
                 guesses: attempt.guesses,
               }
             }),
+            createdAt: result.createdAt.toISOString()
           }
         }),
         groups: groups.map((group) => {

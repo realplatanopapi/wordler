@@ -40,9 +40,10 @@ const handler: NextApiHandler = async (req, res) => {
       displayName: username
     })
 
-    res.json({
-      user
-    })
+    req.session.userId = user.id
+    await req.session.save()
+
+    res.redirect(process.env.APP_URL as string)
   }
 }
 

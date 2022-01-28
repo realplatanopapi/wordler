@@ -4,9 +4,11 @@ import {withIronSessionApiRoute} from 'iron-session/next'
 import { getOrCreateUserFromTwitter } from "../../../../server/lib/accounts";
 import { cookieConfig } from "../../../../server/lib/auth";
 import { joinGroup } from "@server/lib/groups";
+import config from "@server/config";
 
-const clientId = process.env.TWITTER_OAUTH_CLIENT_ID
-const clientSecret = process.env.TWITTER_OAUTH_CLIENT_SECRET
+const twitterConfig = config.get("twitter")
+const clientId = twitterConfig.oauthClientId
+const clientSecret = twitterConfig.oauthClientSecret
 
 const twitter = axios.create({
   baseURL: 'https://api.twitter.com/2',
@@ -24,9 +26,9 @@ const handler: NextApiHandler = async (req, res) => {
   const params = new URLSearchParams();
   params.append('code', code as string);
   params.append('grant_type', 'authorization_code');
-  params.append('client_id', process.env.TWITTER_OAUTH_CLIENT_ID as string);
+  params.append('client_id', config.get('twitter.oauthClientId'));
   params.append('code_verifier', 'fake_challenge');
-  params.append('redirect_uri', `${process.env.APP_URL}/api/auth/twitter/callback`);
+  params.append('redirect_uri', `${config.get('appUrl')}/api/auth/twitter/callback`);
 
   const createTokenResponse = await twitter.post('oauth2/token', params)
   if (createTokenResponse.status != 200) {
@@ -51,7 +53,7 @@ const handler: NextApiHandler = async (req, res) => {
     req.session.userId = user.id
     await req.session.save()
 
-    res.redirect(process.env.APP_URL as string)
+    res.redirect(config.get('appUrl'))
   }
 }
 

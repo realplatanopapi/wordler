@@ -1,9 +1,9 @@
-console.log(process.env)
+import config from "@server/config";
 
 export const cookieConfig = {
   cookieName: "wordler_auth",
-  password: process.env.COOKIE_SECRET_AUTH as string,
+  password: config.get("cookieSecret.auth"),
   cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
+    secure: config.get('env') == "production"
   },
 }

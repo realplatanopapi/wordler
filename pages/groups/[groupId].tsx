@@ -4,6 +4,7 @@ import { getGroupById, getGroupInviteCode } from "@server/lib/groups"
 import { getResultsForGroup } from "@server/lib/wordles"
 import { withIronSessionSsr } from "iron-session/next"
 import { NextPage } from "next"
+import config from "@server/config"
 
 interface Props {
   group: {
@@ -30,7 +31,7 @@ export const getServerSideProps = withIronSessionSsr<Props>(
 
     return {
       props: {
-        appUrl: process.env.APP_URL as string,
+        appUrl: config.get("appUrl"),
         group: {
           id: group.id,
           name: group.name,

@@ -94,6 +94,14 @@ export function getResultsForUser(user: User) {
 
 export function getResultsForGroup(group: Group) {
   return db.wordleResult.findMany({
+    include: {
+      attempts: true,
+      wordle: true,
+      user: true,
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
     where: {
       user: {
         groupMemberships: {
@@ -102,11 +110,6 @@ export function getResultsForGroup(group: Group) {
           },
         },
       },
-    },
-    include: {
-      attempts: true,
-      wordle: true,
-      user: true,
     },
   })
 }
@@ -117,6 +120,9 @@ export function getResultsForUsersConnections(user: User) {
       attempts: true,
       wordle: true,
       user: true,
+    },
+    orderBy: {
+      createdAt: 'desc'
     },
     where: {
       user: {

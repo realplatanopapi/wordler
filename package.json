@@ -3,12 +3,13 @@
   "private": true,
   "scripts": {
     "dev": "yarn db:generate && next dev",
-    "build": "yarn db:generate && next build && yarn db:migrate",
+    "build": "next build",
     "db": "yarn prisma",
     "db:generate": "yarn prisma generate",
     "db:migrate": "yarn prisma migrate dev",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "prisma generate && next build && prisma migrate"
   },
   "dependencies": {
     "@prisma/client": "^3.8.1",

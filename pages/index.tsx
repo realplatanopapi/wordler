@@ -1,5 +1,6 @@
 import { User } from '@prisma/client';
 import { getResultsForUser } from '@server/lib/wordles';
+import axios from 'axios';
 import { withIronSessionSsr } from 'iron-session/next';
 import type { NextPage } from 'next'
 import { getById } from '../server/lib/accounts';
@@ -57,6 +58,16 @@ const Home: NextPage = ({
         <p>Signed in as {user.displayName}</p>
         { /* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/api/auth/logout">Sign out</a>
+        <form onSubmit={(event) => {
+          event.preventDefault()
+          const data = new FormData(event.target as HTMLFormElement)
+          axios.post('/api/results', {
+            results: data.get('results')
+          })
+        }}>
+          <textarea name="results"></textarea>
+          <button type="submit">Save</button>
+        </form>
         {
           JSON.stringify(wordleResults)
         }

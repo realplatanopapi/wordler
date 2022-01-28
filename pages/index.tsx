@@ -1,3 +1,4 @@
+import WordleResult from '@client/components/WordleResult';
 import { User } from '@prisma/client';
 import { getResultsForUser } from '@server/lib/wordles';
 import axios from 'axios';
@@ -33,6 +34,7 @@ export const getServerSideProps = withIronSessionSsr(
         },
         wordleResults: (await getResultsForUser(user)).map(result => {
           return {
+            id: result.id,
             attempts: result.attempts.map(attempt => {
               return {
                 guesses: attempt.guesses
@@ -50,7 +52,8 @@ const Home: NextPage = ({
   user,
   wordleResults,
 }: {
-  user: Pick<User, 'displayName'>
+  user: Pick<User, 'displayName'>,
+  wordleResults: any
 }) => {
   if (user) {
     return (
@@ -69,7 +72,12 @@ const Home: NextPage = ({
           <button type="submit">Save</button>
         </form>
         {
-          JSON.stringify(wordleResults)
+          wordleResults.map((result: any) => {
+            console.log({
+              result
+            })
+            return <WordleResult key={result.id} result={result} />
+          })
         }
       </div>
     )

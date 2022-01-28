@@ -3,6 +3,7 @@ import { getResultsForUser } from "@server/lib/wordles";
 import axios from "axios";
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { getById } from "../server/lib/accounts";
 import { cookieConfig } from "../server/lib/auth";
@@ -57,6 +58,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
 
 const Home: NextPage<HomePageProps> = ({ user, wordleResults: initialWordleResults }) => {
   const [wordleResults, setWordleResults] = useState(initialWordleResults)
+  const router = useRouter()
 
   if (user) {
     return (
@@ -64,6 +66,25 @@ const Home: NextPage<HomePageProps> = ({ user, wordleResults: initialWordleResul
         <p>Signed in as {user.displayName}</p>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/api/auth/logout">Sign out</a>
+        <h2>groups</h2>
+        <form
+          onSubmit={async (event) => {
+            event.preventDefault();
+            const form = event.target as HTMLFormElement
+            const data = new FormData(form)
+            const result = await axios.post("/api/groups", {
+              name: data.get("name"),
+            });
+            router.push(`/groups/${result.data.data.id}`)
+          }}
+        >
+          <label>
+            <span>start a group</span><br />
+            <input name="name" placeholder="name your group" required />
+          </label>
+          <button type="submit">start</button>
+        </form>
+        <h2>your results</h2>
         <form
           onSubmit={async (event) => {
             event.preventDefault();

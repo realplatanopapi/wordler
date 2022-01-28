@@ -71,10 +71,7 @@ const GroupPage: NextPage<Props> = ({ appUrl, group, results }) => {
       </p>
       {results.map((result: any) => {
         return (
-          <div key={result.id}>
-            <p>{result.user.displayName}</p>
-            <WordleResult result={result} />
-          </div>
+          <WordleResult key={result.id} result={result} />
         )
       })}
     </div>

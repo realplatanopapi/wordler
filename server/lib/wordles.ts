@@ -110,3 +110,28 @@ export function getResultsForGroup(group: Group) {
     },
   })
 }
+
+export function getResultsForUsersConnections(user: User) {
+  return db.wordleResult.findMany({
+    include: {
+      attempts: true,
+      wordle: true,
+      user: true,
+    },
+    where: {
+      user: {
+        groupMemberships: {
+          every: {
+            group: {
+              memberships: {
+                some: {
+                  userId: user.id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+}

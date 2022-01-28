@@ -1,5 +1,6 @@
 import { NextApiHandler } from "next";
 import axios from 'axios'
+import { getOrCreateUserFromTwitter } from "../../../../server/lib/accounts";
 
 const clientId = process.env.TWITTER_OAUTH_CLIENT_ID
 const clientSecret = process.env.TWITTER_OAUTH_CLIENT_SECRET
@@ -34,11 +35,13 @@ const handler: NextApiHandler = async (req, res) => {
         'Authorization': `Bearer ${access_token}`
       }
     })
-    const {id, username} = userResponse.data
+    const {id, username} = userResponse.data.data
+    const user = await getOrCreateUserFromTwitter(id, {
+      displayName: username
+    })
 
     res.json({
-      id,
-      username
+      user
     })
   }
 }

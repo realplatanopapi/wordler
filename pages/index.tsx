@@ -3,6 +3,7 @@ import { getResultsForUser } from "@server/lib/wordles";
 import axios from "axios";
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
+import { useState } from "react";
 import { getById } from "../server/lib/accounts";
 import { cookieConfig } from "../server/lib/auth";
 interface HomePageProps {
@@ -54,7 +55,9 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
   cookieConfig
 );
 
-const Home: NextPage<HomePageProps> = ({ user, wordleResults }) => {
+const Home: NextPage<HomePageProps> = ({ user, wordleResults: initialWordleResults }) => {
+  const [wordleResults, setWordleResults] = useState(initialWordleResults)
+
   if (user) {
     return (
       <div>
@@ -62,21 +65,21 @@ const Home: NextPage<HomePageProps> = ({ user, wordleResults }) => {
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/api/auth/logout">Sign out</a>
         <form
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault();
-            const data = new FormData(event.target as HTMLFormElement);
-            axios.post("/api/results", {
+            const form = event.target as HTMLFormElement
+            const data = new FormData(form)
+            const result = await axios.post("/api/results", {
               results: data.get("results"),
             });
+            setWordleResults([result.data.data].concat(wordleResults))
+            form.reset()
           }}
         >
           <textarea name="results"></textarea>
           <button type="submit">Save</button>
         </form>
         {wordleResults.map((result: any) => {
-          console.log({
-            result,
-          });
           return <WordleResult key={result.id} result={result} />;
         })}
       </div>

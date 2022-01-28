@@ -24,7 +24,7 @@ interface ResultData {
   attempts: WordleGuessResult[][]
 }
 
-export async function addResultsForUser(user: User, resultsString: string): Promise<WordleResult> {
+export async function addResultsForUser(user: User, resultsString: string) {
   const resultData = parseResultsFromString(resultsString)
   const wordle = await getOrCreateWordle(resultData.wordleNumber)
 

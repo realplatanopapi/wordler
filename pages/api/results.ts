@@ -11,7 +11,15 @@ const handler: NextApiHandler = async (req, res) => {
   const result = await addResultsForUser(user as User, req.body.results)
 
   return res.json({
-    data: result
+    data: {
+      id: result.id,
+      attempts: result.attempts.map(attempt => {
+        return {
+          id: attempt.id,
+          guesses: attempt.guesses
+        }
+      })
+    }
   })
 }
 

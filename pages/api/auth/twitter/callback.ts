@@ -1,6 +1,8 @@
 import { NextApiHandler } from "next";
 import axios from 'axios'
+import {withIronSessionApiRoute} from 'iron-session/next'
 import { getOrCreateUserFromTwitter } from "../../../../server/lib/accounts";
+import { cookieConfig } from "../../../../server/lib/auth";
 
 const clientId = process.env.TWITTER_OAUTH_CLIENT_ID
 const clientSecret = process.env.TWITTER_OAUTH_CLIENT_SECRET
@@ -47,4 +49,4 @@ const handler: NextApiHandler = async (req, res) => {
   }
 }
 
-export default handler
+export default withIronSessionApiRoute(handler, cookieConfig);

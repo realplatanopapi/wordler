@@ -35,3 +35,11 @@ export async function getOrCreateUserFromTwitter(twitterId: string, {
     }
   })
 }
+
+export async function getById(id: string): Promise<User | null> {
+  return await db.user.findFirst({
+    where: {
+      id
+    }
+  })
+}

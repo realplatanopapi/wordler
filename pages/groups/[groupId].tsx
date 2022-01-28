@@ -1,10 +1,10 @@
-import WordleResult from "@client/components/WordleResult"
-import { cookieConfig } from "@server/lib/auth"
-import { getGroupById, getGroupInviteCode } from "@server/lib/groups"
-import { getResultsForGroup } from "@server/lib/wordles"
-import { withIronSessionSsr } from "iron-session/next"
-import { NextPage } from "next"
-import config from "@server/config"
+import WordleResult from '@client/components/WordleResult'
+import { cookieConfig } from '@server/lib/auth'
+import { getGroupById, getGroupInviteCode } from '@server/lib/groups'
+import { getResultsForGroup } from '@server/lib/wordles'
+import { withIronSessionSsr } from 'iron-session/next'
+import { NextPage } from 'next'
+import config from '@server/config'
 
 interface Props {
   group: {
@@ -18,11 +18,11 @@ interface Props {
 }
 
 export const getServerSideProps = withIronSessionSsr<Props>(
-  async ({req, params = {}}) => {
+  async ({ req, params = {} }) => {
     const group = await getGroupById(params.groupId as string)
     if (!group) {
       return {
-        notFound: true
+        notFound: true,
       }
     }
 
@@ -31,43 +31,42 @@ export const getServerSideProps = withIronSessionSsr<Props>(
 
     return {
       props: {
-        appUrl: config.get("appUrl"),
+        appUrl: config.get('appUrl'),
         group: {
           id: group.id,
           name: group.name,
           inviteCode: inviteCode?.code || null,
         },
-        results: results.map(result => {
+        results: results.map((result) => {
           return {
             id: result.id,
-            attempts: result.attempts.map(attempt => {
+            attempts: result.attempts.map((attempt) => {
               return {
                 id: attempt.id,
-                guesses: attempt.guesses
+                guesses: attempt.guesses,
               }
             }),
             user: {
               id: result.user.id,
               displayName: result.user.displayName,
-            }
+            },
           }
         }),
-      }
+      },
     }
   },
   cookieConfig
 )
 
-const GroupPage: NextPage<Props> = ({
-  appUrl,
-  group,
-  results
-}) => {
+const GroupPage: NextPage<Props> = ({ appUrl, group, results }) => {
   return (
     <div>
       <h1>{group.name}</h1>
       <p>
-        Send others this url to have them join your group: <em>{appUrl}/accept-invite?inviteCode={group.inviteCode}</em>
+        Send others this url to have them join your group:{' '}
+        <em>
+          {appUrl}/accept-invite?inviteCode={group.inviteCode}
+        </em>
       </p>
       {results.map((result: any) => {
         return (

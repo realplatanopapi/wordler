@@ -1,8 +1,8 @@
-import { IronSessionData } from "iron-session";
+import { IronSessionData } from 'iron-session'
 
-declare module "iron-session" {
+declare module 'iron-session' {
   interface IronSessionData {
-    inviteCode?: string;
-    userId?: string;
+    inviteCode?: string
+    userId?: string
   }
 }

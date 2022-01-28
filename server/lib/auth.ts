@@ -1,9 +1,9 @@
-import config from "@server/config";
+import config from '@server/config'
 
 export const cookieConfig = {
-  cookieName: "wordler_auth",
-  password: config.get("cookieSecret.auth"),
+  cookieName: 'wordler_auth',
+  password: config.get('cookieSecret.auth'),
   cookieOptions: {
-    secure: config.get('env') == "production"
+    secure: config.get('env') == 'production',
   },
 }

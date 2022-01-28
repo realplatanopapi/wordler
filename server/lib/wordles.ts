@@ -1,11 +1,17 @@
-import { Group, User, Wordle, WordleGuessResult, WordleResult } from "@prisma/client";
-import db from "@server/services/db";
+import {
+  Group,
+  User,
+  Wordle,
+  WordleGuessResult,
+  WordleResult,
+} from '@prisma/client'
+import db from '@server/services/db'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
     where: {
-      number
-    }
+      number,
+    },
   })
   if (existingWordle) {
     return existingWordle
@@ -14,8 +20,8 @@ export async function getOrCreateWordle(number: number): Promise<Wordle> {
   return await db.wordle.create({
     data: {
       number,
-      date: new Date()
-    }
+      date: new Date(),
+    },
   })
 }
 
@@ -33,17 +39,17 @@ export async function addResultsForUser(user: User, resultsString: string) {
       wordleId: wordle.id,
       userId: user.id,
       attempts: {
-        create: resultData.attempts.map(attempt => {
+        create: resultData.attempts.map((attempt) => {
           return {
-            guesses: attempt
+            guesses: attempt,
           }
-        })
-      }
+        }),
+      },
     },
     include: {
       attempts: true,
-      wordle: true
-    }
+      wordle: true,
+    },
   })
 }
 
@@ -54,10 +60,10 @@ function parseResultsFromString(resultsString: string): ResultData {
 
   const headerParts = header.split(' ')
   const wordleNumber = parseInt(headerParts[1])
-  
-  const parsedAttempts = attempts.map(attempt => {
+
+  const parsedAttempts = attempts.map((attempt) => {
     const guesses = Array.from(attempt.trim())
-    return guesses.map(guess => {
+    return guesses.map((guess) => {
       if (guess == '🟩') {
         return WordleGuessResult.EXACT_MATCH
       } else if (guess == '🟨') {
@@ -70,19 +76,19 @@ function parseResultsFromString(resultsString: string): ResultData {
 
   return {
     wordleNumber,
-    attempts: parsedAttempts
+    attempts: parsedAttempts,
   }
 }
 
 export function getResultsForUser(user: User) {
   return db.wordleResult.findMany({
     where: {
-      userId: user.id
+      userId: user.id,
     },
     include: {
       attempts: true,
-      wordle: true
-    }
+      wordle: true,
+    },
   })
 }
 
@@ -92,15 +98,15 @@ export function getResultsForGroup(group: Group) {
       user: {
         groupMemberships: {
           some: {
-            groupId: group.id 
-          }
-        }
-      } 
+            groupId: group.id,
+          },
+        },
+      },
     },
     include: {
       attempts: true,
       wordle: true,
-      user: true
-    }
+      user: true,
+    },
   })
 }

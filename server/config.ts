@@ -1,18 +1,18 @@
 import convict from 'convict'
 
 const config = convict<{
-  appUrl: string,
+  appUrl: string
   cookieSecret: {
     auth: string
   }
-  databaseUrl: string 
-  env: "production" | "development"
+  databaseUrl: string
+  env: 'production' | 'development'
   twitter: {
-    apiKey: string 
-    apiSecret: string 
-    bearerToken: string 
-    oauthClientId: string 
-    oauthClientSecret: string 
+    apiKey: string
+    apiSecret: string
+    bearerToken: string
+    oauthClientId: string
+    oauthClientSecret: string
   }
 }>({
   appUrl: {
@@ -25,7 +25,7 @@ const config = convict<{
       format: String,
       env: 'COOKIE_SECRET_AUTH',
       default: null,
-    }
+    },
   },
   databaseUrl: {
     format: String,
@@ -33,17 +33,17 @@ const config = convict<{
     default: null,
   },
   env: {
-    format: ["production", "development"],
+    format: ['production', 'development'],
     env: 'NODE_ENV',
     default: null,
   },
   twitter: {
-     apiKey: {
-       format: String,
-       env: 'TWITTER_API_KEY',
-       default: null,
-     },
-     apiSecret: {
+    apiKey: {
+      format: String,
+      env: 'TWITTER_API_KEY',
+      default: null,
+    },
+    apiSecret: {
       format: String,
       env: 'TWITTER_API_SECRET',
       default: null,
@@ -63,11 +63,11 @@ const config = convict<{
       env: 'TWITTER_OAUTH_CLIENT_SECRET',
       default: null,
     },
-  }
+  },
 })
 
 config.validate({
-  allowed: 'strict'
+  allowed: 'strict',
 })
 
 export default config

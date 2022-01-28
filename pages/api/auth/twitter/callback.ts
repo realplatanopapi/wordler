@@ -3,6 +3,7 @@ import axios from 'axios'
 import {withIronSessionApiRoute} from 'iron-session/next'
 import { getOrCreateUserFromTwitter } from "../../../../server/lib/accounts";
 import { cookieConfig } from "../../../../server/lib/auth";
+import { joinGroup } from "@server/lib/groups";
 
 const clientId = process.env.TWITTER_OAUTH_CLIENT_ID
 const clientSecret = process.env.TWITTER_OAUTH_CLIENT_SECRET
@@ -41,6 +42,11 @@ const handler: NextApiHandler = async (req, res) => {
     const user = await getOrCreateUserFromTwitter(id, {
       displayName: username
     })
+
+    if (req.session.inviteCode) {
+      await joinGroup(user, req.session.inviteCode)
+      delete req.session.inviteCode
+    }
 
     req.session.userId = user.id
     await req.session.save()

@@ -1,15 +1,18 @@
 import WordleResult from "@client/components/WordleResult";
+import { getGroupsForUser } from "@server/lib/groups";
 import { getResultsForUser } from "@server/lib/wordles";
 import axios from "axios";
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { getById } from "../server/lib/accounts";
 import { cookieConfig } from "../server/lib/auth";
 interface HomePageProps {
   user: any;
-  wordleResults: any;
+  wordleResults: any[];
+  groups: any[]
   [key: string]: any;
 }
 
@@ -20,7 +23,8 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
       return {
         props: {
           user: null,
-          wordleResults: null,
+          wordleResults: [],
+          groups: []
         },
       };
     }
@@ -30,17 +34,21 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
       return {
         props: {
           user: null,
-          wordleResults: null,
+          wordleResults: [],
+          groups: []
         },
       };
     }
+
+    const groups = await getGroupsForUser(user)
+    const results = await getResultsForUser(user)
 
     return {
       props: {
         user: {
           displayName: user.displayName,
         },
-        wordleResults: (await getResultsForUser(user)).map((result) => {
+        wordleResults: results.map((result) => {
           return {
             id: result.id,
             attempts: result.attempts.map((attempt) => {
@@ -50,13 +58,19 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
             }),
           };
         }),
+        groups: groups.map(group => {
+          return {
+            id: group.id,
+            name: group.name
+          }
+        })
       },
     };
   },
   cookieConfig
 );
 
-const Home: NextPage<HomePageProps> = ({ user, wordleResults: initialWordleResults }) => {
+const Home: NextPage<HomePageProps> = ({ user, wordleResults: initialWordleResults, groups }) => {
   const [wordleResults, setWordleResults] = useState(initialWordleResults)
   const router = useRouter()
 
@@ -67,6 +81,17 @@ const Home: NextPage<HomePageProps> = ({ user, wordleResults: initialWordleResul
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/api/auth/logout">Sign out</a>
         <h2>groups</h2>
+        {
+          groups.length ? groups.map(group => {
+            return (
+              <Link key={group.id} href={`/groups/${group.id}`}>
+                {group.name}
+              </Link>
+            )
+          }) : (
+            <p>Not a member of any groups (yet)</p>
+          )
+        }
         <form
           onSubmit={async (event) => {
             event.preventDefault();

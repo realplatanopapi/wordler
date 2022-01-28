@@ -18,6 +18,8 @@ model User {
 
   groupMemberships GroupMembership[]
   results WordleResult[]
+
+  createdGroupInviteCodes GroupInviteCode[]
 }
 
 model Wordle {
@@ -71,6 +73,7 @@ model Group {
   updatedAt DateTime @updatedAt
 
   memberships GroupMembership[]
+  inviteCodes GroupInviteCode[]
 
   name String
 }
@@ -95,4 +98,18 @@ model GroupMembership {
 
   // Ensure users can only join one Group at a time
   @@unique([userId, groupId])
+}
+
+model GroupInviteCode {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  code String @unique
+
+  group Group @relation(fields: [groupId], references: [id])
+  groupId String
+
+  createdBy User @relation(fields: [createdById], references: [id])
+  createdById String
 }

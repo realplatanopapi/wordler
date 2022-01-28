@@ -4,10 +4,10 @@ import { getResultsForUser } from '@server/lib/wordles'
 import axios from 'axios'
 import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { Heading, Text } from 'theme-ui'
+import { Heading, Link, Text } from 'theme-ui'
 import { getById } from '../server/lib/accounts'
 import { cookieConfig } from '../server/lib/auth'
 interface HomePageProps {
@@ -86,14 +86,14 @@ const Home: NextPage<HomePageProps> = ({
         <Heading as="h1">Wordler</Heading>
         <Text>Signed in as {user.displayName}</Text>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/api/auth/logout">Sign out</a>
+        <Link href="/api/auth/logout">Sign out</Link>
         <h2>groups</h2>
         {groups.length ? (
           groups.map((group) => {
             return (
-              <Link key={group.id} href={`/groups/${group.slug}`}>
-                {group.name}
-              </Link>
+              <NextLink key={group.id} href={`/groups/${group.slug}`}>
+                <Link href={`/groups/${group.slug}`}>{group.name}</Link>
+              </NextLink>
             )
           })
         ) : (

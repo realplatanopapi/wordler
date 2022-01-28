@@ -7,7 +7,7 @@ import type { NextPage } from 'next'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { Heading, Link, Text } from 'theme-ui'
+import { Box, Heading, Link, Text } from 'theme-ui'
 import { getById } from '../server/lib/accounts'
 import { cookieConfig } from '../server/lib/auth'
 interface HomePageProps {
@@ -82,69 +82,79 @@ const Home: NextPage<HomePageProps> = ({
 
   if (user) {
     return (
-      <div>
-        <Heading as="h1">Wordler</Heading>
-        <Text>Signed in as {user.displayName}</Text>
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <Link href="/api/auth/logout">Sign out</Link>
-        <h2>groups</h2>
-        {groups.length ? (
-          groups.map((group) => {
-            return (
-              <NextLink key={group.id} href={`/groups/${group.slug}`}>
-                <Link href={`/groups/${group.slug}`}>{group.name}</Link>
-              </NextLink>
-            )
-          })
-        ) : (
-          <p>Not a member of any groups (yet)</p>
-        )}
-        <form
-          onSubmit={async (event) => {
-            event.preventDefault()
-            const form = event.target as HTMLFormElement
-            const data = new FormData(form)
-            const result = await axios.post('/api/groups', {
-              name: data.get('name'),
+      <>
+        <Box mb={4}>
+          <Heading as="h1">Wordler</Heading>
+          <Text as="p">
+            Signed in as <strong>@{user.displayName}</strong>.
+          </Text>
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <Text as="p">
+            <Link href="/api/auth/logout">Sign out</Link>
+          </Text>
+        </Box>
+        <Box mb={4}>
+          <Heading as="h2">groups</Heading>
+          {groups.length ? (
+            groups.map((group) => {
+              return (
+                <NextLink key={group.id} href={`/groups/${group.slug}`}>
+                  <Link href={`/groups/${group.slug}`}>{group.name}</Link>
+                </NextLink>
+              )
             })
-            router.push(`/groups/${result.data.data.id}`)
-          }}
-        >
-          <label>
-            <span>start a group</span>
-            <br />
-            <input name="name" placeholder="name your group" required />
-          </label>
-          <button type="submit">start</button>
-        </form>
-        <h2>your results</h2>
-        <form
-          onSubmit={async (event) => {
-            event.preventDefault()
-            const form = event.target as HTMLFormElement
-            const data = new FormData(form)
-            const result = await axios.post('/api/results', {
-              results: data.get('results'),
-            })
-            setWordleResults([result.data.data].concat(wordleResults))
-            form.reset()
-          }}
-        >
-          <textarea
-            name="results"
-            placeholder="Paste results from Wordle here"
-            required
-            style={{
-              height: 369,
-              width: 420,
+          ) : (
+            <Text>Not a member of any groups (yet)</Text>
+          )}
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault()
+              const form = event.target as HTMLFormElement
+              const data = new FormData(form)
+              const result = await axios.post('/api/groups', {
+                name: data.get('name'),
+              })
+              router.push(`/groups/${result.data.data.id}`)
             }}
-          ></textarea>
-          <button type="submit">Save</button>
-        </form>
-        {wordleResults.map((result: any) => {
-          return <WordleResult key={result.id} result={result} />
-        })}
-      </div>
+          >
+            <label>
+              <span>start a group</span>
+              <br />
+              <input name="name" placeholder="name your group" required />
+            </label>
+            <button type="submit">start</button>
+          </form>
+        </Box>
+        <Box mb={4}>
+          <Heading as="h2">your results</Heading>
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault()
+              const form = event.target as HTMLFormElement
+              const data = new FormData(form)
+              const result = await axios.post('/api/results', {
+                results: data.get('results'),
+              })
+              setWordleResults([result.data.data].concat(wordleResults))
+              form.reset()
+            }}
+          >
+            <textarea
+              name="results"
+              placeholder="Paste results from Wordle here"
+              required
+              style={{
+                height: 369,
+                width: 420,
+              }}
+            ></textarea>
+            <button type="submit">Save</button>
+          </form>
+          {wordleResults.map((result: any) => {
+            return <WordleResult key={result.id} result={result} />
+          })}
+        </Box>
+      </>
     )
   }
 

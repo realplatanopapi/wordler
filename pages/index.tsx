@@ -46,6 +46,7 @@ const Home: NextPage = ({
         user ? (
           <>
           <p>Signed in as {user.displayName}</p>
+            { /* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/api/auth/logout">Sign out</a>
           </>
         ) : (

@@ -125,19 +125,26 @@ export function getResultsForUsersConnections(user: User) {
       createdAt: 'desc'
     },
     where: {
-      user: {
-        groupMemberships: {
-          every: {
-            group: {
-              memberships: {
-                every: {
-                  userId: user.id
+      OR: [
+        {
+          userId: user.id
+        },
+        {
+          user: {
+            groupMemberships: {
+              every: {
+                group: {
+                  memberships: {
+                    every: {
+                      userId: user.id
+                    }
+                  }
                 }
               }
             }
           }
         }
-      }
+      ]
     }
   })
 }

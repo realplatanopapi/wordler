@@ -1,15 +1,18 @@
 import WordleResult from "@client/components/WordleResult"
 import { cookieConfig } from "@server/lib/auth"
-import { getGroupById } from "@server/lib/groups"
+import { getGroupById, getGroupInviteCode } from "@server/lib/groups"
 import { getResultsForGroup } from "@server/lib/wordles"
 import { withIronSessionSsr } from "iron-session/next"
 import { NextPage } from "next"
 
 interface Props {
   group: {
+    id: string
     name: string
+    inviteCode: string | null
   }
   results: any[]
+  appUrl: string
   [key: string]: any
 }
 
@@ -23,11 +26,15 @@ export const getServerSideProps = withIronSessionSsr<Props>(
     }
 
     const results = await getResultsForGroup(group)
+    const inviteCode = await getGroupInviteCode(group)
 
     return {
       props: {
+        appUrl: process.env.APP_URL,
         group: {
-          name: group.name
+          id: group.id,
+          name: group.name,
+          inviteCode: inviteCode?.code || null,
         },
         results: results.map(result => {
           return {
@@ -51,12 +58,16 @@ export const getServerSideProps = withIronSessionSsr<Props>(
 )
 
 const GroupPage: NextPage<Props> = ({
+  appUrl,
   group,
   results
 }) => {
   return (
     <div>
       <h1>{group.name}</h1>
+      <p>
+        Send others this url to have them join your group: <em>{appUrl}/accept-invite?inviteCode={group.inviteCode}</em>
+      </p>
       {results.map((result: any) => {
         return (
           <div key={result.id}>

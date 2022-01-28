@@ -1,14 +1,10 @@
-import type { Theme } from 'theme-ui'
+import { merge, Theme } from 'theme-ui'
+import {base} from '@theme-ui/presets'
 
-export const theme: Theme = {
+export const theme: Theme = merge(base, {
   fonts: {
-    body: 'system-ui, sans-serif',
-    heading: '"Avenir Next", sans-serif',
+    body: "'Cutive Mono', monospace",
+    heading: "'Cutive Mono', monospace",
     monospace: 'Menlo, monospace',
   },
-  colors: {
-    text: '#fff',
-    background: '#111',
-    primary: '#33e',
-  },
-}
+})

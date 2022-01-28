@@ -7,7 +7,7 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { Text } from 'theme-ui'
+import { Heading, Text } from 'theme-ui'
 import { getById } from '../server/lib/accounts'
 import { cookieConfig } from '../server/lib/auth'
 interface HomePageProps {
@@ -83,6 +83,7 @@ const Home: NextPage<HomePageProps> = ({
   if (user) {
     return (
       <div>
+        <Heading as="h1">Wordler</Heading>
         <Text>Signed in as {user.displayName}</Text>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/api/auth/logout">Sign out</a>

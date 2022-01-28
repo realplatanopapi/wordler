@@ -5,6 +5,8 @@ import { getResultsForGroup } from '@server/lib/wordles'
 import { withIronSessionSsr } from 'iron-session/next'
 import { NextPage } from 'next'
 import config from '@server/config'
+import { Heading, Text } from 'theme-ui'
+import Head from 'next/head'
 
 interface Props {
   group: {
@@ -62,20 +64,23 @@ export const getServerSideProps = withIronSessionSsr<Props>(
 
 const GroupPage: NextPage<Props> = ({ appUrl, group, results }) => {
   return (
-    <div>
-      <h1>{group.name}</h1>
-      <p>
+    <>
+      <Head>
+        <title>{group.name}</title>
+      </Head>
+      <Heading>{group.name}</Heading>
+      <Text as="p">
         Send others this url to have them join your group:{' '}
         <em>
           {appUrl}/accept-invite?inviteCode={group.inviteCode}
         </em>
-      </p>
+      </Text>
       {results.map((result: any) => {
         return (
           <WordleResult key={result.id} result={result} />
         )
       })}
-    </div>
+    </>
   )
 }
 

@@ -4,6 +4,7 @@ import { getResultsForUser, getResultsForUsersConnections } from '@server/lib/wo
 import axios from 'axios'
 import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
+import Head from 'next/head'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -88,6 +89,9 @@ const Home: NextPage<HomePageProps> = ({
   if (user) {
     return (
       <>
+        <Head>
+          <title>Wordler</title>
+        </Head>
         <Box mb={3}>
           <Heading as="h1">Wordler</Heading>
           <Text as="p">

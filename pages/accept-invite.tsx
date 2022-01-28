@@ -2,6 +2,7 @@ import { cookieConfig } from '@server/lib/auth'
 import { getGroupByInviteCode } from '@server/lib/groups'
 import { withIronSessionSsr } from 'iron-session/next'
 import { NextPage } from 'next'
+import Head from 'next/head'
 import { Flex, Heading, Link, Text } from 'theme-ui'
 
 interface Props {
@@ -36,6 +37,10 @@ export const getServerSideProps = withIronSessionSsr<Props>(
 
 const AcceptInvitePage: NextPage<Props> = ({ group, inviteCode }) => {
   return (
+    <>
+    <Head>
+      <title>Join my Wordler group!</title>
+    </Head>
     <Flex sx={{
       alignItems: 'center',
       justifyContent: 'center',
@@ -50,6 +55,7 @@ const AcceptInvitePage: NextPage<Props> = ({ group, inviteCode }) => {
         </Link>
       </div>
     </Flex>
+    </>
   )
 }
 

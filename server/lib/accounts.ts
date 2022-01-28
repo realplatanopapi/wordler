@@ -24,10 +24,6 @@ export async function getOrCreateUserFromTwitter(twitterId: string, {
     })
   }
 
-  console.log({
-    displayName
-  })
-
   return await db.user.create({
     data: {
       twitterId,

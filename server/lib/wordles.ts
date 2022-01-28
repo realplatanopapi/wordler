@@ -1,4 +1,4 @@
-import { User, Wordle, WordleGuessResult, WordleResult } from "@prisma/client";
+import { Group, User, Wordle, WordleGuessResult, WordleResult } from "@prisma/client";
 import db from "@server/services/db";
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
@@ -82,6 +82,25 @@ export function getResultsForUser(user: User) {
     include: {
       attempts: true,
       wordle: true
+    }
+  })
+}
+
+export function getResultsForGroup(group: Group) {
+  return db.wordleResult.findMany({
+    where: {
+      user: {
+        groupMemberships: {
+          some: {
+            groupId: group.id 
+          }
+        }
+      } 
+    },
+    include: {
+      attempts: true,
+      wordle: true,
+      user: true
     }
   })
 }

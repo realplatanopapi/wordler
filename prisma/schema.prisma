@@ -15,4 +15,48 @@ model User {
   email String? @unique
   twitterId String? @unique
   displayName String
+
+  results WordleResult[]
+}
+
+model Wordle {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  date DateTime @unique
+  number BigInt @unique
+
+  results WordleResult[]
+}
+
+model WordleResult {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  wordle Wordle @relation(fields: [wordleId], references: [id])
+  wordleId String
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  attempts WordleAttempt[]
+}
+
+enum WordleGuessResult {
+  EXACT_MATCH
+  IN_WORD
+  NOT_IN_WORD
+}
+
+model WordleAttempt {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  wordleResult WordleResult @relation(fields: [wordleResultId], references: [id])
+  wordleResultId String
+
+  guesses WordleGuessResult[]
 }

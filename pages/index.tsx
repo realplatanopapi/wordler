@@ -76,7 +76,7 @@ const Home: NextPage<HomePageProps> = ({ user, wordleResults: initialWordleResul
             form.reset()
           }}
         >
-          <textarea name="results" required></textarea>
+          <textarea name="results" placeholder="Paste results from Wordle here" required></textarea>
           <button type="submit">Save</button>
         </form>
         {wordleResults.map((result: any) => {

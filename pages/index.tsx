@@ -62,6 +62,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
           return {
             id: group.id,
             name: group.name,
+            slug: group.slug,
           }
         }),
       },
@@ -88,7 +89,7 @@ const Home: NextPage<HomePageProps> = ({
         {groups.length ? (
           groups.map((group) => {
             return (
-              <Link key={group.id} href={`/groups/${group.id}`}>
+              <Link key={group.id} href={`/groups/${group.slug}`}>
                 {group.name}
               </Link>
             )

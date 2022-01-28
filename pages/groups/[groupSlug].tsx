@@ -1,6 +1,6 @@
 import WordleResult from '@client/components/WordleResult'
 import { cookieConfig } from '@server/lib/auth'
-import { getGroupById, getGroupInviteCode } from '@server/lib/groups'
+import { getGroupById, getGroupBySlug, getGroupInviteCode } from '@server/lib/groups'
 import { getResultsForGroup } from '@server/lib/wordles'
 import { withIronSessionSsr } from 'iron-session/next'
 import { NextPage } from 'next'
@@ -19,7 +19,7 @@ interface Props {
 
 export const getServerSideProps = withIronSessionSsr<Props>(
   async ({ req, params = {} }) => {
-    const group = await getGroupById(params.groupId as string)
+    const group = await getGroupBySlug(params.groupSlug as string)
     if (!group) {
       return {
         notFound: true,
@@ -35,6 +35,7 @@ export const getServerSideProps = withIronSessionSsr<Props>(
         group: {
           id: group.id,
           name: group.name,
+          slug: group.slug,
           inviteCode: inviteCode?.code || null,
         },
         results: results.map((result) => {

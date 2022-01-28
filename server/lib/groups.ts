@@ -43,6 +43,14 @@ export function getGroupById(id: string) {
   })
 }
 
+export function getGroupBySlug(slug: string) {
+  return db.group.findFirst({
+    where: {
+      slug,
+    },
+  })
+}
+
 export function getGroupsForUser(user: User) {
   return db.group.findMany({
     where: {

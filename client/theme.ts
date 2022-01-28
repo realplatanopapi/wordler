@@ -7,4 +7,10 @@ export const theme: Theme = merge(base, {
     heading: "'Cutive Mono', monospace",
     monospace: 'Menlo, monospace',
   },
+  layout: {
+    container: {
+      maxWidth: 800,
+      p: 4
+    }
+  }
 })

@@ -2,10 +2,12 @@ import {
   Group,
   User,
   Wordle,
+  WordleAttempt,
   WordleGuessResult,
   WordleResult,
 } from '@prisma/client'
 import db from '@server/services/db'
+import {Prisma } from '@prisma/client'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
@@ -124,21 +126,72 @@ export function getResultsForUsersConnections(user: User) {
     orderBy: {
       createdAt: 'desc'
     },
-    where: {
-      OR: [
-        {
-          userId: user.id
-        },
-        {
-          user: {
-            groupMemberships: {
-              some: {
-                userId: user.id
-              }
+    
+  })
+}
+
+interface ResultQueryOptions {
+  user: User
+  take: number
+  cursor?: string | null
+  groupId?: string
+}
+
+interface ResultsQueryResult {
+  total: number
+  nextCursor: string
+  data: (WordleResult & {
+    user: User,
+    attempts: WordleAttempt[],
+    wordle: Wordle
+  })[]
+}
+
+export async function queryResults({
+  user,
+  ...options
+}: ResultQueryOptions): Promise<ResultsQueryResult> {
+  const where: Prisma.WordleResultWhereInput = {
+    OR: [
+      {
+        userId: user.id
+      },
+      {
+        user: {
+          groupMemberships: {
+            some: {
+              groupId: options.groupId,
+              userId: user.id
             }
           }
         }
-      ]
-    }
+      }
+    ]
+  }
+
+  const total = await db.wordleResult.count({
+    where
   })
+
+  const data = await db.wordleResult.findMany({
+    skip: options.cursor ? 1 : undefined,
+    cursor: options.cursor ? {
+      id: options.cursor
+    } : undefined,
+    include: {
+      user: true,
+      attempts: true,
+      wordle: true,
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    where,
+  })
+
+  return {
+    total,
+    data, 
+    nextCursor: data[data.length - 1].id
+  }
 }

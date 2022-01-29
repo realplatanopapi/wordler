@@ -87,6 +87,7 @@ interface ResultQueryOptions {
   cursor?: string | null
   userId?: string
   groupId?: string
+  date?: Date
 }
 
 interface ResultsQueryResult {
@@ -101,6 +102,7 @@ interface ResultsQueryResult {
 
 export async function queryResults({
   userId,
+  date,
   ...options
 }: ResultQueryOptions): Promise<ResultsQueryResult> {
   const where: Prisma.WordleResultWhereInput = {
@@ -109,6 +111,10 @@ export async function queryResults({
         userId: userId
       },
       {
+        createdAt: date ? {
+          gte: date,
+          lt: date
+        } : undefined,
         user: {
           groupMemberships: {
             some: {

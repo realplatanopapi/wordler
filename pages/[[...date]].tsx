@@ -2,7 +2,7 @@ import WordleResult from '@client/components/WordleResult'
 import { getGroupsForUser } from '@server/lib/groups'
 import { queryResults } from '@server/lib/wordles'
 import axios from 'axios'
-import { addDays, startOfDay, subDays } from 'date-fns'
+import { addDays, subDays } from 'date-fns'
 import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -12,6 +12,8 @@ import { useState } from 'react'
 import { Box, Heading, Link, Text } from 'theme-ui'
 import { getById } from '../server/lib/accounts'
 import { cookieConfig } from '@server/lib/auth'
+import { startOfDay, toUTC } from '@common/utils/time'
+import format from 'date-fns/format'
 
 interface HomePageProps {
   user: any
@@ -26,11 +28,11 @@ interface HomePageProps {
 export const getServerSideProps = withIronSessionSsr<HomePageProps>(
   async ({ req, query }) => {
     const dateQuery = query.date as string | undefined
-    const today = startOfDay(new Date())
-    const date = dateQuery ? startOfDay(new Date(dateQuery)) : today
+    const today = startOfDay(toUTC(new Date()))
+    const date = dateQuery ? startOfDay(toUTC(new Date(dateQuery))) : today
     const nextDate = date < today ? addDays(date, 1) : null
     const previousDate = subDays(date, 1)
-    
+
     const userId = req.session.userId
     if (!userId) {
       return {
@@ -106,9 +108,11 @@ const Home: NextPage<HomePageProps> = ({
   user,
   wordleResults: initialWordleResults,
   groups,
+  previousDate: previousDateStr,
 }) => {
   const [wordleResults, setWordleResults] = useState(initialWordleResults)
   const router = useRouter()
+  const previousDate = startOfDay(toUTC(new Date(Date.parse(previousDateStr))))
 
   if (user) {
     return (
@@ -128,6 +132,11 @@ const Home: NextPage<HomePageProps> = ({
         </Box>
         <Box mb={5}>
           <Heading mb={2} as="h2">activity</Heading>
+          {
+            previousDate && (
+              <Link href={`/${previousDate.getUTCFullYear()}-${format(previousDate, 'MM')}-${previousDate.getUTCDate()}`}>Yesterday</Link>
+            )
+          }
           {wordleResults.map((result: any) => {
             return (
               <Box key={result.id} mb={3}>

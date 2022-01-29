@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@client/*": ["client/*"],
+      "@common/*": ["common/*"],
       "@server/*": ["server/*"]
     },
     "target": "es5",

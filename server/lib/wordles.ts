@@ -1,5 +1,4 @@
 import {
-  Group,
   User,
   Wordle,
   WordleAttempt,
@@ -8,7 +7,8 @@ import {
 } from '@prisma/client'
 import db from '@server/services/db'
 import {Prisma } from '@prisma/client'
-import { addDays, startOfDay } from 'date-fns'
+import { addDays } from 'date-fns'
+import { startOfDay, toUTC } from '@common/utils/time'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
@@ -23,7 +23,7 @@ export async function getOrCreateWordle(number: number): Promise<Wordle> {
   return await db.wordle.create({
     data: {
       number,
-      date: startOfDay(new Date()),
+      date: startOfDay(toUTC(new Date())),
     },
   })
 }
@@ -106,7 +106,6 @@ export async function queryResults({
   date,
   ...options
 }: ResultQueryOptions): Promise<ResultsQueryResult> {
-  console.log(date)
   const where: Prisma.WordleResultWhereInput = {
     AND: [
       {

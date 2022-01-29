@@ -6,12 +6,12 @@ hooks:
 generates:
   client/graphql/types.d.ts:
     - typescript
-  pages/:
+  client/:
     preset: near-operation-file
     presetConfig:
       extension: .ts
       folder: __gql__
-      baseTypesPath: ../client/graphql/types.d.ts
+      baseTypesPath: graphql/types.d.ts
     plugins:
       - typescript-operations
       - typescript-react-apollo

@@ -3,8 +3,12 @@ import { formatRelative } from 'date-fns'
 import {Box, Text} from 'theme-ui'
 
 interface Props {
+  currentUser: {
+    id: string
+  } | null,
   result: {
     user: {
+      id: string
       displayName: string
     }
     attempts: {
@@ -14,9 +18,10 @@ interface Props {
   }
 }
 
-const WordleResult: React.FC<Props> = ({ result }) => {
+const WordleResult: React.FC<Props> = ({ currentUser, result }) => {
   const submittedAt = Date.parse(result.createdAt)
   const submittedAtFormatted = formatRelative(submittedAt, new Date())
+  const isResultForCurrentUser = currentUser?.id == result.user.id
 
   return (
     <Box sx={{
@@ -26,7 +31,13 @@ const WordleResult: React.FC<Props> = ({ result }) => {
       borderStyle: 'solid',
       borderWidth: 1,
     }}>
-      <Text as="p">{result.user.displayName}</Text>
+      <Text as="p" sx={{
+        fontWeight: isResultForCurrentUser ? 'bold' : 'normal'
+      }}>{result.user.displayName}{
+        isResultForCurrentUser ? (
+          ' (you)'
+        ) : ''
+      }</Text>
       <Text as="p" mb={3} sx={{
         fontSize: 1
       }}>submitted <time>{submittedAtFormatted}</time></Text>

@@ -17,7 +17,7 @@ import format from 'date-fns/format'
 import DatePicker from '@client/components/DatePicker'
 
 interface HomePageProps {
-  user: any
+  user: any | null
   hasPostedResultsToday: boolean
   wordleResults: any[]
   groups: any[]
@@ -69,6 +69,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
         date: date.toISOString(),
         hasPostedResultsToday: await hasPostedResultsToday(user),
         user: {
+          id: user.id,
           displayName: user.displayName,
         },
         wordleResults: results.map((result) => {
@@ -117,23 +118,13 @@ const Home: NextPage<HomePageProps> = ({
         </Head>
         <Box mb={3}>
           <Heading as="h1">Wordler</Heading>
-          <Text as="p">
-            Signed in as <strong>@{user.displayName}</strong>.
-          </Text>
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <Text as="p">
-            <Link href="/api/auth/logout">Sign out</Link>
-          </Text>
         </Box>
         <Box mb={5}>
-          <Heading mb={2} as="h2">
-            activity
-          </Heading>
           <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
           {wordleResults.map((result: any) => {
             return (
               <Box key={result.id} mb={3}>
-                <WordleResult result={result} />
+                <WordleResult currentUser={user} result={result} />
               </Box>
             )
           })}

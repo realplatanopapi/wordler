@@ -7,8 +7,12 @@ import { NextPage } from 'next'
 import config from '@server/config'
 import { Heading, Text } from 'theme-ui'
 import Head from 'next/head'
+import { getById } from '@server/lib/accounts'
 
 interface Props {
+  user: {
+    id: string
+  } | null,
   group: {
     id: string
     name: string
@@ -33,10 +37,14 @@ export const getServerSideProps = withIronSessionSsr<Props>(
       take: 25,
     })
     const inviteCode = await getGroupInviteCode(group)
+    const user = req.session.userId ? await getById(req.session.userId) : null
 
     return {
       props: {
         appUrl: config.get('appUrl'),
+        user: user ? {
+          id: user.id
+        } : null,
         group: {
           id: group.id,
           name: group.name,
@@ -65,7 +73,7 @@ export const getServerSideProps = withIronSessionSsr<Props>(
   cookieConfig
 )
 
-const GroupPage: NextPage<Props> = ({ appUrl, group, results }) => {
+const GroupPage: NextPage<Props> = ({ appUrl, group, results, user }) => {
   return (
     <>
       <Head>
@@ -80,7 +88,7 @@ const GroupPage: NextPage<Props> = ({ appUrl, group, results }) => {
       </Text>
       {results.map((result: any) => {
         return (
-          <WordleResult key={result.id} result={result} />
+          <WordleResult currentUser={user} key={result.id} result={result} />
         )
       })}
     </>

@@ -1,6 +1,7 @@
 import { WordleGuessResult, WordleResult } from "@prisma/client";
 import { getById } from "@server/lib/accounts";
 import { GraphQLEnumType, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType, GraphQLString, Kind, ValueNode } from "graphql";
+import { GraphQLContext } from "./schema";
 
 export const DateType = new GraphQLScalarType<Date | null, string>({
   name: 'Date',
@@ -75,7 +76,7 @@ export const WordleAttemptType = new GraphQLObjectType({
   }
 })
 
-export const WordleResultType = new GraphQLObjectType<any, WordleResult>({
+export const WordleResultType = new GraphQLObjectType<WordleResult, GraphQLContext>({
   name: 'WordleResult',
   fields: {
     id: {

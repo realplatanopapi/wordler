@@ -8,7 +8,7 @@ import {
 import db from '@server/services/db'
 import {Prisma } from '@prisma/client'
 import { addDays } from 'date-fns'
-import { startOfDay, toUTC } from '@common/utils/time'
+import { getToday, startOfDay, toUTC } from '@common/utils/time'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
@@ -161,4 +161,19 @@ export async function queryResults({
     data, 
     nextCursor: data.length > 0 ? data[data.length - 1].id : null
   }
+}
+
+export async function hasPostedResultsToday(user: User): Promise<boolean> {
+  const today = getToday()
+  const count = await db.wordleResult.count({
+    where: {
+      userId: user.id,
+      createdAt: {
+        gte: today,
+        lt: addDays(today, 1)
+      }
+    }
+  })
+
+  return count > 0
 }

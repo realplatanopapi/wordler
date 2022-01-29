@@ -1,6 +1,6 @@
 import WordleResult from '@client/components/WordleResult'
 import { getGroupsForUser } from '@server/lib/groups'
-import { queryResults } from '@server/lib/wordles'
+import { hasPostedResultsToday, queryResults } from '@server/lib/wordles'
 import axios from 'axios'
 import { addDays, subDays } from 'date-fns'
 import { withIronSessionSsr } from 'iron-session/next'
@@ -18,11 +18,10 @@ import DatePicker from '@client/components/DatePicker'
 
 interface HomePageProps {
   user: any
+  hasPostedResultsToday: boolean
   wordleResults: any[]
   groups: any[]
   date: string
-  nextDate: string | null
-  previousDate: string
   [key: string]: any
 }
 
@@ -31,16 +30,13 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     const dateQuery = query.date as string | undefined
     const today = startOfDay(toUTC(new Date()))
     const date = dateQuery ? startOfDay(toUTC(new Date(dateQuery))) : today
-    const nextDate = date < today ? addDays(date, 1) : null
-    const previousDate = subDays(date, 1)
 
     const userId = req.session.userId
     if (!userId) {
       return {
         props: {
+          hasPostedResultsToday: false,
           date: date.toISOString(),
-          previousDate: previousDate.toISOString(),
-          nextDate: nextDate ? nextDate.toISOString() : null,
           user: null,
           wordleResults: [],
           groups: [],
@@ -52,9 +48,8 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     if (!user) {
       return {
         props: {
+          hasPostedResultsToday: false,
           date: date.toISOString(),
-          previousDate: previousDate.toISOString(),
-          nextDate: nextDate ? nextDate.toISOString() : null,
           user: null,
           wordleResults: [],
           groups: [],
@@ -63,7 +58,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     }
 
     const groups = await getGroupsForUser(user)
-    const {data: results} = await queryResults({
+    const { data: results } = await queryResults({
       userId: user.id,
       take: 25,
       date,
@@ -72,8 +67,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     return {
       props: {
         date: date.toISOString(),
-        previousDate: previousDate.toISOString(),
-        nextDate: nextDate ? nextDate.toISOString() : null,
+        hasPostedResultsToday: await hasPostedResultsToday(user),
         user: {
           displayName: user.displayName,
         },
@@ -89,7 +83,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
                 guesses: attempt.guesses,
               }
             }),
-            createdAt: result.createdAt.toISOString()
+            createdAt: result.createdAt.toISOString(),
           }
         }),
         groups: groups.map((group) => {
@@ -106,6 +100,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
 )
 
 const Home: NextPage<HomePageProps> = ({
+  hasPostedResultsToday,
   user,
   wordleResults: initialWordleResults,
   groups,
@@ -131,7 +126,9 @@ const Home: NextPage<HomePageProps> = ({
           </Text>
         </Box>
         <Box mb={5}>
-          <Heading mb={2} as="h2">activity</Heading>
+          <Heading mb={2} as="h2">
+            activity
+          </Heading>
           <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
           {wordleResults.map((result: any) => {
             return (
@@ -141,33 +138,35 @@ const Home: NextPage<HomePageProps> = ({
             )
           })}
         </Box>
-        <Box mb={5}>
-          <Heading as="h2">post your results</Heading>
-          <form
-            onSubmit={async (event) => {
-              event.preventDefault()
-              const form = event.target as HTMLFormElement
-              const data = new FormData(form)
-              const result = await axios.post('/api/results', {
-                results: data.get('results'),
-              })
-              setWordleResults([result.data.data].concat(wordleResults))
-              form.reset()
-            }}
-          >
-            <textarea
-              name="results"
-              placeholder="Paste results from Wordle here"
-              required
-              style={{
-                height: 100,
-                width: 300,
+        {!hasPostedResultsToday && (
+          <Box mb={5}>
+            <Heading as="h2">post your results</Heading>
+            <form
+              onSubmit={async (event) => {
+                event.preventDefault()
+                const form = event.target as HTMLFormElement
+                const data = new FormData(form)
+                const result = await axios.post('/api/results', {
+                  results: data.get('results'),
+                })
+                setWordleResults([result.data.data].concat(wordleResults))
+                form.reset()
               }}
-            ></textarea>
-            <br />
-            <button type="submit">Post</button>
-          </form>
-        </Box>
+            >
+              <textarea
+                name="results"
+                placeholder="Paste results from Wordle here"
+                required
+                style={{
+                  height: 100,
+                  width: 300,
+                }}
+              ></textarea>
+              <br />
+              <button type="submit">Post</button>
+            </form>
+          </Box>
+        )}
         <Box mb={5}>
           <Heading as="h2">groups</Heading>
           {groups.length ? (

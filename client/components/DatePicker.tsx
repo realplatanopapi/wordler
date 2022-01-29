@@ -16,7 +16,7 @@ const DateLink: React.FC<{date: DateUTC, prefix?: string, suffix?: string}> = ({
   const display = formatDateForDisplay(date)
 
   return (
-    <Link href={`/${link}`}>{prefix}{display}{suffix}</Link>
+    <Link href={`?date=${link}`}>{prefix}{display}{suffix}</Link>
   )
 }
 

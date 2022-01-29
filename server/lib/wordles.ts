@@ -8,6 +8,7 @@ import {
 } from '@prisma/client'
 import db from '@server/services/db'
 import {Prisma } from '@prisma/client'
+import { startOfDay } from 'date-fns'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
@@ -22,7 +23,7 @@ export async function getOrCreateWordle(number: number): Promise<Wordle> {
   return await db.wordle.create({
     data: {
       number,
-      date: new Date(),
+      date: startOfDay(new Date()),
     },
   })
 }

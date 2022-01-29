@@ -14,6 +14,7 @@ import { getById } from '../server/lib/accounts'
 import { cookieConfig } from '@server/lib/auth'
 import { startOfDay, toUTC } from '@common/utils/time'
 import format from 'date-fns/format'
+import DatePicker from '@client/components/DatePicker'
 
 interface HomePageProps {
   user: any
@@ -108,11 +109,10 @@ const Home: NextPage<HomePageProps> = ({
   user,
   wordleResults: initialWordleResults,
   groups,
-  previousDate: previousDateStr,
+  date,
 }) => {
   const [wordleResults, setWordleResults] = useState(initialWordleResults)
   const router = useRouter()
-  const previousDate = startOfDay(toUTC(new Date(Date.parse(previousDateStr))))
 
   if (user) {
     return (
@@ -132,11 +132,7 @@ const Home: NextPage<HomePageProps> = ({
         </Box>
         <Box mb={5}>
           <Heading mb={2} as="h2">activity</Heading>
-          {
-            previousDate && (
-              <Link href={`/${previousDate.getUTCFullYear()}-${format(previousDate, 'MM')}-${previousDate.getUTCDate()}`}>Yesterday</Link>
-            )
-          }
+          <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
           {wordleResults.map((result: any) => {
             return (
               <Box key={result.id} mb={3}>

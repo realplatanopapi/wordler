@@ -95,7 +95,7 @@ export const WordleResultType = new GraphQLObjectType<any, WordleResult>({
     },
     user: {
       type: new GraphQLNonNull(UserType),
-      resolve: async (_source, _args, result) => {
+      resolve: async (result) => {
         return await getById(result.userId)
       }
     }

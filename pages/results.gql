@@ -1,0 +1,14 @@
+query results($date: Date) {
+  results(date: $date) {
+    id
+    createdAt
+    user {
+      id
+      displayName
+    }
+    attempts {
+      id
+      guesses
+    }
+  }
+}

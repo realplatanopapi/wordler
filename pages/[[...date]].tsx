@@ -13,13 +13,13 @@ import { getById } from '../server/lib/accounts'
 import { cookieConfig } from '@server/lib/auth'
 import { startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
+import { useResultsQuery } from './__gql__/results'
 
 interface HomePageProps {
   user: any | null
-  hasPostedResultsToday: boolean
-  wordleResults: any[]
-  groups: any[]
   date: string
+  hasPostedResultsToday: boolean
+  groups: any[]
   [key: string]: any
 }
 
@@ -36,7 +36,6 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
           hasPostedResultsToday: false,
           date: date.toISOString(),
           user: null,
-          wordleResults: [],
           groups: [],
         },
       }
@@ -49,18 +48,12 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
           hasPostedResultsToday: false,
           date: date.toISOString(),
           user: null,
-          wordleResults: [],
           groups: [],
         },
       }
     }
 
     const groups = await getGroupsForUser(user)
-    const { data: results } = await queryResults({
-      userId: user.id,
-      take: 25,
-      date,
-    })
 
     return {
       props: {
@@ -70,21 +63,6 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
           id: user.id,
           displayName: user.displayName,
         },
-        wordleResults: results.map((result) => {
-          return {
-            id: result.id,
-            user: {
-              id: result.user.id,
-              displayName: result.user.displayName,
-            },
-            attempts: result.attempts.map((attempt) => {
-              return {
-                guesses: attempt.guesses,
-              }
-            }),
-            createdAt: result.createdAt.toISOString(),
-          }
-        }),
         groups: groups.map((group) => {
           return {
             id: group.id,
@@ -99,14 +77,18 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
 )
 
 const Home: NextPage<HomePageProps> = ({
+  date,
   hasPostedResultsToday,
   user,
-  wordleResults: initialWordleResults,
   groups,
-  date,
 }) => {
-  const [wordleResults, setWordleResults] = useState(initialWordleResults)
   const router = useRouter()
+  const resultsQuery = useResultsQuery({
+    variables: {
+      date
+    }
+  })
+  const results = resultsQuery.data?.results
 
   if (user) {
     return (
@@ -119,7 +101,7 @@ const Home: NextPage<HomePageProps> = ({
         </Box>
         <Box mb={5}>
           <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
-          {wordleResults.map((result: any) => {
+          {results?.map((result: any) => {
             return (
               <Box key={result.id} mb={3}>
                 <WordleResult currentUser={user} result={result} />
@@ -138,7 +120,6 @@ const Home: NextPage<HomePageProps> = ({
                 const result = await axios.post('/api/results', {
                   results: data.get('results'),
                 })
-                setWordleResults([result.data.data].concat(wordleResults))
                 form.reset()
               }}
             >

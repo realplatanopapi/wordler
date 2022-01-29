@@ -4,14 +4,14 @@ hooks:
   afterAllFileWrite:
     - prettier --write
 generates:
-  client/api/graphql/types.d.ts:
+  client/graphql/types.d.ts:
     - typescript
-  client/:
+  pages/:
     preset: near-operation-file
     presetConfig:
       extension: .ts
       folder: __gql__
-      baseTypesPath: graphql/types.d.ts
+      baseTypesPath: ../client/graphql/types.d.ts
     plugins:
       - typescript-operations
       - typescript-react-apollo

@@ -2,19 +2,19 @@ import { WordleGuessResult, WordleResult } from "@prisma/client";
 import { getById } from "@server/lib/accounts";
 import { GraphQLEnumType, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType, GraphQLString, Kind, ValueNode } from "graphql";
 
-export const DateType = new GraphQLScalarType<Date, string>({
+export const DateType = new GraphQLScalarType<Date | null, string>({
   name: 'Date',
   serialize(value: any) {
     return value.toISOString()
   },
   parseValue(value) {
-    return new Date(value as string);
+    return value ? new Date(value as string) : null;
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.STRING) {
       return new Date(ast.value)
     }
-    return new Date()
+    return null
   },
 });
 
@@ -84,7 +84,7 @@ export const WordleResultType = new GraphQLObjectType<any, WordleResult>({
     createdAt: {
       type: new GraphQLNonNull(DateType)
     },
-    guesses: {
+    attempts: {
       type: new GraphQLNonNull(
         new GraphQLList(
           new GraphQLNonNull(

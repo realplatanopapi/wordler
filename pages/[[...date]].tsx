@@ -99,16 +99,6 @@ const Home: NextPage<HomePageProps> = ({
         <Box mb={3}>
           <Heading as="h1">Wordler</Heading>
         </Box>
-        <Box mb={5}>
-          <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
-          {results?.map((result: any) => {
-            return (
-              <Box key={result.id} mb={3}>
-                <WordleResult currentUser={user} result={result} />
-              </Box>
-            )
-          })}
-        </Box>
         {!hasPostedResultsToday && (
           <Box mb={5}>
             <Heading as="h2">post your results</Heading>
@@ -137,6 +127,16 @@ const Home: NextPage<HomePageProps> = ({
             </form>
           </Box>
         )}
+        <Box mb={5}>
+          <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
+          {results?.map((result: any) => {
+            return (
+              <Box key={result.id} mb={3}>
+                <WordleResult currentUser={user} result={result} />
+              </Box>
+            )
+          })}
+        </Box>
         <Box mb={5}>
           <Heading as="h2">groups</Heading>
           {groups.length ? (

@@ -1,0 +1,17 @@
+schema: http://localhost:3000/api/graphql
+documents: '{client,pages}/**/*.gql'
+hooks:
+  afterAllFileWrite:
+    - prettier --write
+generates:
+  client/api/graphql/types.d.ts:
+    - typescript
+  client/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .ts
+      folder: __gql__
+      baseTypesPath: graphql/types.d.ts
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo

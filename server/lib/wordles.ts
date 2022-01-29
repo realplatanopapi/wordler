@@ -82,58 +82,10 @@ function parseResultsFromString(resultsString: string): ResultData {
   }
 }
 
-export function getResultsForUser(user: User) {
-  return db.wordleResult.findMany({
-    where: {
-      userId: user.id,
-    },
-    include: {
-      attempts: true,
-      wordle: true,
-    },
-  })
-}
-
-export function getResultsForGroup(group: Group) {
-  return db.wordleResult.findMany({
-    include: {
-      attempts: true,
-      wordle: true,
-      user: true,
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
-    where: {
-      user: {
-        groupMemberships: {
-          some: {
-            groupId: group.id,
-          },
-        },
-      },
-    },
-  })
-}
-
-export function getResultsForUsersConnections(user: User) {
-  return db.wordleResult.findMany({
-    include: {
-      attempts: true,
-      wordle: true,
-      user: true,
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
-    
-  })
-}
-
 interface ResultQueryOptions {
-  user: User
   take: number
   cursor?: string | null
+  userId?: string
   groupId?: string
 }
 
@@ -148,20 +100,20 @@ interface ResultsQueryResult {
 }
 
 export async function queryResults({
-  user,
+  userId,
   ...options
 }: ResultQueryOptions): Promise<ResultsQueryResult> {
   const where: Prisma.WordleResultWhereInput = {
     OR: [
       {
-        userId: user.id
+        userId: userId
       },
       {
         user: {
           groupMemberships: {
             some: {
               groupId: options.groupId,
-              userId: user.id
+              userId: userId
             }
           }
         }

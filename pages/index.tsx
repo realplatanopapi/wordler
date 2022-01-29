@@ -1,6 +1,6 @@
 import WordleResult from '@client/components/WordleResult'
 import { getGroupsForUser } from '@server/lib/groups'
-import { getResultsForUser, getResultsForUsersConnections } from '@server/lib/wordles'
+import { queryResults } from '@server/lib/wordles'
 import axios from 'axios'
 import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
@@ -43,7 +43,10 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     }
 
     const groups = await getGroupsForUser(user)
-    const results = await getResultsForUsersConnections(user)
+    const {data: results} = await queryResults({
+      userId: user.id,
+      take: 25,
+    })
 
     return {
       props: {

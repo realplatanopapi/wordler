@@ -2,7 +2,7 @@ import WordleResult from '@client/components/WordleResult'
 import { getGroupsForUser } from '@server/lib/groups'
 import { queryResults } from '@server/lib/wordles'
 import axios from 'axios'
-import { startOfDay } from 'date-fns'
+import { addDays, startOfDay, subDays } from 'date-fns'
 import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -11,20 +11,33 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Box, Heading, Link, Text } from 'theme-ui'
 import { getById } from '../server/lib/accounts'
-import { cookieConfig } from '../server/lib/auth'
+import { cookieConfig } from '@server/lib/auth'
+
 interface HomePageProps {
   user: any
   wordleResults: any[]
   groups: any[]
+  date: string
+  nextDate: string | null
+  previousDate: string
   [key: string]: any
 }
 
 export const getServerSideProps = withIronSessionSsr<HomePageProps>(
-  async ({ req }) => {
+  async ({ req, query }) => {
+    const dateQuery = query.date as string | undefined
+    const today = startOfDay(new Date())
+    const date = dateQuery ? startOfDay(new Date(dateQuery)) : today
+    const nextDate = date < today ? addDays(date, 1) : null
+    const previousDate = subDays(date, 1)
+    
     const userId = req.session.userId
     if (!userId) {
       return {
         props: {
+          date: date.toISOString(),
+          previousDate: previousDate.toISOString(),
+          nextDate: nextDate ? nextDate.toISOString() : null,
           user: null,
           wordleResults: [],
           groups: [],
@@ -36,6 +49,9 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     if (!user) {
       return {
         props: {
+          date: date.toISOString(),
+          previousDate: previousDate.toISOString(),
+          nextDate: nextDate ? nextDate.toISOString() : null,
           user: null,
           wordleResults: [],
           groups: [],
@@ -47,11 +63,14 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     const {data: results} = await queryResults({
       userId: user.id,
       take: 25,
-      date: startOfDay(new Date())
+      date,
     })
 
     return {
       props: {
+        date: date.toISOString(),
+        previousDate: previousDate.toISOString(),
+        nextDate: nextDate ? nextDate.toISOString() : null,
         user: {
           displayName: user.displayName,
         },

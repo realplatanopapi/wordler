@@ -1,4 +1,4 @@
-import NextLink, { LinkProps as NextLinkProps } from 'next/Link'
+import NextLink, { LinkProps as NextLinkProps } from 'next/link'
 import {Link as A, LinkProps as AProps} from 'theme-ui'
 
 type Props = NextLinkProps & AProps

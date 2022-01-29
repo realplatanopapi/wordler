@@ -8,7 +8,7 @@ import {
 } from '@prisma/client'
 import db from '@server/services/db'
 import {Prisma } from '@prisma/client'
-import { startOfDay } from 'date-fns'
+import { addDays, startOfDay } from 'date-fns'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
@@ -93,7 +93,7 @@ interface ResultQueryOptions {
 
 interface ResultsQueryResult {
   total: number
-  nextCursor: string
+  nextCursor: string | null
   data: (WordleResult & {
     user: User,
     attempts: WordleAttempt[],
@@ -106,24 +106,33 @@ export async function queryResults({
   date,
   ...options
 }: ResultQueryOptions): Promise<ResultsQueryResult> {
+  console.log(date)
   const where: Prisma.WordleResultWhereInput = {
-    OR: [
+    AND: [
       {
-        userId: userId
+        wordle: {
+          date: date ? {
+            gte: date,
+            lt: addDays(date, 1)
+          } : undefined
+        }
       },
       {
-        createdAt: date ? {
-          gte: date,
-          lt: date
-        } : undefined,
-        user: {
-          groupMemberships: {
-            some: {
-              groupId: options.groupId,
-              userId: userId
+        OR: [
+          {
+            userId: userId
+          },
+          {
+            user: {
+              groupMemberships: {
+                some: {
+                  groupId: options.groupId,
+                  userId: userId
+                }
+              }
             }
           }
-        }
+        ]
       }
     ]
   }
@@ -151,6 +160,6 @@ export async function queryResults({
   return {
     total,
     data, 
-    nextCursor: data[data.length - 1].id
+    nextCursor: data.length > 0 ? data[data.length - 1].id : null
   }
 }

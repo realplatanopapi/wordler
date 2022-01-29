@@ -2,6 +2,7 @@ import WordleResult from '@client/components/WordleResult'
 import { getGroupsForUser } from '@server/lib/groups'
 import { queryResults } from '@server/lib/wordles'
 import axios from 'axios'
+import { startOfDay } from 'date-fns'
 import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -46,6 +47,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     const {data: results} = await queryResults({
       userId: user.id,
       take: 25,
+      date: startOfDay(new Date())
     })
 
     return {

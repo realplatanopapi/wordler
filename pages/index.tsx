@@ -14,6 +14,8 @@ import { ResultsDocument, ResultsQuery, useCanPostResultsQuery, useGroupsQuery, 
 import PostResultsForm from '@client/components/PostResultsForm'
 import { client } from '@client/graphql'
 import Leaderboard from '@client/components/Leaderboard'
+import { useMemo } from 'react'
+import { Group } from '@client/api'
 
 interface HomePageProps {
   user: any | null
@@ -82,6 +84,22 @@ const Home: NextPage<HomePageProps> = ({
   const results = resultsQuery.data?.results
   const leaderboard = leaderboardQuery.data?.leaderboard
 
+  const groupsById: {
+    [id: string]: Group
+  } | null = useMemo(() => {
+    if (!groups) {
+      return null
+    }
+
+    return groups.reduce((acc, group) => {
+      return {
+        ...acc,
+        [group.id]: group
+      }
+    }, {})
+  },[groups]);
+  const selectedGroup = groupId && groupsById ? groupsById[groupId] : null
+
   return (
     <>
       <Head>
@@ -135,13 +153,14 @@ const Home: NextPage<HomePageProps> = ({
             }}
           />
         </Box>
-
       ) : (
         <Text>Not a member of any groups (yet)</Text>
       )}
-      <Box mb={4}>
-        <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
-      </Box>
+      {
+        selectedGroup && (
+          <Heading>{selectedGroup.name}</Heading>
+        )
+      }
       <Box mb={4}>
         {
           leaderboard && <Leaderboard leaderboard={leaderboard} />
@@ -155,6 +174,9 @@ const Home: NextPage<HomePageProps> = ({
             </Box>
           )
         })}
+      </Box>
+      <Box mb={4}>
+        <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
       </Box>
       <Box mb={5}>
         <form

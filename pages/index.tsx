@@ -5,15 +5,14 @@ import axios from 'axios'
 import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { Box, Heading, Link, Text } from 'theme-ui'
+import { Box, Heading, Text } from 'theme-ui'
 import { getById } from '../server/lib/accounts'
 import { cookieConfig } from '@server/lib/auth'
 import { startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
-import { useResultsQuery } from '@client/graphql/__gql__/wordles'
 import GroupPicker from '@client/components/GroupPicker'
+import { useResultsQuery } from '@client/__gql__/api'
 
 interface HomePageProps {
   user: any | null

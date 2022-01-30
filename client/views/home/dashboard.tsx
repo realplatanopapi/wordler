@@ -1,5 +1,4 @@
 import WordleResult from '@client/components/WordleResult'
-import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Box, Grid, Heading, Text } from 'theme-ui'
@@ -20,7 +19,6 @@ import { useMemo } from 'react'
 import { Group, User } from '@client/api'
 import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
-import Link from '@client/components/Link'
 import { getStartOfWeek } from '@common/utils/time'
 import Groups from '@client/components/Groups'
 
@@ -76,15 +74,7 @@ const Dashboard: React.FC<Props> = ({
       <Head>
         <title>Wordler</title>
       </Head>
-      {!user && (
-        <div>
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="/api/auth/twitter/authorize">
-            Sign in with Twitter to share and compare your results
-          </a>
-        </div>
-      )}
-      {user && canPostResults && (
+      {canPostResults && (
         <Section>
           <PostResultsForm
             onSubmit={async (wordleResult) => {

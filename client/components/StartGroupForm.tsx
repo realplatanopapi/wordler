@@ -1,7 +1,8 @@
+import { Group } from "@client/api"
 import { useStartGroupMutation } from "@client/__gql__/api"
 
 interface Props {
-  onSubmit: () => any
+  onSubmit: (group: Group) => any
 }
 
 const StartGroupForm: React.FC<Props> = ({onSubmit}) => {
@@ -13,15 +14,20 @@ const StartGroupForm: React.FC<Props> = ({onSubmit}) => {
         event.preventDefault()
         const form = event.target as HTMLFormElement
         const data = new FormData(form)
-        await startGroup({
+        const result = await startGroup({
           variables: {
             name: data.get('name') as string
           }
         })
-        onSubmit()
+        const newGroup = result.data?.startGroup
+
+        if (newGroup) {
+          onSubmit(newGroup)
+        }
       }}
     >
       <input name="name" placeholder="name your group" required />
+      <br />
       <button type="submit">start</button>
     </form>
   )

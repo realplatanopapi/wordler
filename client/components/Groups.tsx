@@ -1,6 +1,7 @@
 import { Group } from '@client/api'
+import { copyToClipboard } from '@client/utils'
 import React from 'react'
-import { Flex, Text } from 'theme-ui'
+import { Button, Flex, Text } from 'theme-ui'
 
 interface Props {
   groups: Group[]
@@ -12,7 +13,11 @@ const Groups: React.FC<Props> = ({ groups }) => {
       {groups.map((group) => {
         return (
           <Flex key={group.id}>
-            <Text>{group.name}</Text> - {group.inviteLink}
+            <Text>{group.name}</Text> - <Text onClick={() => {
+              copyToClipboard(group.inviteLink)
+            }}>
+              Copy invite link
+            </Text>
           </Flex>
         )
       })}

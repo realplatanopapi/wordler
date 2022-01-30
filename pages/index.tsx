@@ -13,6 +13,7 @@ import { cookieConfig } from '@server/lib/auth'
 import { startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
 import { useResultsQuery } from '@client/graphql/__gql__/wordles'
+import GroupPicker from '@client/components/GroupPicker'
 
 interface HomePageProps {
   user: any | null
@@ -84,8 +85,8 @@ const Home: NextPage<HomePageProps> = ({
   const router = useRouter()
   const resultsQuery = useResultsQuery({
     variables: {
-      date
-    }
+      date,
+    },
   })
   const results = resultsQuery.data?.results
 
@@ -97,14 +98,14 @@ const Home: NextPage<HomePageProps> = ({
       <Box mb={3}>
         <Heading as="h1">Wordler</Heading>
       </Box>
-      {
-        !user && (
-          <div>
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a href="/api/auth/twitter/authorize">Sign in with Twitter to share and compare your results</a>
-          </div>
-        )
-      }
+      {!user && (
+        <div>
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a href="/api/auth/twitter/authorize">
+            Sign in with Twitter to share and compare your results
+          </a>
+        </div>
+      )}
       {user && !hasPostedResultsToday && (
         <Box mb={5}>
           <Heading as="h2">post your results</Heading>
@@ -133,6 +134,28 @@ const Home: NextPage<HomePageProps> = ({
           </form>
         </Box>
       )}
+      {groups.length ? (
+        <GroupPicker
+          selectedGroupId={router.query.groupId as string}
+          groups={groups}
+          onChange={(newGroupId) => {
+            let newQuery = {
+              ...router.query,
+            }
+            if (!newGroupId) {
+              delete newQuery.groupId
+            } else {
+              newQuery.groupId = newGroupId
+            }
+
+            router.replace({
+              query: newQuery
+            })
+          }}
+        />
+      ) : (
+        <Text>Not a member of any groups (yet)</Text>
+      )}
       <Box mb={5}>
         <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
         {results?.map((result: any) => {
@@ -144,18 +167,6 @@ const Home: NextPage<HomePageProps> = ({
         })}
       </Box>
       <Box mb={5}>
-        <Heading as="h2">groups</Heading>
-        {groups.length ? (
-          groups.map((group) => {
-            return (
-              <NextLink key={group.id} href={`/groups/${group.slug}`}>
-                <Link href={`/groups/${group.slug}`}>{group.name}</Link>
-              </NextLink>
-            )
-          })
-        ) : (
-          <Text>Not a member of any groups (yet)</Text>
-        )}
         <form
           onSubmit={async (event) => {
             event.preventDefault()

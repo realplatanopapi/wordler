@@ -3,7 +3,7 @@ import { Box } from "theme-ui"
 
 const Navigation: React.FC = () => {
   return (
-    <Box as="nav">
+    <Box as="nav" mb={4}>
       <Link href="/">Wordler</Link>
     </Box>
   )

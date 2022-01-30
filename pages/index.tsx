@@ -102,7 +102,7 @@ const Home: NextPage = () => {
           />
         </Box>
       )}
-      {groups?.length ? (
+      {groups && groups.length > 1 ? (
         <Box mb={4}>
           <GroupPicker
             selectedGroupId={groupId}

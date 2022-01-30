@@ -10,9 +10,10 @@ import { cookieConfig } from '@server/lib/auth'
 import { startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
-import { ResultsDocument, ResultsQuery, useCanPostResultsQuery, useGroupsQuery, useResultsQuery } from '@client/__gql__/api'
+import { ResultsDocument, ResultsQuery, useCanPostResultsQuery, useGroupsQuery, useLeaderboardQuery, useResultsQuery } from '@client/__gql__/api'
 import PostResultsForm from '@client/components/PostResultsForm'
 import { client } from '@client/graphql'
+import Leaderboard from '@client/components/Leaderboard'
 
 interface HomePageProps {
   user: any | null
@@ -66,6 +67,7 @@ const Home: NextPage<HomePageProps> = ({
   const router = useRouter()
   const groupId = router.query.groupId as string
   const canPostResultsQuery = useCanPostResultsQuery()
+  const leaderboardQuery = useLeaderboardQuery()
   const groupsQuery = useGroupsQuery()
   const resultsQueryVariables = {
     date,
@@ -78,6 +80,7 @@ const Home: NextPage<HomePageProps> = ({
   const canPostResults = canPostResultsQuery.data?.canPostResults === true
   const groups = groupsQuery.data?.groups
   const results = resultsQuery.data?.results
+  const leaderboard = leaderboardQuery.data?.leaderboard
 
   return (
     <>
@@ -142,6 +145,11 @@ const Home: NextPage<HomePageProps> = ({
             </Box>
           )
         })}
+      </Box>
+      <Box mb={5}>
+        {
+          leaderboard && <Leaderboard leaderboard={leaderboard} />
+        }
       </Box>
       <Box mb={5}>
         <form

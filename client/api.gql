@@ -1,9 +1,13 @@
+fragment User on User {
+  id
+  displayName
+}
+
 fragment WordleResult on WordleResult {
   id
   createdAt
   user {
-    id
-    displayName
+    ...User
   }
   guesses
 }
@@ -28,5 +32,16 @@ query groups {
   groups {
     id
     name
+  }
+}
+
+query leaderboard {
+  leaderboard {
+    entries {
+      user {
+        ...User
+      }
+      score
+    }
   }
 }

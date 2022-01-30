@@ -1,9 +1,9 @@
 import { User } from "@prisma/client"
 import { getById } from "@server/lib/accounts"
 import { getGroupsForUser } from "@server/lib/groups"
-import { addResultsForUser, canPostResults, queryResults } from "@server/lib/wordles"
+import { addResultsForUser, canPostResults, getLeaderboard, queryResults } from "@server/lib/wordles"
 import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
-import {DateType, GroupType, WordleResultType} from './types'
+import {DateType, GroupType, LeaderboardType, WordleResultType} from './types'
 
 export interface GraphQLContext {
   user: User | null
@@ -30,6 +30,12 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         }
 
         return getGroupsForUser(context.user)
+      }
+    },
+    leaderboard: {
+      type: new GraphQLNonNull(LeaderboardType),
+      resolve: (_source, _args, _context) => {
+        return getLeaderboard()
       }
     },
     results: {

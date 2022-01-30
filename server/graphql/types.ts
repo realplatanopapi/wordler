@@ -1,6 +1,6 @@
 import { WordleResult } from "@prisma/client";
 import { getById } from "@server/lib/accounts";
-import { GraphQLEnumType, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType, GraphQLString, Kind, ValueNode } from "graphql";
+import { GraphQLEnumType, GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType, GraphQLString, Kind, ValueNode } from "graphql";
 import { GraphQLContext } from "./schema";
 import { WordleGuessResult } from "@server/lib/wordles";
 
@@ -88,3 +88,27 @@ export const WordleResultType = new GraphQLObjectType<WordleResult, GraphQLConte
   }
 })
 
+export const LeaderboardEntryType = new GraphQLObjectType({
+  name: 'LeaderboardEntry',
+  fields: {
+    score: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    user: {
+      type: new GraphQLNonNull(UserType)
+    }
+  }
+})
+
+export const LeaderboardType = new GraphQLObjectType({
+  name: 'Leaderboard',
+  fields: {
+    entries: {
+      type: new GraphQLNonNull(
+        new GraphQLList(
+          new GraphQLNonNull(LeaderboardEntryType)
+        )
+      )
+    }
+  }
+})

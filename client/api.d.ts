@@ -25,6 +25,17 @@ export type Group = {
   name: Scalars['String']
 }
 
+export type Leaderboard = {
+  __typename?: 'Leaderboard'
+  entries: Array<LeaderboardEntry>
+}
+
+export type LeaderboardEntry = {
+  __typename?: 'LeaderboardEntry'
+  score: Scalars['Int']
+  user: User
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   postResults?: Maybe<WordleResult>
@@ -36,8 +47,9 @@ export type MutationPostResultsArgs = {
 
 export type Query = {
   __typename?: 'Query'
-  canPostResults?: Maybe<Scalars['Boolean']>
+  canPostResults: Scalars['Boolean']
   groups?: Maybe<Array<Group>>
+  leaderboard: Leaderboard
   results: Array<WordleResult>
 }
 

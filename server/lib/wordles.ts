@@ -7,6 +7,7 @@ import db from '@server/services/db'
 import {Prisma } from '@prisma/client'
 import { addDays } from 'date-fns'
 import { getToday, startOfDay, toUTC } from '@common/utils/time'
+import { getById } from './accounts'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
@@ -188,4 +189,43 @@ export async function canPostResults(user: User): Promise<boolean> {
   })
 
   return count === 0
+}
+
+export interface LeaderboardEntry {
+  user: User
+  score: number
+}
+
+export interface Leaderboard {
+  entries: LeaderboardEntry[]
+}
+
+export async function getLeaderboard(): Promise<Leaderboard> {
+  const results = await db.wordleResult.groupBy({
+    by: ['userId'],
+    _sum: {
+      score: true
+    },
+    orderBy: {
+      _sum: {
+        score: 'desc'
+      }
+    },
+  })
+
+  const entries = await Promise.all(
+    results.map(async result => {
+      const user = await getById(result.userId) as User
+      const score = result._sum.score as number
+
+      return {
+        user,
+        score
+      }
+    })
+  )
+
+  return {
+    entries
+  }
 }

@@ -3,6 +3,12 @@ import * as Types from '../api.d'
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
+export type UserFragment = {
+  __typename?: 'User'
+  id: string
+  displayName: string
+}
+
 export type WordleResultFragment = {
   __typename?: 'WordleResult'
   id: string
@@ -49,7 +55,7 @@ export type CanPostResultsQueryVariables = Types.Exact<{ [key: string]: never }>
 
 export type CanPostResultsQuery = {
   __typename?: 'Query'
-  canPostResults?: boolean | null | undefined
+  canPostResults: boolean
 }
 
 export type GroupsQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -62,16 +68,36 @@ export type GroupsQuery = {
     | undefined
 }
 
+export type LeaderboardQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type LeaderboardQuery = {
+  __typename?: 'Query'
+  leaderboard: {
+    __typename?: 'Leaderboard'
+    entries: Array<{
+      __typename?: 'LeaderboardEntry'
+      score: number
+      user: { __typename?: 'User'; id: string; displayName: string }
+    }>
+  }
+}
+
+export const UserFragmentDoc = gql`
+  fragment User on User {
+    id
+    displayName
+  }
+`
 export const WordleResultFragmentDoc = gql`
   fragment WordleResult on WordleResult {
     id
     createdAt
     user {
-      id
-      displayName
+      ...User
     }
     guesses
   }
+  ${UserFragmentDoc}
 `
 export const ResultsDocument = gql`
   query results($date: Date, $groupId: ID) {
@@ -276,4 +302,65 @@ export type GroupsLazyQueryHookResult = ReturnType<typeof useGroupsLazyQuery>
 export type GroupsQueryResult = Apollo.QueryResult<
   GroupsQuery,
   GroupsQueryVariables
+>
+export const LeaderboardDocument = gql`
+  query leaderboard {
+    leaderboard {
+      entries {
+        user {
+          ...User
+        }
+        score
+      }
+    }
+  }
+  ${UserFragmentDoc}
+`
+
+/**
+ * __useLeaderboardQuery__
+ *
+ * To run a query within a React component, call `useLeaderboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLeaderboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLeaderboardQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLeaderboardQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    LeaderboardQuery,
+    LeaderboardQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<LeaderboardQuery, LeaderboardQueryVariables>(
+    LeaderboardDocument,
+    options
+  )
+}
+export function useLeaderboardLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    LeaderboardQuery,
+    LeaderboardQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<LeaderboardQuery, LeaderboardQueryVariables>(
+    LeaderboardDocument,
+    options
+  )
+}
+export type LeaderboardQueryHookResult = ReturnType<typeof useLeaderboardQuery>
+export type LeaderboardLazyQueryHookResult = ReturnType<
+  typeof useLeaderboardLazyQuery
+>
+export type LeaderboardQueryResult = Apollo.QueryResult<
+  LeaderboardQuery,
+  LeaderboardQueryVariables
 >

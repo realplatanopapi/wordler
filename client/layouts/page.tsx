@@ -23,11 +23,14 @@ export const Section: React.FC<SectionProps> = ({heading, headingAs = "h3", chil
   )
 }
 
-export type PageProps = PropsWithChildren<{}>
+export type PageProps = PropsWithChildren<{
+  header?: React.ReactNode
+}>
 
-const Page: React.FC<PageProps> = ({children}) => {
+const Page: React.FC<PageProps> = ({children, header}) => {
   return (
     <Container>
+      {header}
       {children}
     </Container>
   )

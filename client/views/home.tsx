@@ -1,10 +1,18 @@
-import { useWhoamiQuery } from "@client/__gql__/api"
+import { useGroupsQuery, useWhoamiQuery } from "@client/__gql__/api"
 import Dashboard from "./dashboard/dashboard"
+import Onboarding from "./Onboarding"
 import Preview from "./preview"
 
 const Home: React.FC = () => {
   const whoamiResult = useWhoamiQuery()
-  const isLoading = whoamiResult.loading
+  const user = whoamiResult.data?.whoami
+  
+  const groupsResult = useGroupsQuery({
+    skip: !user
+  })
+  const groups = groupsResult.data?.groups
+
+  const isLoading = whoamiResult.loading || groupsResult.loading
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -12,9 +20,15 @@ const Home: React.FC = () => {
     return <div>error</div>
   }
 
-  const user = whoamiResult.data.whoami
   if (!user) {
     return <Preview />
+  }
+
+  const isInAGroup = groups && groups.length > 0
+  if (!isInAGroup) {
+    return <Onboarding onCompleteOnboarding={() => {
+      groupsResult.refetch()
+    }} />
   }
 
   return (

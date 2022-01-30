@@ -5,15 +5,12 @@ import { Box, Grid, Heading, Text } from 'theme-ui'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
 import {
-  ResultsDocument,
-  ResultsQuery,
   useCanPostResultsQuery,
   useGroupsQuery,
   useLeaderboardQuery,
   useResultsQuery,
 } from '@client/__gql__/api'
 import PostResultsForm from '@client/components/PostResultsForm'
-import { client } from '@client/graphql'
 import Leaderboard from '@client/components/Leaderboard'
 import { useMemo } from 'react'
 import { Group, User } from '@client/api'

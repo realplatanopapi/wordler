@@ -157,30 +157,12 @@ const Home: NextPage = () => {
       {
         user && groups && (
           <Section heading="Your groups">
-            <Groups groups={groups} />
+            <Groups groups={groups} onStartGroup={() => {
+              groupsQuery.refetch()
+            }} />
           </Section>
         )
       }
-      <Section>
-        <form
-          onSubmit={async (event) => {
-            event.preventDefault()
-            const form = event.target as HTMLFormElement
-            const data = new FormData(form)
-            const result = await axios.post('/api/groups', {
-              name: data.get('name'),
-            })
-            router.push(`/groups/${result.data.data.id}`)
-          }}
-        >
-          <label>
-            <span>start a group</span>
-            <br />
-            <input name="name" placeholder="name your group" required />
-          </label>
-          <button type="submit">start</button>
-        </form>
-      </Section>
       {user && (
         <Section>
           <Text as="p" mb={2}>

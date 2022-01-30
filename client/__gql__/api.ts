@@ -3,6 +3,13 @@ import * as Types from '../api.d'
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
+export type GroupFragment = {
+  __typename?: 'Group'
+  id: string
+  name: string
+  inviteLink: string
+}
+
 export type UserFragment = {
   __typename?: 'User'
   id: string
@@ -99,6 +106,25 @@ export type WhoamiQuery = {
     | undefined
 }
 
+export type StartGroupMutationVariables = Types.Exact<{
+  name: Types.Scalars['String']
+}>
+
+export type StartGroupMutation = {
+  __typename?: 'Mutation'
+  startGroup?:
+    | { __typename?: 'Group'; id: string; name: string; inviteLink: string }
+    | null
+    | undefined
+}
+
+export const GroupFragmentDoc = gql`
+  fragment Group on Group {
+    id
+    name
+    inviteLink
+  }
+`
 export const UserFragmentDoc = gql`
   fragment User on User {
     id
@@ -275,11 +301,10 @@ export type CanPostResultsQueryResult = Apollo.QueryResult<
 export const GroupsDocument = gql`
   query groups {
     groups {
-      id
-      name
-      inviteLink
+      ...Group
     }
   }
+  ${GroupFragmentDoc}
 `
 
 /**
@@ -430,4 +455,54 @@ export type WhoamiLazyQueryHookResult = ReturnType<typeof useWhoamiLazyQuery>
 export type WhoamiQueryResult = Apollo.QueryResult<
   WhoamiQuery,
   WhoamiQueryVariables
+>
+export const StartGroupDocument = gql`
+  mutation startGroup($name: String!) {
+    startGroup(name: $name) {
+      ...Group
+    }
+  }
+  ${GroupFragmentDoc}
+`
+export type StartGroupMutationFn = Apollo.MutationFunction<
+  StartGroupMutation,
+  StartGroupMutationVariables
+>
+
+/**
+ * __useStartGroupMutation__
+ *
+ * To run a mutation, you first call `useStartGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startGroupMutation, { data, loading, error }] = useStartGroupMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useStartGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StartGroupMutation,
+    StartGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<StartGroupMutation, StartGroupMutationVariables>(
+    StartGroupDocument,
+    options
+  )
+}
+export type StartGroupMutationHookResult = ReturnType<
+  typeof useStartGroupMutation
+>
+export type StartGroupMutationResult = Apollo.MutationResult<StartGroupMutation>
+export type StartGroupMutationOptions = Apollo.BaseMutationOptions<
+  StartGroupMutation,
+  StartGroupMutationVariables
 >

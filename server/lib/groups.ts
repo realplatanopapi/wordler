@@ -4,7 +4,7 @@ import db from '@server/services/db'
 import slugify from 'slugify'
 import config from '@server/config'
 
-export function createGroup(user: User, name: string) {
+export function startGroup(user: User, name: string) {
   const slug = slugify(name, {
     lower: true,
     replacement: '_',
@@ -61,6 +61,9 @@ export function getGroupsForUser(user: User) {
         },
       },
     },
+    orderBy: {
+      name: 'asc'
+    }
   })
 }
 

@@ -40,10 +40,15 @@ export type LeaderboardEntry = {
 export type Mutation = {
   __typename?: 'Mutation'
   postResults?: Maybe<WordleResult>
+  startGroup?: Maybe<Group>
 }
 
 export type MutationPostResultsArgs = {
   results: Scalars['String']
+}
+
+export type MutationStartGroupArgs = {
+  name: Scalars['String']
 }
 
 export type Query = {

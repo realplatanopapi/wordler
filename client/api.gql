@@ -1,3 +1,9 @@
+fragment Group on Group {
+  id
+  name 
+  inviteLink
+}
+
 fragment User on User {
   id
   displayName
@@ -30,9 +36,7 @@ query canPostResults {
 
 query groups {
   groups {
-    id
-    name
-    inviteLink
+    ...Group
   }
 }
 
@@ -50,5 +54,11 @@ query leaderboard($weekOf: Date!) {
 query whoami {
   whoami {
     ...User
+  }
+}
+
+mutation startGroup($name: String!) {
+  startGroup(name: $name) {
+    ...Group
   }
 }

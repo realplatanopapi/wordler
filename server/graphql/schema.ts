@@ -1,6 +1,5 @@
 import { User } from "@prisma/client"
-import { getById } from "@server/lib/accounts"
-import { getGroupsForUser } from "@server/lib/groups"
+import { getGroupsForUser, startGroup } from "@server/lib/groups"
 import { addResultsForUser, canPostResults, getLeaderboard, queryResults } from "@server/lib/wordles"
 import { addDays } from "date-fns"
 import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
@@ -105,6 +104,21 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
         }
 
         return addResultsForUser(context.user, args.results)
+      }
+    },
+    startGroup: {
+      type: GroupType,
+      args: {
+        name: {
+          type: new GraphQLNonNull(GraphQLString)
+        }
+      },
+      resolve: (_source, {name}, {user}) => {
+        if (!user) {
+          return null
+        }
+
+        return startGroup(user, name)
       }
     }
   }

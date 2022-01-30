@@ -12,13 +12,12 @@ import { cookieConfig } from '@server/lib/auth'
 import { startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
-import { useResultsQuery } from '@client/__gql__/api'
+import { useGroupsQuery, useResultsQuery } from '@client/__gql__/api'
 
 interface HomePageProps {
   user: any | null
   date: string
   hasPostedResultsToday: boolean
-  groups: any[]
   [key: string]: any
 }
 
@@ -35,7 +34,6 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
           hasPostedResultsToday: false,
           date: date.toISOString(),
           user: null,
-          groups: [],
         },
       }
     }
@@ -47,12 +45,9 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
           hasPostedResultsToday: false,
           date: date.toISOString(),
           user: null,
-          groups: [],
         },
       }
     }
-
-    const groups = await getGroupsForUser(user)
 
     return {
       props: {
@@ -62,13 +57,6 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
           id: user.id,
           displayName: user.displayName,
         },
-        groups: groups.map((group) => {
-          return {
-            id: group.id,
-            name: group.name,
-            slug: group.slug,
-          }
-        }),
       },
     }
   },
@@ -79,16 +67,18 @@ const Home: NextPage<HomePageProps> = ({
   date,
   hasPostedResultsToday,
   user,
-  groups,
 }) => {
   const router = useRouter()
   const groupId = router.query.groupId as string
+  const groupsQuery = useGroupsQuery()
   const resultsQuery = useResultsQuery({
     variables: {
       date,
       groupId
     },
   })
+
+  const groups = groupsQuery.data?.groups
   const results = resultsQuery.data?.results
 
   return (
@@ -135,7 +125,7 @@ const Home: NextPage<HomePageProps> = ({
           </form>
         </Box>
       )}
-      {groups.length ? (
+      {groups?.length ? (
         <GroupPicker
           selectedGroupId={groupId}
           groups={groups}

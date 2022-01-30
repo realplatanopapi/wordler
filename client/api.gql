@@ -9,3 +9,10 @@ query results($date: Date, $groupId: ID) {
     guesses
   }
 }
+
+query groups {
+  groups {
+    id
+    name
+  }
+}

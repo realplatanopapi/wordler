@@ -19,8 +19,15 @@ export type Scalars = {
   Date: any
 }
 
+export type Group = {
+  __typename?: 'Group'
+  id: Scalars['ID']
+  name: Scalars['String']
+}
+
 export type Query = {
   __typename?: 'Query'
+  groups?: Maybe<Array<Group>>
   results: Array<WordleResult>
 }
 

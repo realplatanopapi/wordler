@@ -1,7 +1,8 @@
 import { User } from "@prisma/client"
+import { getGroupsForUser } from "@server/lib/groups"
 import { queryResults } from "@server/lib/wordles"
 import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
-import {DateType, WordleResultType} from './types'
+import {DateType, GroupType, WordleResultType} from './types'
 
 export interface GraphQLContext {
   user: User | null
@@ -10,6 +11,16 @@ export interface GraphQLContext {
 const query = new GraphQLObjectType<any, GraphQLContext>({
   name: 'Query',
   fields: {
+    groups: {
+      type: new GraphQLList(new GraphQLNonNull(GroupType)),
+      resolve: async(_source, _args, context) => {
+        if (!context.user) {
+          return null
+        }
+
+        return getGroupsForUser(context.user)
+      }
+    },
     results: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(WordleResultType))),
       args: {

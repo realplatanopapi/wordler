@@ -19,6 +19,16 @@ export type ResultsQuery = {
   }>
 }
 
+export type GroupsQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GroupsQuery = {
+  __typename?: 'Query'
+  groups?:
+    | Array<{ __typename?: 'Group'; id: string; name: string }>
+    | null
+    | undefined
+}
+
 export const ResultsDocument = gql`
   query results($date: Date, $groupId: ID) {
     results(date: $date, groupId: $groupId) {
@@ -73,4 +83,52 @@ export type ResultsLazyQueryHookResult = ReturnType<typeof useResultsLazyQuery>
 export type ResultsQueryResult = Apollo.QueryResult<
   ResultsQuery,
   ResultsQueryVariables
+>
+export const GroupsDocument = gql`
+  query groups {
+    groups {
+      id
+      name
+    }
+  }
+`
+
+/**
+ * __useGroupsQuery__
+ *
+ * To run a query within a React component, call `useGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGroupsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GroupsQuery, GroupsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GroupsQuery, GroupsQueryVariables>(
+    GroupsDocument,
+    options
+  )
+}
+export function useGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GroupsQuery, GroupsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GroupsQuery, GroupsQueryVariables>(
+    GroupsDocument,
+    options
+  )
+}
+export type GroupsQueryHookResult = ReturnType<typeof useGroupsQuery>
+export type GroupsLazyQueryHookResult = ReturnType<typeof useGroupsLazyQuery>
+export type GroupsQueryResult = Apollo.QueryResult<
+  GroupsQuery,
+  GroupsQueryVariables
 >

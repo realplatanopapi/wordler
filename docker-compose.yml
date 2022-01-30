@@ -10,7 +10,7 @@ services:
       - PGDATA=/var/lib/postgresql/data
       - POSTGRES_USER=worlder
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=worlder_dev
+      - POSTGRES_DB=wordler_dev
     volumes:
       - db:/var/lib/postgresql/data
     ports:
@@ -21,7 +21,7 @@ services:
     depends_on:
       - 'postgres'
     environment:
-      - DATABASE_URL=postgres://worlder:password@postgres:5432/worlder_dev?sslmode=disable
+      - DATABASE_URL=postgres://worlder:password@postgres:5432/wordler_dev?sslmode=disable
     ports:
       - '3002:8081'
     restart: 'on-failure'

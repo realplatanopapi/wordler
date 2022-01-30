@@ -53,9 +53,13 @@ export type Query = {
   results: Array<WordleResult>
 }
 
+export type QueryLeaderboardArgs = {
+  weekOf: Scalars['Date']
+}
+
 export type QueryResultsArgs = {
   groupId?: InputMaybe<Scalars['ID']>
-  weekStart: Scalars['Date']
+  weekOf: Scalars['Date']
 }
 
 export type User = {

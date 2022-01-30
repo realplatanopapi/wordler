@@ -18,7 +18,7 @@ export type WordleResultFragment = {
 }
 
 export type ResultsQueryVariables = Types.Exact<{
-  weekStart: Types.Scalars['Date']
+  weekOf: Types.Scalars['Date']
   groupId?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
@@ -68,7 +68,9 @@ export type GroupsQuery = {
     | undefined
 }
 
-export type LeaderboardQueryVariables = Types.Exact<{ [key: string]: never }>
+export type LeaderboardQueryVariables = Types.Exact<{
+  weekOf: Types.Scalars['Date']
+}>
 
 export type LeaderboardQuery = {
   __typename?: 'Query'
@@ -100,8 +102,8 @@ export const WordleResultFragmentDoc = gql`
   ${UserFragmentDoc}
 `
 export const ResultsDocument = gql`
-  query results($weekStart: Date!, $groupId: ID) {
-    results(weekStart: $weekStart, groupId: $groupId) {
+  query results($weekOf: Date!, $groupId: ID) {
+    results(weekOf: $weekOf, groupId: $groupId) {
       ...WordleResult
     }
   }
@@ -120,7 +122,7 @@ export const ResultsDocument = gql`
  * @example
  * const { data, loading, error } = useResultsQuery({
  *   variables: {
- *      weekStart: // value for 'weekStart'
+ *      weekOf: // value for 'weekOf'
  *      groupId: // value for 'groupId'
  *   },
  * });
@@ -304,8 +306,8 @@ export type GroupsQueryResult = Apollo.QueryResult<
   GroupsQueryVariables
 >
 export const LeaderboardDocument = gql`
-  query leaderboard {
-    leaderboard {
+  query leaderboard($weekOf: Date!) {
+    leaderboard(weekOf: $weekOf) {
       entries {
         user {
           ...User
@@ -329,11 +331,12 @@ export const LeaderboardDocument = gql`
  * @example
  * const { data, loading, error } = useLeaderboardQuery({
  *   variables: {
+ *      weekOf: // value for 'weekOf'
  *   },
  * });
  */
 export function useLeaderboardQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     LeaderboardQuery,
     LeaderboardQueryVariables
   >

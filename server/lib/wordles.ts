@@ -204,11 +204,22 @@ export interface Leaderboard {
   entries: LeaderboardEntry[]
 }
 
-export async function getLeaderboard(): Promise<Leaderboard> {
+export interface LeaderboardQueryOptions {
+  from: Date 
+  until: Date 
+}
+
+export async function getLeaderboard(options: LeaderboardQueryOptions): Promise<Leaderboard> {
   const results = await db.wordleResult.groupBy({
     by: ['userId'],
     _sum: {
       score: true
+    },
+    where: {
+      createdAt: {
+        gte: options.from,
+        lt: addDays(options.until, 1) 
+      }
     },
     orderBy: {
       _sum: {

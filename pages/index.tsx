@@ -69,12 +69,16 @@ const Home: NextPage<HomePageProps> = ({
   const router = useRouter()
   const groupId = router.query.groupId as string
   const canPostResultsQuery = useCanPostResultsQuery()
-  const leaderboardQuery = useLeaderboardQuery()
-  const groupsQuery = useGroupsQuery()
   const resultsQueryVariables = {
-    weekStart: new Date(dateStr),
+    weekOf: new Date(dateStr),
     groupId
   }
+  const leaderboardQuery = useLeaderboardQuery({
+    variables: {
+      weekOf: new Date(dateStr)
+    }
+  })
+  const groupsQuery = useGroupsQuery()
   const resultsQuery = useResultsQuery({
     variables: resultsQueryVariables
   })

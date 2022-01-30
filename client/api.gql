@@ -12,8 +12,8 @@ fragment WordleResult on WordleResult {
   guesses
 }
 
-query results($weekStart: Date!, $groupId: ID) {
-  results(weekStart: $weekStart, groupId: $groupId) {
+query results($weekOf: Date!, $groupId: ID) {
+  results(weekOf: $weekOf, groupId: $groupId) {
     ...WordleResult
   }
 }
@@ -35,8 +35,8 @@ query groups {
   }
 }
 
-query leaderboard {
-  leaderboard {
+query leaderboard($weekOf: Date!) {
+  leaderboard(weekOf: $weekOf) {
     entries {
       user {
         ...User

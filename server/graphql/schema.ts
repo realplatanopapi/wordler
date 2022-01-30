@@ -35,14 +35,25 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
     },
     leaderboard: {
       type: new GraphQLNonNull(LeaderboardType),
-      resolve: (_source, _args, _context) => {
-        return getLeaderboard()
+      args: {
+        weekOf: {
+          type: new GraphQLNonNull(DateType)
+        },
+      },
+      resolve: (_source, {weekOf}, _context) => {
+        const from = weekOf
+        const until = addDays(from, 7)
+
+        return getLeaderboard({
+          from,
+          until
+        })
       }
     },
     results: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(WordleResultType))),
       args: {
-        weekStart: {
+        weekOf: {
           type: new GraphQLNonNull(DateType)
         },
         groupId: {
@@ -50,12 +61,12 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         }
       },
       resolve: async (_, {
-        weekStart,
+        weekOf,
         groupId
       }, {
         user
       }) => {
-        const from = weekStart
+        const from = weekOf
         const until = addDays(from, 7)
 
         const results = await queryResults({

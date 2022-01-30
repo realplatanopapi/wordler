@@ -102,7 +102,7 @@ const Home: NextPage = () => {
           />
         </Box>
       )}
-      {groups && groups.length > 1 ? (
+      {groups && groups.length > 1 && (
         <Box mb={4}>
           <GroupPicker
             selectedGroupId={groupId}
@@ -123,8 +123,6 @@ const Home: NextPage = () => {
             }}
           />
         </Box>
-      ) : (
-        <Text>Not a member of any groups (yet)</Text>
       )}
       <Box mb={4}>
         <Heading as="h1">

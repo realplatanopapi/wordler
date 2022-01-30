@@ -1,5 +1,5 @@
-query results($date: Date) {
-  results(date: $date) {
+query results($date: Date, $groupId: ID) {
+  results(date: $date, groupId: $groupId) {
     id
     createdAt
     user {

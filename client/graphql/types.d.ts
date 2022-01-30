@@ -26,7 +26,7 @@ export type Query = {
 
 export type QueryResultsArgs = {
   date?: InputMaybe<Scalars['Date']>
-  groupId?: InputMaybe<Scalars['String']>
+  groupId?: InputMaybe<Scalars['ID']>
 }
 
 export type User = {

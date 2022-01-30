@@ -1,6 +1,6 @@
 import { User } from "@prisma/client"
 import { queryResults } from "@server/lib/wordles"
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
+import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
 import {DateType, WordleResultType} from './types'
 
 export interface GraphQLContext {
@@ -17,7 +17,7 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
           type: DateType
         },
         groupId: {
-          type: GraphQLString
+          type: GraphQLID
         }
       },
       resolve: async (_, {

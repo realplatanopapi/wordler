@@ -5,6 +5,7 @@ import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
 export type ResultsQueryVariables = Types.Exact<{
   date?: Types.InputMaybe<Types.Scalars['Date']>
+  groupId?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
 export type ResultsQuery = {
@@ -19,8 +20,8 @@ export type ResultsQuery = {
 }
 
 export const ResultsDocument = gql`
-  query results($date: Date) {
-    results(date: $date) {
+  query results($date: Date, $groupId: ID) {
+    results(date: $date, groupId: $groupId) {
       id
       createdAt
       user {
@@ -45,6 +46,7 @@ export const ResultsDocument = gql`
  * const { data, loading, error } = useResultsQuery({
  *   variables: {
  *      date: // value for 'date'
+ *      groupId: // value for 'groupId'
  *   },
  * });
  */

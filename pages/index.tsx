@@ -83,9 +83,11 @@ const Home: NextPage<HomePageProps> = ({
   groups,
 }) => {
   const router = useRouter()
+  const groupId = router.query.groupId as string
   const resultsQuery = useResultsQuery({
     variables: {
       date,
+      groupId
     },
   })
   const results = resultsQuery.data?.results
@@ -136,7 +138,7 @@ const Home: NextPage<HomePageProps> = ({
       )}
       {groups.length ? (
         <GroupPicker
-          selectedGroupId={router.query.groupId as string}
+          selectedGroupId={groupId}
           groups={groups}
           onChange={(newGroupId) => {
             let newQuery = {

@@ -2,6 +2,9 @@ import { merge, Theme } from 'theme-ui'
 import {base} from '@theme-ui/presets'
 
 export const theme: Theme = merge(base, {
+  colors: {
+    muted: '#dadada'
+  },
   fonts: {
     body: "'Cutive Mono', monospace",
     heading: "'Cutive Mono', monospace",

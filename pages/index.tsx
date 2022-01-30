@@ -136,8 +136,8 @@ const Home: NextPage = () => {
         </Box>
       </Section>
       {results && results.length > 0 && (
-        <Section heading="results">
-          <Grid columns={[1, 2]} gap={2}>
+        <Section heading="submissions">
+          <Grid columns={1} gap={2} mx={-4}>
             {results.map((result: any) => {
               return (
                 <WordleResult

@@ -1,4 +1,4 @@
-import { WordleGuessResult } from '@client/graphql/types'
+import { WordleGuessResult } from '@client/api'
 import { formatRelative } from 'date-fns'
 import {Box, Text} from 'theme-ui'
 

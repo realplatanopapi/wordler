@@ -24,6 +24,7 @@ import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
 import Link from '@client/components/Link'
 import { getStartOfWeek } from '@common/utils/time'
+import Groups from '@client/components/Groups'
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -153,6 +154,13 @@ const Home: NextPage = () => {
       <Section>
         <DatePicker selectedDate={weekOf} />
       </Section>
+      {
+        user && groups && (
+          <Section heading="Your groups">
+            <Groups groups={groups} />
+          </Section>
+        )
+      }
       <Section>
         <form
           onSubmit={async (event) => {

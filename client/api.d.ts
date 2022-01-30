@@ -22,6 +22,7 @@ export type Scalars = {
 export type Group = {
   __typename?: 'Group'
   id: Scalars['ID']
+  inviteLink: Scalars['String']
   name: Scalars['String']
 }
 

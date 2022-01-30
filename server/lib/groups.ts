@@ -2,6 +2,7 @@ import cryptoRandomString from 'crypto-random-string'
 import { Group, GroupRole, User } from '@prisma/client'
 import db from '@server/services/db'
 import slugify from 'slugify'
+import config from '@server/config'
 
 export function createGroup(user: User, name: string) {
   const slug = slugify(name, {
@@ -153,4 +154,24 @@ export async function joinGroup(user: User, inviteCode: string) {
   })
 
   return group
+}
+
+export async function checkIsMemberOfGroup(group: Group, user: User): Promise<boolean> {
+  const membership = await db.groupMembership.findFirst({
+    where: {
+      groupId: group.id,
+      userId: user.id
+    }
+  })
+
+  return Boolean(membership)
+}
+
+export async function getInviteLink(group: Group): Promise<string | null> {
+  const inviteCode = await getGroupInviteCode(group)
+  if (!inviteCode) {
+    return null
+  }
+
+  return `${config.get("appUrl")}/accept-invite?inviteCode=${inviteCode.code}`
 }

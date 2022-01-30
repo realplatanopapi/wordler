@@ -1,9 +1,10 @@
-import { WordleResult } from "@prisma/client";
+import { Group, WordleResult } from "@prisma/client";
 import { getById } from "@server/lib/accounts";
 import { GraphQLEnumType, GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType, GraphQLString, Kind, ValueNode } from "graphql";
 import { GraphQLContext } from "./schema";
 import { WordleGuessResult } from "@server/lib/wordles";
 import { toUTC } from "@common/utils/time";
+import { checkIsMemberOfGroup, getInviteLink } from "@server/lib/groups";
 
 export const DateType = new GraphQLScalarType<Date | null, string>({
   name: 'Date',
@@ -33,7 +34,7 @@ export const UserType = new GraphQLObjectType({
   }
 })
 
-export const GroupType = new GraphQLObjectType({
+export const GroupType = new GraphQLObjectType<Group, GraphQLContext>({
   name: 'Group',
   fields: {
     id: {
@@ -41,6 +42,21 @@ export const GroupType = new GraphQLObjectType({
     },
     name: {
       type: new GraphQLNonNull(GraphQLString)
+    },
+    inviteLink: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: async (group, _args, context) => {
+        if (!context.user) {
+          return null
+        }
+
+        const isMemberOfGroup = await checkIsMemberOfGroup(group, context.user)
+        if (!isMemberOfGroup) {
+          return null
+        }
+
+        return getInviteLink(group)
+      }
     }
   }
 })

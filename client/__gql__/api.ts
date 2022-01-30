@@ -63,7 +63,12 @@ export type GroupsQueryVariables = Types.Exact<{ [key: string]: never }>
 export type GroupsQuery = {
   __typename?: 'Query'
   groups?:
-    | Array<{ __typename?: 'Group'; id: string; name: string }>
+    | Array<{
+        __typename?: 'Group'
+        id: string
+        name: string
+        inviteLink: string
+      }>
     | null
     | undefined
 }
@@ -272,6 +277,7 @@ export const GroupsDocument = gql`
     groups {
       id
       name
+      inviteLink
     }
   }
 `

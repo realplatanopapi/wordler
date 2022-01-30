@@ -15,7 +15,7 @@ export const Section: React.FC<SectionProps> = ({heading, headingAs = "h3", chil
     }}>
       {
         heading && (
-          <Heading as={headingAs} mb={4}>{heading}</Heading>
+          <Heading as={headingAs} mb={3}>{heading}</Heading>
         )
       }
       {children}

@@ -1,4 +1,4 @@
-import Home from "@client/views/home/home";
+import Home from "@client/views/home";
 import { NextPage } from "next";
 
 const Index: NextPage = () => {

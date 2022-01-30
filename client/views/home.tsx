@@ -1,5 +1,5 @@
 import { useWhoamiQuery } from "@client/__gql__/api"
-import Dashboard from "./dashboard"
+import Dashboard from "./dashboard/dashboard"
 import Preview from "./preview"
 
 const Home: React.FC = () => {

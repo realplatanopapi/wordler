@@ -29,7 +29,7 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
               </Text>
             )}
           </Box>
-          <Heading as="h3" mb={3}>leaderboard</Heading>
+          <Heading as="h3" mb={4}>leaders</Heading>
           <Grid>
             <Grid columns={2} gap={2}>
               <Text>user</Text>

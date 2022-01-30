@@ -21,6 +21,7 @@ import Leaderboard from '@client/components/Leaderboard'
 import { useMemo } from 'react'
 import { Group } from '@client/api'
 import { formatInTimeZone } from 'date-fns-tz'
+import { Section } from '@client/layouts/page'
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -70,7 +71,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Wordler</title>
       </Head>
-      <Box mb={3}>
+      <Box mb={1}>
         <Text>wordler</Text>
       </Box>
       {!user && (
@@ -82,7 +83,7 @@ const Home: NextPage = () => {
         </div>
       )}
       {user && canPostResults && (
-        <Box mb={5}>
+        <Section>
           <PostResultsForm
             onSubmit={async (wordleResult) => {
               await canPostResultsQuery.refetch()
@@ -100,7 +101,7 @@ const Home: NextPage = () => {
               )
             }}
           />
-        </Box>
+        </Section>
       )}
       {groups && groups.length > 1 && (
         <Box mb={4}>
@@ -124,32 +125,35 @@ const Home: NextPage = () => {
           />
         </Box>
       )}
-      <Box mb={4}>
-        <Heading as="h1">
-          {selectedGroup ? selectedGroup.name : <>all results</>}
-        </Heading>
-      </Box>
-      <Box mb={4}>
-        <Heading as="h2">
-          week of {formatInTimeZone(weekOf, 'UTC', 'MMM dd')}
-        </Heading>
-      </Box>
-      <Box mb={4}>
-        {leaderboard && (
-          <Leaderboard currentUser={user} leaderboard={leaderboard} />
-        )}
-      </Box>
-      <Grid mb={5} columns={[1, 2]} gap={2}>
-        {results?.map((result: any) => {
-          return (
-            <WordleResult key={result.id} currentUser={user} result={result} />
-          )
-        })}
-      </Grid>
-      <Box mb={4}>
+      <Heading as="h1" mb={3}>
+        {selectedGroup ? selectedGroup.name : 'all results'}
+      </Heading>
+      <Section heading={`week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}>
+        <Box mb={4}>
+          {leaderboard && (
+            <Leaderboard currentUser={user} leaderboard={leaderboard} />
+          )}
+        </Box>
+      </Section>
+      {results && results.length > 0 && (
+        <Section heading="results">
+          <Grid columns={[1, 2]} gap={2}>
+            {results.map((result: any) => {
+              return (
+                <WordleResult
+                  key={result.id}
+                  currentUser={user}
+                  result={result}
+                />
+              )
+            })}
+          </Grid>
+        </Section>
+      )}
+      <Section>
         <DatePicker selectedDate={weekOf} />
-      </Box>
-      <Box mb={5}>
+      </Section>
+      <Section>
         <form
           onSubmit={async (event) => {
             event.preventDefault()
@@ -168,15 +172,17 @@ const Home: NextPage = () => {
           </label>
           <button type="submit">start</button>
         </form>
-      </Box>
+      </Section>
       {user && (
-        <Box mb={5}>
-          <Text as="p" mb={2}>Signed in as {user.displayName}</Text>
+        <Section>
+          <Text as="p" mb={2}>
+            Signed in as {user.displayName}
+          </Text>
           <Text as="p">
             {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/api/auth/logout">Sign out</a>
           </Text>
-        </Box>
+        </Section>
       )}
     </>
   )

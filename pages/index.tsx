@@ -115,31 +115,34 @@ const Home: NextPage<HomePageProps> = ({
         </Box>
       )}
       {groups?.length ? (
-        <GroupPicker
-          selectedGroupId={groupId}
-          groups={groups}
-          onChange={(newGroupId) => {
-            let newQuery = {
-              ...router.query,
-            }
-            if (!newGroupId) {
-              delete newQuery.groupId
-            } else {
-              newQuery.groupId = newGroupId
-            }
+        <Box mb={4}>
+          <GroupPicker
+            selectedGroupId={groupId}
+            groups={groups}
+            onChange={(newGroupId) => {
+              let newQuery = {
+                ...router.query,
+              }
+              if (!newGroupId) {
+                delete newQuery.groupId
+              } else {
+                newQuery.groupId = newGroupId
+              }
 
-            router.replace({
-              query: newQuery
-            })
-          }}
-        />
+              router.replace({
+                query: newQuery
+              })
+            }}
+          />
+        </Box>
+
       ) : (
         <Text>Not a member of any groups (yet)</Text>
       )}
-      <Box mb={5}>
+      <Box mb={4}>
         <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
       </Box>
-      <Box mb={5}>
+      <Box mb={4}>
         {
           leaderboard && <Leaderboard leaderboard={leaderboard} />
         }

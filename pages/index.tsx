@@ -3,7 +3,7 @@ import axios from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Box, Heading, Text } from 'theme-ui'
+import { Box, Grid, Heading, Text } from 'theme-ui'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
 import {
@@ -139,7 +139,7 @@ const Home: NextPage = () => {
           <Leaderboard currentUser={user} leaderboard={leaderboard} />
         )}
       </Box>
-      <Box mb={5}>
+      <Grid mb={5} columns={[1, 2]}>
         {results?.map((result: any) => {
           return (
             <Box key={result.id} mb={3}>
@@ -147,7 +147,7 @@ const Home: NextPage = () => {
             </Box>
           )
         })}
-      </Box>
+      </Grid>
       <Box mb={4}>
         <DatePicker selectedDate={weekOf} />
       </Box>

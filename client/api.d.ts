@@ -51,6 +51,7 @@ export type Query = {
   groups?: Maybe<Array<Group>>
   leaderboard: Leaderboard
   results: Array<WordleResult>
+  whoami?: Maybe<User>
 }
 
 export type QueryLeaderboardArgs = {

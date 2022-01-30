@@ -2,7 +2,7 @@ import { Leaderboard, User } from '@client/api'
 import { Box, Grid, Text } from 'theme-ui'
 
 interface Props {
-  currentUser?: User
+  currentUser: Pick<User, 'id' | "displayName"> | null
   leaderboard: Leaderboard
 }
 

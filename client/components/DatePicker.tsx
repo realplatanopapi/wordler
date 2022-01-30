@@ -22,7 +22,7 @@ const DateLink: React.FC<{date: DateUTC, prefix?: string, suffix?: string}> = ({
     pathname: router.pathname,
     query: {
       ...router.query,
-      date: link
+      weekOf: link
     }
   }
 

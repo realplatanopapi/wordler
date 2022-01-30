@@ -1,13 +1,9 @@
 import WordleResult from '@client/components/WordleResult'
 import axios from 'axios'
-import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Box, Heading, Text } from 'theme-ui'
-import { getById } from '../server/lib/accounts'
-import { cookieConfig } from '@server/lib/auth'
-import { getStartOfWeek, startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
 import {
@@ -17,66 +13,21 @@ import {
   useGroupsQuery,
   useLeaderboardQuery,
   useResultsQuery,
+  useWhoamiQuery,
 } from '@client/__gql__/api'
 import PostResultsForm from '@client/components/PostResultsForm'
 import { client } from '@client/graphql'
 import Leaderboard from '@client/components/Leaderboard'
 import { useMemo } from 'react'
 import { Group } from '@client/api'
-import { format } from 'date-fns'
 import { formatInTimeZone } from 'date-fns-tz'
 
-interface HomePageProps {
-  user: any | null
-  dateStr: string
-  [key: string]: any
-}
-
-export const getServerSideProps = withIronSessionSsr<HomePageProps>(
-  async ({ req, query }) => {
-    const dateQuery = query.date as string | undefined
-    const startOfWeek = getStartOfWeek(new Date())
-    const date = dateQuery
-      ? startOfDay(toUTC(new Date(dateQuery)))
-      : startOfWeek
-
-    const userId = req.session.userId
-    if (!userId) {
-      return {
-        props: {
-          dateStr: date.toISOString(),
-          user: null,
-        },
-      }
-    }
-
-    const user = await getById(userId)
-    if (!user) {
-      return {
-        props: {
-          dateStr: date.toISOString(),
-          user: null,
-        },
-      }
-    }
-
-    return {
-      props: {
-        dateStr: date.toISOString(),
-        user: {
-          id: user.id,
-          displayName: user.displayName,
-        },
-      },
-    }
-  },
-  cookieConfig
-)
-
-const Home: NextPage<HomePageProps> = ({ dateStr, user }) => {
+const Home: NextPage = () => {
   const router = useRouter()
   const groupId = router.query.groupId as string
-  const weekOf = new Date(dateStr)
+  const weekOfStr = router.query.weekOf
+  const weekOf = weekOfStr ? new Date(weekOfStr as string) : new Date()
+  const whoamiQuery = useWhoamiQuery()
   const canPostResultsQuery = useCanPostResultsQuery()
   const resultsQueryVariables = {
     weekOf,
@@ -92,6 +43,7 @@ const Home: NextPage<HomePageProps> = ({ dateStr, user }) => {
     variables: resultsQueryVariables,
   })
 
+  const user = whoamiQuery.data?.whoami || null
   const canPostResults = canPostResultsQuery.data?.canPostResults === true
   const groups = groupsQuery.data?.groups
   const results = resultsQuery.data?.results
@@ -199,7 +151,7 @@ const Home: NextPage<HomePageProps> = ({ dateStr, user }) => {
         })}
       </Box>
       <Box mb={4}>
-        <DatePicker selectedDate={startOfDay(toUTC(new Date(dateStr)))} />
+        <DatePicker selectedDate={weekOf} />
       </Box>
       <Box mb={5}>
         <form

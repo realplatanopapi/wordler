@@ -4,7 +4,7 @@ import { getGroupsForUser } from "@server/lib/groups"
 import { addResultsForUser, canPostResults, getLeaderboard, queryResults } from "@server/lib/wordles"
 import { addDays } from "date-fns"
 import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
-import {DateType, GroupType, LeaderboardType, WordleResultType} from './types'
+import {DateType, GroupType, LeaderboardType, UserType, WordleResultType} from './types'
 
 export interface GraphQLContext {
   user: User | null
@@ -78,6 +78,12 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         })
 
         return results.data
+      }
+    },
+    whoami: {
+      type: UserType,
+      resolve: (_source, _args, context) => {
+        return context.user
       }
     }
   }

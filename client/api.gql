@@ -45,3 +45,9 @@ query leaderboard($weekOf: Date!) {
     }
   }
 }
+
+query whoami {
+  whoami {
+    ...User
+  }
+}

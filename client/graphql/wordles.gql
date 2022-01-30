@@ -6,9 +6,6 @@ query results($date: Date) {
       id
       displayName
     }
-    attempts {
-      id
-      guesses
-    }
+    guesses
   }
 }

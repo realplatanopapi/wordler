@@ -1,4 +1,4 @@
-import { WordleGuessResult } from '@prisma/client'
+import { WordleGuessResult } from '@client/graphql/types'
 import { formatRelative } from 'date-fns'
 import {Box, Text} from 'theme-ui'
 
@@ -11,9 +11,7 @@ interface Props {
       id: string
       displayName: string
     }
-    attempts: {
-      guesses: WordleGuessResult[]
-    }[]
+    guesses: WordleGuessResult[][]
     createdAt: string
   }
 }
@@ -41,10 +39,10 @@ const WordleResult: React.FC<Props> = ({ currentUser, result }) => {
       <Text as="p" mb={3} sx={{
         fontSize: 1
       }}>submitted <time>{submittedAtFormatted}</time></Text>
-      {result.attempts.map((attempt, index) => {
+      {result.guesses.map((guesses, index) => {
         return (
           <div key={index}>
-            {attempt.guesses.map((guess) => {
+            {guesses.map((guess) => {
               if (guess == 'EXACT_MATCH') {
                 return '🟩'
               } else if (guess == 'IN_WORD') {

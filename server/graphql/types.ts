@@ -1,7 +1,8 @@
-import { WordleGuessResult, WordleResult } from "@prisma/client";
+import { WordleResult } from "@prisma/client";
 import { getById } from "@server/lib/accounts";
 import { GraphQLEnumType, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType, GraphQLString, Kind, ValueNode } from "graphql";
 import { GraphQLContext } from "./schema";
+import { WordleGuessResult } from "@server/lib/wordles";
 
 export const DateType = new GraphQLScalarType<Date | null, string>({
   name: 'Date',
@@ -47,31 +48,13 @@ export const WordleGuessResultType = new GraphQLEnumType({
   name: 'WordleGuessResult',
   values: {
     EXACT_MATCH: {
-      value: WordleGuessResult.EXACT_MATCH,
+      value: WordleGuessResult.EXACT_MATCH
     },
     IN_WORD: {
       value: WordleGuessResult.IN_WORD,
     },
     NOT_IN_WORD: {
       value: WordleGuessResult.NOT_IN_WORD,
-    }
-  }
-})
-
-export const WordleAttemptType = new GraphQLObjectType({
-  name: 'WordleAttempt',
-  fields: {
-    id: {
-      type: new GraphQLNonNull(GraphQLID)
-    },
-    guesses: {
-      type: new GraphQLNonNull(
-        new GraphQLList(
-          new GraphQLNonNull(
-            WordleGuessResultType
-          )
-        )
-      )
     }
   }
 })
@@ -85,11 +68,13 @@ export const WordleResultType = new GraphQLObjectType<WordleResult, GraphQLConte
     createdAt: {
       type: new GraphQLNonNull(DateType)
     },
-    attempts: {
+    guesses: {
       type: new GraphQLNonNull(
         new GraphQLList(
           new GraphQLNonNull(
-            WordleAttemptType
+            new GraphQLList(
+              new GraphQLNonNull(WordleGuessResultType)
+            )
           )
         )
       )

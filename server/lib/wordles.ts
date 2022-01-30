@@ -1,8 +1,6 @@
 import {
   User,
   Wordle,
-  WordleAttempt,
-  WordleGuessResult,
   WordleResult,
 } from '@prisma/client'
 import db from '@server/services/db'
@@ -28,32 +26,44 @@ export async function getOrCreateWordle(number: number): Promise<Wordle> {
   })
 }
 
+export enum WordleGuessResult {
+  EXACT_MATCH = "EXACT_MATCH",
+  IN_WORD = "IN_WORD",
+  NOT_IN_WORD = "NOT_IN_WORD"
+}
+
 interface ResultData {
   wordleNumber: number
   attempts: WordleGuessResult[][]
+  didSolve: boolean
+  attemptsUsed: number
+  maxAttempts: number
 }
 
 export async function addResultsForUser(user: User, resultsString: string) {
   const resultData = parseResultsFromString(resultsString)
+  const score = calculateScore(resultData)
   const wordle = await getOrCreateWordle(resultData.wordleNumber)
 
   return await db.wordleResult.create({
     data: {
       wordleId: wordle.id,
       userId: user.id,
-      attempts: {
-        create: resultData.attempts.map((attempt) => {
-          return {
-            guesses: attempt,
-          }
-        }),
-      },
-    },
-    include: {
-      attempts: true,
-      wordle: true,
+      attemptsUsed: resultData.attemptsUsed,
+      maxAttempts: resultData.maxAttempts,
+      guesses: resultData.attempts,
+      didSolve: resultData.didSolve,
+      score: score,
     },
   })
+}
+
+function calculateScore(data: ResultData) {
+  if (!data.didSolve) {
+    return 0
+  }
+
+  return ((data.maxAttempts - data.attemptsUsed) * 100) + 100
 }
 
 function parseResultsFromString(resultsString: string): ResultData {
@@ -63,6 +73,14 @@ function parseResultsFromString(resultsString: string): ResultData {
 
   const headerParts = header.split(' ')
   const wordleNumber = parseInt(headerParts[1])
+
+  const attemptsParts = headerParts[2].split('/')
+  const attemptsUsedStr = attemptsParts[0]
+  const maxAttempts = parseInt(attemptsParts[1])
+  let attemptsUsed = parseInt(attemptsUsedStr)
+  if (isNaN(attemptsUsed)) {
+    attemptsUsed = maxAttempts
+  }
 
   const parsedAttempts = attempts.map((attempt) => {
     const guesses = Array.from(attempt.trim())
@@ -80,6 +98,9 @@ function parseResultsFromString(resultsString: string): ResultData {
   return {
     wordleNumber,
     attempts: parsedAttempts,
+    didSolve: true,
+    maxAttempts: maxAttempts,
+    attemptsUsed,
   }
 }
 
@@ -94,11 +115,7 @@ interface ResultQueryOptions {
 interface ResultsQueryResult {
   total: number
   nextCursor: string | null
-  data: (WordleResult & {
-    user: User,
-    attempts: WordleAttempt[],
-    wordle: Wordle
-  })[]
+  data: WordleResult[]
 }
 
 export async function queryResults({
@@ -145,11 +162,6 @@ export async function queryResults({
     cursor: options.cursor ? {
       id: options.cursor
     } : undefined,
-    include: {
-      user: true,
-      attempts: true,
-      wordle: true,
-    },
     orderBy: {
       createdAt: 'desc'
     },

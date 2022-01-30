@@ -44,27 +44,16 @@ model WordleResult {
   user User @relation(fields: [userId], references: [id])
   userId String
 
-  attempts WordleAttempt[]
+  didSolve Boolean
+  attemptsUsed Int
+  maxAttempts Int
+  score Int
+
+  // 2D array of guesses
+  guesses Json
 
   // Ensure user's can't have more than one Wordle Result for a single Wordle. 
   @@unique([userId, wordleId])
-}
-
-enum WordleGuessResult {
-  EXACT_MATCH
-  IN_WORD
-  NOT_IN_WORD
-}
-
-model WordleAttempt {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  wordleResult WordleResult @relation(fields: [wordleResultId], references: [id])
-  wordleResultId String
-
-  guesses WordleGuessResult[]
 }
 
 model Group {

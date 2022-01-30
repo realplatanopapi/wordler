@@ -13,12 +13,8 @@ export type ResultsQuery = {
     __typename?: 'WordleResult'
     id: string
     createdAt: any
+    guesses: Array<Array<Types.WordleGuessResult>>
     user: { __typename?: 'User'; id: string; displayName: string }
-    attempts: Array<{
-      __typename?: 'WordleAttempt'
-      id: string
-      guesses: Array<Types.WordleGuessResult>
-    }>
   }>
 }
 
@@ -31,10 +27,7 @@ export const ResultsDocument = gql`
         id
         displayName
       }
-      attempts {
-        id
-        guesses
-      }
+      guesses
     }
   }
 `

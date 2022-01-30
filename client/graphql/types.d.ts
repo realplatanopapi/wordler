@@ -35,12 +35,6 @@ export type User = {
   id: Scalars['ID']
 }
 
-export type WordleAttempt = {
-  __typename?: 'WordleAttempt'
-  guesses: Array<WordleGuessResult>
-  id: Scalars['ID']
-}
-
 export enum WordleGuessResult {
   ExactMatch = 'EXACT_MATCH',
   InWord = 'IN_WORD',
@@ -49,8 +43,8 @@ export enum WordleGuessResult {
 
 export type WordleResult = {
   __typename?: 'WordleResult'
-  attempts: Array<WordleAttempt>
   createdAt: Scalars['Date']
+  guesses: Array<Array<WordleGuessResult>>
   id: Scalars['ID']
   user: User
 }

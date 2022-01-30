@@ -13,12 +13,7 @@ const handler: NextApiHandler = async (req, res) => {
   return res.json({
     data: {
       id: result.id,
-      attempts: result.attempts.map((attempt) => {
-        return {
-          id: attempt.id,
-          guesses: attempt.guesses,
-        }
-      }),
+      guesses: result.guesses
     },
   })
 }

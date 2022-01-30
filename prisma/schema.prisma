@@ -38,10 +38,10 @@ model WordleResult {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  wordle Wordle @relation(fields: [wordleId], references: [id])
+  wordle Wordle @relation(fields: [wordleId], references: [id], onDelete: Cascade)
   wordleId String
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   didSolve Boolean
@@ -78,10 +78,10 @@ model GroupMembership {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  group Group @relation(fields: [groupId], references: [id])
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId String
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   role GroupRole
@@ -97,9 +97,9 @@ model GroupInviteCode {
 
   code String @unique
 
-  group Group @relation(fields: [groupId], references: [id])
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId String
 
-  createdBy User @relation(fields: [createdById], references: [id])
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String
 }

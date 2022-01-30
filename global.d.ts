@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { IronSessionData } from 'iron-session'
 
 declare module 'iron-session' {
@@ -6,4 +6,8 @@ declare module 'iron-session' {
     inviteCode?: string
     userId?: string
   }
+}
+
+declare global {
+  var prismaClient: PrismaClient | undefined
 }

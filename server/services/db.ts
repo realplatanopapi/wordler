@@ -1,5 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 
-const db = new PrismaClient()
+if (!global.prismaClient) {
+  global.prismaClient = new PrismaClient()
+}
+
+const db = global.prismaClient as PrismaClient
 
 export default db

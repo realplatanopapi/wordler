@@ -1,4 +1,5 @@
 import { Group } from "@client/api"
+import ClipboardCopy from "@client/components/clipboard-copy"
 import Link from "@client/components/Link"
 import StartGroupForm from "@client/components/StartGroupForm"
 import { useState } from "react"
@@ -26,6 +27,8 @@ const Onboarding: React.FC<Props> = ({onCompleteOnboarding}) => {
           p: 4
         }}>
           <Text>{group.inviteLink}</Text>
+          <Text mx="3">-</Text>
+          <ClipboardCopy textToCopy={group.inviteLink} />
         </Box>
         <Text as="p" mb={3}>You&apos;ll be able to invite your friend(s) later also.</Text>
         <Flex sx={{

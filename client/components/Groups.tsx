@@ -2,6 +2,7 @@ import { Group } from '@client/api'
 import { copyToClipboard } from '@client/utils'
 import React from 'react'
 import { Heading, Flex, Text } from 'theme-ui'
+import ClipboardCopy from './clipboard-copy'
 import StartGroupForm from './StartGroupForm'
 
 interface Props {
@@ -15,14 +16,9 @@ const Groups: React.FC<Props> = ({ groups, onStartGroup }) => {
       {groups.map((group) => {
         return (
           <Flex mb={3} key={group.id}>
-            <Text>{group.name}</Text> -{' '}
-            <Text
-              onClick={() => {
-                copyToClipboard(group.inviteLink)
-              }}
-            >
-              Copy invite link
-            </Text>
+            <Text>{group.name}</Text>
+            <Text mx={2}>-</Text>
+            <ClipboardCopy textToCopy={group.inviteLink} label="Copy invite link" />
           </Flex>
         )
       })}

@@ -30,10 +30,21 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
             )}
           </Box>
           <Heading as="h3" mb={4}>leaders</Heading>
-          <Grid>
-            <Grid columns={2} gap={2}>
-              <Text>user</Text>
-              <Text>points</Text>
+          <Box>
+            <Grid gap={0} columns={2} mx={-4}>
+              <Box py={2} px={4}>
+              <Text sx={{
+                fontSize: 1
+              }}>user</Text>
+              </Box>
+              <Box py={2} px={4} sx={{
+                borderLeft: '1px solid',
+                borderColor: 'muted'
+              }}>
+              <Text sx={{
+                fontSize: 1
+              }}>points</Text>
+              </Box>
             </Grid>
             {entries.map((entry, index) => {
               const { score, user } = entry
@@ -44,21 +55,33 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
                 <Grid
                   key={user.id}
                   columns={2}
-                  gap={2}
+                  gap={0}
+                  mx={-4}
                   sx={{
                     fontWeight,
                   }}
                 >
+                  <Box py={3} px={4} sx={{
+                    borderTop: "1px solid",
+                    borderColor: 'muted'
+                  }}>
                   <Text>
                     {isFirstEntry && '👑 '}
                     {user.displayName}{' '}
                     {currentUser && user.id === currentUser.id && <>(you)</>}
                   </Text>
+                  </Box>
+                  <Box py={3} px={4} sx={{
+                    borderLeft: "1px solid",
+                    borderTop: "1px solid",
+                    borderColor: 'muted'
+                  }}>
                   <Text>{score}</Text>
+                  </Box>
                 </Grid>
               )
             })}
-          </Grid>
+          </Box>
         </>
       )}
     </Box>

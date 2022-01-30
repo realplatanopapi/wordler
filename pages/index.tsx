@@ -10,7 +10,14 @@ import { cookieConfig } from '@server/lib/auth'
 import { getStartOfWeek, startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
-import { ResultsDocument, ResultsQuery, useCanPostResultsQuery, useGroupsQuery, useLeaderboardQuery, useResultsQuery } from '@client/__gql__/api'
+import {
+  ResultsDocument,
+  ResultsQuery,
+  useCanPostResultsQuery,
+  useGroupsQuery,
+  useLeaderboardQuery,
+  useResultsQuery,
+} from '@client/__gql__/api'
 import PostResultsForm from '@client/components/PostResultsForm'
 import { client } from '@client/graphql'
 import Leaderboard from '@client/components/Leaderboard'
@@ -29,7 +36,9 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
   async ({ req, query }) => {
     const dateQuery = query.date as string | undefined
     const startOfWeek = getStartOfWeek(new Date())
-    const date = dateQuery ? startOfDay(toUTC(new Date(dateQuery))) : startOfWeek
+    const date = dateQuery
+      ? startOfDay(toUTC(new Date(dateQuery)))
+      : startOfWeek
 
     const userId = req.session.userId
     if (!userId) {
@@ -64,26 +73,23 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
   cookieConfig
 )
 
-const Home: NextPage<HomePageProps> = ({
-  dateStr,
-  user,
-}) => {
+const Home: NextPage<HomePageProps> = ({ dateStr, user }) => {
   const router = useRouter()
   const groupId = router.query.groupId as string
   const weekOf = new Date(dateStr)
   const canPostResultsQuery = useCanPostResultsQuery()
   const resultsQueryVariables = {
     weekOf,
-    groupId
+    groupId,
   }
   const leaderboardQuery = useLeaderboardQuery({
     variables: {
       weekOf,
-    }
+    },
   })
   const groupsQuery = useGroupsQuery()
   const resultsQuery = useResultsQuery({
-    variables: resultsQueryVariables
+    variables: resultsQueryVariables,
   })
 
   const canPostResults = canPostResultsQuery.data?.canPostResults === true
@@ -101,10 +107,10 @@ const Home: NextPage<HomePageProps> = ({
     return groups.reduce((acc, group) => {
       return {
         ...acc,
-        [group.id]: group
+        [group.id]: group,
       }
     }, {})
-  },[groups]);
+  }, [groups])
   const selectedGroup = groupId && groupsById ? groupsById[groupId] : null
 
   return (
@@ -125,18 +131,23 @@ const Home: NextPage<HomePageProps> = ({
       )}
       {user && canPostResults && (
         <Box mb={5}>
-          <PostResultsForm onSubmit={async (wordleResult) => {
-            await canPostResultsQuery.refetch()
-            client.cache.updateQuery<ResultsQuery>({
-              query: ResultsDocument,
-              variables: resultsQueryVariables
-            }, (data) => {
-              return {
-                ...data,
-                results: [wordleResult].concat(data?.results || [])
-              }
-            })
-          }} />
+          <PostResultsForm
+            onSubmit={async (wordleResult) => {
+              await canPostResultsQuery.refetch()
+              client.cache.updateQuery<ResultsQuery>(
+                {
+                  query: ResultsDocument,
+                  variables: resultsQueryVariables,
+                },
+                (data) => {
+                  return {
+                    ...data,
+                    results: [wordleResult].concat(data?.results || []),
+                  }
+                }
+              )
+            }}
+          />
         </Box>
       )}
       {groups?.length ? (
@@ -155,7 +166,7 @@ const Home: NextPage<HomePageProps> = ({
               }
 
               router.replace({
-                query: newQuery
+                query: newQuery,
               })
             }}
           />
@@ -165,20 +176,18 @@ const Home: NextPage<HomePageProps> = ({
       )}
       <Box mb={4}>
         <Heading as="h1">
-          {selectedGroup ? selectedGroup.name : (
-            <>
-              all results
-            </>
-          )}
+          {selectedGroup ? selectedGroup.name : <>all results</>}
         </Heading>
       </Box>
       <Box mb={4}>
-        <Heading as="h2">week of {formatInTimeZone(weekOf, 'UTC', 'MMM dd')}</Heading>
+        <Heading as="h2">
+          week of {formatInTimeZone(weekOf, 'UTC', 'MMM dd')}
+        </Heading>
       </Box>
       <Box mb={4}>
-        {
-          leaderboard && <Leaderboard currentUser={user} leaderboard={leaderboard} />
-        }
+        {leaderboard && (
+          <Leaderboard currentUser={user} leaderboard={leaderboard} />
+        )}
       </Box>
       <Box mb={5}>
         {results?.map((result: any) => {
@@ -212,6 +221,15 @@ const Home: NextPage<HomePageProps> = ({
           <button type="submit">start</button>
         </form>
       </Box>
+      {user && (
+        <Box mb={5}>
+          <Text as="p" mb={2}>Signed in as {user.displayName}</Text>
+          <Text as="p">
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a href="/api/auth/logout">Sign out</a>
+          </Text>
+        </Box>
+      )}
     </>
   )
 }

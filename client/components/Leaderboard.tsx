@@ -2,14 +2,16 @@ import { Leaderboard, User } from '@client/api'
 import { Box, Grid, Text } from 'theme-ui'
 
 interface Props {
-  currentUser: Pick<User, 'id' | "displayName"> | null
+  currentUser: Pick<User, 'id' | 'displayName'> | null
   leaderboard: Leaderboard
 }
 
 const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
   const { entries } = leaderboard
   const firstEntry = entries[0] || null
-  const isCurrentUserLeading = currentUser ? firstEntry?.user.id === currentUser.id : false
+  const isCurrentUserLeading = currentUser
+    ? firstEntry?.user.id === currentUser.id
+    : false
 
   return (
     <Box>
@@ -26,14 +28,7 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
             )}
           </Box>
           <Grid>
-            <Grid
-              columns={2}
-              sx={{
-                borderBottomColor: 'muted',
-                borderBottomStyle: 'solid',
-                borderBottomWidth: 1,
-              }}
-            >
+            <Grid columns={2} gap={2}>
               <Text>user</Text>
               <Text>score</Text>
             </Grid>
@@ -46,6 +41,7 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
                 <Grid
                   key={user.id}
                   columns={2}
+                  gap={2}
                   sx={{
                     fontWeight,
                   }}

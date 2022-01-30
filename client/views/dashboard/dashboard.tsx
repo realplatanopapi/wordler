@@ -2,7 +2,7 @@ import WordleResult from '@client/views/dashboard/wordle-result'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Box, Grid, Heading, Text } from 'theme-ui'
-import DatePicker from '@client/views/dashboard/date-picker'
+import WeekPicker from '@client/views/dashboard/week-picker'
 import GroupPicker from '@client/views/dashboard/group-picker'
 import {
   useCanPostResultsQuery,
@@ -133,7 +133,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
         </Section>
       )}
       <Section>
-        <DatePicker selectedDate={weekOf} />
+        <WeekPicker selectedDate={weekOf} />
       </Section>
       {user && groups && (
         <Section heading="Your groups">

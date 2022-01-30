@@ -27,7 +27,7 @@ const DateLink: React.FC<{date: DateUTC, prefix?: string, suffix?: string}> = ({
   )
 }
 
-const DatePicker: React.FC<Props> = ({
+const WeekPicker: React.FC<Props> = ({
   selectedDate
 }) => {
   const startOfThisWeek = getStartOfWeek(getToday())
@@ -52,4 +52,4 @@ const DatePicker: React.FC<Props> = ({
   )
 }
 
-export default DatePicker
+export default WeekPicker

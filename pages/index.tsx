@@ -138,6 +138,13 @@ const Home: NextPage<HomePageProps> = ({
       )}
       <Box mb={5}>
         <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
+      </Box>
+      <Box mb={5}>
+        {
+          leaderboard && <Leaderboard leaderboard={leaderboard} />
+        }
+      </Box>
+      <Box mb={5}>
         {results?.map((result: any) => {
           return (
             <Box key={result.id} mb={3}>
@@ -145,11 +152,6 @@ const Home: NextPage<HomePageProps> = ({
             </Box>
           )
         })}
-      </Box>
-      <Box mb={5}>
-        {
-          leaderboard && <Leaderboard leaderboard={leaderboard} />
-        }
       </Box>
       <Box mb={5}>
         <form

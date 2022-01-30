@@ -167,7 +167,7 @@ const Home: NextPage<HomePageProps> = ({
       </Box>
       <Box mb={4}>
         {
-          leaderboard && <Leaderboard leaderboard={leaderboard} />
+          leaderboard && <Leaderboard currentUser={user} leaderboard={leaderboard} />
         }
       </Box>
       <Box mb={5}>

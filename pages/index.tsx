@@ -16,6 +16,8 @@ import { client } from '@client/graphql'
 import Leaderboard from '@client/components/Leaderboard'
 import { useMemo } from 'react'
 import { Group } from '@client/api'
+import { format } from 'date-fns'
+import { formatInTimeZone } from 'date-fns-tz'
 
 interface HomePageProps {
   user: any | null
@@ -68,14 +70,15 @@ const Home: NextPage<HomePageProps> = ({
 }) => {
   const router = useRouter()
   const groupId = router.query.groupId as string
+  const weekOf = new Date(dateStr)
   const canPostResultsQuery = useCanPostResultsQuery()
   const resultsQueryVariables = {
-    weekOf: new Date(dateStr),
+    weekOf,
     groupId
   }
   const leaderboardQuery = useLeaderboardQuery({
     variables: {
-      weekOf: new Date(dateStr)
+      weekOf,
     }
   })
   const groupsQuery = useGroupsQuery()
@@ -168,6 +171,9 @@ const Home: NextPage<HomePageProps> = ({
             </>
           )}
         </Heading>
+      </Box>
+      <Box mb={4}>
+        <Heading as="h2">week of {formatInTimeZone(weekOf, 'UTC', 'MMM dd')}</Heading>
       </Box>
       <Box mb={4}>
         {

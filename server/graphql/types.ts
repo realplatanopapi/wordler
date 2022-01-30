@@ -3,18 +3,19 @@ import { getById } from "@server/lib/accounts";
 import { GraphQLEnumType, GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType, GraphQLString, Kind, ValueNode } from "graphql";
 import { GraphQLContext } from "./schema";
 import { WordleGuessResult } from "@server/lib/wordles";
+import { toUTC } from "@common/utils/time";
 
 export const DateType = new GraphQLScalarType<Date | null, string>({
   name: 'Date',
   serialize(value: any) {
-    return value.toISOString()
+    return toUTC(value).toISOString()
   },
   parseValue(value) {
-    return value ? new Date(value as string) : null;
+    return value ? toUTC(new Date(value as string)) : null;
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.STRING) {
-      return new Date(ast.value)
+      return toUTC(new Date(ast.value))
     }
     return null
   },

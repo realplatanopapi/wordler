@@ -54,8 +54,8 @@ export type Query = {
 }
 
 export type QueryResultsArgs = {
-  date?: InputMaybe<Scalars['Date']>
   groupId?: InputMaybe<Scalars['ID']>
+  weekStart: Scalars['Date']
 }
 
 export type User = {

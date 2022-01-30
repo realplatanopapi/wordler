@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { Box, Heading, Text } from 'theme-ui'
 import { getById } from '../server/lib/accounts'
 import { cookieConfig } from '@server/lib/auth'
-import { startOfDay, toUTC } from '@common/utils/time'
+import { getStartOfWeek, startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
 import { ResultsDocument, ResultsQuery, useCanPostResultsQuery, useGroupsQuery, useLeaderboardQuery, useResultsQuery } from '@client/__gql__/api'
@@ -19,21 +19,21 @@ import { Group } from '@client/api'
 
 interface HomePageProps {
   user: any | null
-  date: string
+  dateStr: string
   [key: string]: any
 }
 
 export const getServerSideProps = withIronSessionSsr<HomePageProps>(
   async ({ req, query }) => {
     const dateQuery = query.date as string | undefined
-    const today = startOfDay(toUTC(new Date()))
-    const date = dateQuery ? startOfDay(toUTC(new Date(dateQuery))) : today
+    const startOfWeek = getStartOfWeek(new Date())
+    const date = dateQuery ? startOfDay(toUTC(new Date(dateQuery))) : startOfWeek
 
     const userId = req.session.userId
     if (!userId) {
       return {
         props: {
-          date: date.toISOString(),
+          dateStr: date.toISOString(),
           user: null,
         },
       }
@@ -43,7 +43,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     if (!user) {
       return {
         props: {
-          date: date.toISOString(),
+          dateStr: date.toISOString(),
           user: null,
         },
       }
@@ -51,7 +51,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
 
     return {
       props: {
-        date: date.toISOString(),
+        dateStr: date.toISOString(),
         user: {
           id: user.id,
           displayName: user.displayName,
@@ -63,7 +63,7 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
 )
 
 const Home: NextPage<HomePageProps> = ({
-  date,
+  dateStr,
   user,
 }) => {
   const router = useRouter()
@@ -72,7 +72,7 @@ const Home: NextPage<HomePageProps> = ({
   const leaderboardQuery = useLeaderboardQuery()
   const groupsQuery = useGroupsQuery()
   const resultsQueryVariables = {
-    date,
+    weekStart: new Date(dateStr),
     groupId
   }
   const resultsQuery = useResultsQuery({
@@ -180,7 +180,7 @@ const Home: NextPage<HomePageProps> = ({
         })}
       </Box>
       <Box mb={4}>
-        <DatePicker selectedDate={startOfDay(toUTC(new Date(date)))} />
+        <DatePicker selectedDate={startOfDay(toUTC(new Date(dateStr)))} />
       </Box>
       <Box mb={5}>
         <form

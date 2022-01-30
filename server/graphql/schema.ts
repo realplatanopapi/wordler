@@ -2,6 +2,7 @@ import { User } from "@prisma/client"
 import { getById } from "@server/lib/accounts"
 import { getGroupsForUser } from "@server/lib/groups"
 import { addResultsForUser, canPostResults, getLeaderboard, queryResults } from "@server/lib/wordles"
+import { addDays } from "date-fns"
 import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
 import {DateType, GroupType, LeaderboardType, WordleResultType} from './types'
 
@@ -41,23 +42,27 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
     results: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(WordleResultType))),
       args: {
-        date: {
-          type: DateType
+        weekStart: {
+          type: new GraphQLNonNull(DateType)
         },
         groupId: {
           type: GraphQLID
         }
       },
       resolve: async (_, {
-        date,
+        weekStart,
         groupId
       }, {
         user
       }) => {
+        const from = weekStart
+        const until = addDays(from, 7)
+
         const results = await queryResults({
           groupId,
           userId: user?.id,
-          date,
+          from,
+          until,
           take: 50,
         })
 

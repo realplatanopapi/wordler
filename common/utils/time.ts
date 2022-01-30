@@ -1,3 +1,5 @@
+import { startOfWeek } from "date-fns"
+
 export type DateUTC = Date
 
 export const toUTC = (date: Date): DateUTC => {
@@ -19,4 +21,10 @@ export const getToday = (): DateUTC => {
   const now = new Date()
 
   return startOfDay(toUTC(now))
+}
+
+export const getStartOfWeek = (date: Date): DateUTC => {
+  return toUTC(startOfDay(startOfWeek(date, {
+    weekStartsOn: 1
+  })))
 }

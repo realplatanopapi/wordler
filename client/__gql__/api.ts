@@ -18,7 +18,7 @@ export type WordleResultFragment = {
 }
 
 export type ResultsQueryVariables = Types.Exact<{
-  date?: Types.InputMaybe<Types.Scalars['Date']>
+  weekStart: Types.Scalars['Date']
   groupId?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
@@ -100,8 +100,8 @@ export const WordleResultFragmentDoc = gql`
   ${UserFragmentDoc}
 `
 export const ResultsDocument = gql`
-  query results($date: Date, $groupId: ID) {
-    results(date: $date, groupId: $groupId) {
+  query results($weekStart: Date!, $groupId: ID) {
+    results(weekStart: $weekStart, groupId: $groupId) {
       ...WordleResult
     }
   }
@@ -120,13 +120,13 @@ export const ResultsDocument = gql`
  * @example
  * const { data, loading, error } = useResultsQuery({
  *   variables: {
- *      date: // value for 'date'
+ *      weekStart: // value for 'weekStart'
  *      groupId: // value for 'groupId'
  *   },
  * });
  */
 export function useResultsQuery(
-  baseOptions?: Apollo.QueryHookOptions<ResultsQuery, ResultsQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<ResultsQuery, ResultsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<ResultsQuery, ResultsQueryVariables>(

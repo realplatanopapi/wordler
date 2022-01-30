@@ -110,7 +110,8 @@ interface ResultQueryOptions {
   cursor?: string | null
   userId?: string
   groupId?: string
-  date?: Date
+  from: Date
+  until: Date
 }
 
 interface ResultsQueryResult {
@@ -121,17 +122,20 @@ interface ResultsQueryResult {
 
 export async function queryResults({
   userId,
-  date,
+  from,
+  until,
   ...options
 }: ResultQueryOptions): Promise<ResultsQueryResult> {
   const where: Prisma.WordleResultWhereInput = {
     AND: [
       {
         wordle: {
-          date: date ? {
-            gte: date,
-            lt: addDays(date, 1)
-          } : undefined
+          date: {
+            gte: startOfDay(from),
+            lt: addDays(
+              startOfDay(until)
+            , 1),
+          }
         }
       },
       {

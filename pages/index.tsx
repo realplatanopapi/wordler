@@ -106,7 +106,7 @@ const Home: NextPage<HomePageProps> = ({
         <title>Wordler</title>
       </Head>
       <Box mb={3}>
-        <Heading as="h1">Wordler</Heading>
+        <Text>wordler</Text>
       </Box>
       {!user && (
         <div>
@@ -156,11 +156,15 @@ const Home: NextPage<HomePageProps> = ({
       ) : (
         <Text>Not a member of any groups (yet)</Text>
       )}
-      {
-        selectedGroup && (
-          <Heading>{selectedGroup.name}</Heading>
-        )
-      }
+      <Box mb={4}>
+        <Heading as="h1">
+          {selectedGroup ? selectedGroup.name : (
+            <>
+              all results
+            </>
+          )}
+        </Heading>
+      </Box>
       <Box mb={4}>
         {
           leaderboard && <Leaderboard leaderboard={leaderboard} />

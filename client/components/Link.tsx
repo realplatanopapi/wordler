@@ -1,7 +1,7 @@
 import NextLink, { LinkProps as NextLinkProps } from 'next/link'
 import {Link as A, LinkProps as AProps} from 'theme-ui'
 
-type Props = NextLinkProps & AProps
+type Props = NextLinkProps & Omit<AProps, 'href'>
 
 const Link: React.FC<Props> = (props) => {
   const {

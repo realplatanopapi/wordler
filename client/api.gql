@@ -14,15 +14,19 @@ query results($date: Date, $groupId: ID) {
   }
 }
 
+mutation postResults($results: String!) {
+  postResults(results: $results) {
+    ...WordleResult
+  }
+}
+
+query canPostResults {
+  canPostResults
+}
+
 query groups {
   groups {
     id
     name
-  }
-}
-
-mutation postResults($results: String!) {
-  postResults(results: $results) {
-    ...WordleResult
   }
 }

@@ -36,6 +36,7 @@ export type MutationPostResultsArgs = {
 
 export type Query = {
   __typename?: 'Query'
+  canPostResults?: Maybe<Scalars['Boolean']>
   groups?: Maybe<Array<Group>>
   results: Array<WordleResult>
 }

@@ -175,7 +175,7 @@ export async function queryResults({
   }
 }
 
-export async function hasPostedResultsToday(user: User): Promise<boolean> {
+export async function canPostResults(user: User): Promise<boolean> {
   const today = getToday()
   const count = await db.wordleResult.count({
     where: {
@@ -187,5 +187,5 @@ export async function hasPostedResultsToday(user: User): Promise<boolean> {
     }
   })
 
-  return count > 0
+  return count === 0
 }

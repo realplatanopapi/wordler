@@ -27,16 +27,6 @@ export type ResultsQuery = {
   }>
 }
 
-export type GroupsQueryVariables = Types.Exact<{ [key: string]: never }>
-
-export type GroupsQuery = {
-  __typename?: 'Query'
-  groups?:
-    | Array<{ __typename?: 'Group'; id: string; name: string }>
-    | null
-    | undefined
-}
-
 export type PostResultsMutationVariables = Types.Exact<{
   results: Types.Scalars['String']
 }>
@@ -51,6 +41,23 @@ export type PostResultsMutation = {
         guesses: Array<Array<Types.WordleGuessResult>>
         user: { __typename?: 'User'; id: string; displayName: string }
       }
+    | null
+    | undefined
+}
+
+export type CanPostResultsQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type CanPostResultsQuery = {
+  __typename?: 'Query'
+  canPostResults?: boolean | null | undefined
+}
+
+export type GroupsQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GroupsQuery = {
+  __typename?: 'Query'
+  groups?:
+    | Array<{ __typename?: 'Group'; id: string; name: string }>
     | null
     | undefined
 }
@@ -116,54 +123,6 @@ export type ResultsQueryResult = Apollo.QueryResult<
   ResultsQuery,
   ResultsQueryVariables
 >
-export const GroupsDocument = gql`
-  query groups {
-    groups {
-      id
-      name
-    }
-  }
-`
-
-/**
- * __useGroupsQuery__
- *
- * To run a query within a React component, call `useGroupsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGroupsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGroupsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GroupsQuery, GroupsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GroupsQuery, GroupsQueryVariables>(
-    GroupsDocument,
-    options
-  )
-}
-export function useGroupsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GroupsQuery, GroupsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GroupsQuery, GroupsQueryVariables>(
-    GroupsDocument,
-    options
-  )
-}
-export type GroupsQueryHookResult = ReturnType<typeof useGroupsQuery>
-export type GroupsLazyQueryHookResult = ReturnType<typeof useGroupsLazyQuery>
-export type GroupsQueryResult = Apollo.QueryResult<
-  GroupsQuery,
-  GroupsQueryVariables
->
 export const PostResultsDocument = gql`
   mutation postResults($results: String!) {
     postResults(results: $results) {
@@ -214,4 +173,107 @@ export type PostResultsMutationResult =
 export type PostResultsMutationOptions = Apollo.BaseMutationOptions<
   PostResultsMutation,
   PostResultsMutationVariables
+>
+export const CanPostResultsDocument = gql`
+  query canPostResults {
+    canPostResults
+  }
+`
+
+/**
+ * __useCanPostResultsQuery__
+ *
+ * To run a query within a React component, call `useCanPostResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCanPostResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCanPostResultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCanPostResultsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    CanPostResultsQuery,
+    CanPostResultsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<CanPostResultsQuery, CanPostResultsQueryVariables>(
+    CanPostResultsDocument,
+    options
+  )
+}
+export function useCanPostResultsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CanPostResultsQuery,
+    CanPostResultsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<CanPostResultsQuery, CanPostResultsQueryVariables>(
+    CanPostResultsDocument,
+    options
+  )
+}
+export type CanPostResultsQueryHookResult = ReturnType<
+  typeof useCanPostResultsQuery
+>
+export type CanPostResultsLazyQueryHookResult = ReturnType<
+  typeof useCanPostResultsLazyQuery
+>
+export type CanPostResultsQueryResult = Apollo.QueryResult<
+  CanPostResultsQuery,
+  CanPostResultsQueryVariables
+>
+export const GroupsDocument = gql`
+  query groups {
+    groups {
+      id
+      name
+    }
+  }
+`
+
+/**
+ * __useGroupsQuery__
+ *
+ * To run a query within a React component, call `useGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGroupsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GroupsQuery, GroupsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GroupsQuery, GroupsQueryVariables>(
+    GroupsDocument,
+    options
+  )
+}
+export function useGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GroupsQuery, GroupsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GroupsQuery, GroupsQueryVariables>(
+    GroupsDocument,
+    options
+  )
+}
+export type GroupsQueryHookResult = ReturnType<typeof useGroupsQuery>
+export type GroupsLazyQueryHookResult = ReturnType<typeof useGroupsLazyQuery>
+export type GroupsQueryResult = Apollo.QueryResult<
+  GroupsQuery,
+  GroupsQueryVariables
 >

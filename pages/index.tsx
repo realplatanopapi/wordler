@@ -1,6 +1,4 @@
 import WordleResult from '@client/components/WordleResult'
-import { getGroupsForUser } from '@server/lib/groups'
-import { hasPostedResultsToday } from '@server/lib/wordles'
 import axios from 'axios'
 import { withIronSessionSsr } from 'iron-session/next'
 import type { NextPage } from 'next'
@@ -12,15 +10,13 @@ import { cookieConfig } from '@server/lib/auth'
 import { startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
-import { ResultsDocument, ResultsQuery, useGroupsQuery, useResultsQuery } from '@client/__gql__/api'
+import { ResultsDocument, ResultsQuery, useCanPostResultsQuery, useGroupsQuery, useResultsQuery } from '@client/__gql__/api'
 import PostResultsForm from '@client/components/PostResultsForm'
 import { client } from '@client/graphql'
-import { gql } from '@apollo/client'
 
 interface HomePageProps {
   user: any | null
   date: string
-  hasPostedResultsToday: boolean
   [key: string]: any
 }
 
@@ -34,7 +30,6 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     if (!userId) {
       return {
         props: {
-          hasPostedResultsToday: false,
           date: date.toISOString(),
           user: null,
         },
@@ -45,7 +40,6 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     if (!user) {
       return {
         props: {
-          hasPostedResultsToday: false,
           date: date.toISOString(),
           user: null,
         },
@@ -55,7 +49,6 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
     return {
       props: {
         date: date.toISOString(),
-        hasPostedResultsToday: await hasPostedResultsToday(user),
         user: {
           id: user.id,
           displayName: user.displayName,
@@ -68,11 +61,11 @@ export const getServerSideProps = withIronSessionSsr<HomePageProps>(
 
 const Home: NextPage<HomePageProps> = ({
   date,
-  hasPostedResultsToday,
   user,
 }) => {
   const router = useRouter()
   const groupId = router.query.groupId as string
+  const canPostResultsQuery = useCanPostResultsQuery()
   const groupsQuery = useGroupsQuery()
   const resultsQueryVariables = {
     date,
@@ -82,6 +75,7 @@ const Home: NextPage<HomePageProps> = ({
     variables: resultsQueryVariables
   })
 
+  const canPostResults = canPostResultsQuery.data?.canPostResults === true
   const groups = groupsQuery.data?.groups
   const results = resultsQuery.data?.results
 
@@ -101,9 +95,10 @@ const Home: NextPage<HomePageProps> = ({
           </a>
         </div>
       )}
-      {user && !hasPostedResultsToday && (
+      {user && canPostResults && (
         <Box mb={5}>
-          <PostResultsForm onSubmit={(wordleResult) => {
+          <PostResultsForm onSubmit={async (wordleResult) => {
+            await canPostResultsQuery.refetch()
             client.cache.updateQuery<ResultsQuery>({
               query: ResultsDocument,
               variables: resultsQueryVariables

@@ -1,7 +1,8 @@
 import { User } from "@prisma/client"
+import { getById } from "@server/lib/accounts"
 import { getGroupsForUser } from "@server/lib/groups"
-import { addResultsForUser, queryResults } from "@server/lib/wordles"
-import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
+import { addResultsForUser, canPostResults, queryResults } from "@server/lib/wordles"
+import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
 import {DateType, GroupType, WordleResultType} from './types'
 
 export interface GraphQLContext {
@@ -11,6 +12,16 @@ export interface GraphQLContext {
 const query = new GraphQLObjectType<any, GraphQLContext>({
   name: 'Query',
   fields: {
+    canPostResults: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      resolve: (_source, _args, {user}) => {
+        if (!user) {
+          return false
+        }
+
+        return canPostResults(user)
+      }
+    },
     groups: {
       type: new GraphQLList(new GraphQLNonNull(GroupType)),
       resolve: async(_source, _args, context) => {

@@ -139,12 +139,10 @@ const Home: NextPage = () => {
           <Leaderboard currentUser={user} leaderboard={leaderboard} />
         )}
       </Box>
-      <Grid mb={5} columns={[1, 2]}>
+      <Grid mb={5} columns={[1, 2]} gap={2}>
         {results?.map((result: any) => {
           return (
-            <Box key={result.id} mb={3}>
-              <WordleResult currentUser={user} result={result} />
-            </Box>
+            <WordleResult key={result.id} currentUser={user} result={result} />
           )
         })}
       </Grid>

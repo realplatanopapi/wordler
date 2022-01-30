@@ -1,22 +1,18 @@
-import {Box, Flex} from 'theme-ui'
+import {Flex} from 'theme-ui'
 import Link from '@client/components/Link'
 import { DateUTC, getStartOfWeek, getToday } from '@common/utils/time'
 import { addDays, subDays, format } from 'date-fns'
 import { useRouter } from 'next/router'
-import startOfDay from 'date-fns/startOfDay'
+import { formatInTimeZone } from 'date-fns-tz'
 
 interface Props {
   selectedDate: DateUTC
 }
 
-const formatDateForDisplay = (date: DateUTC) => {
-  return `${format(date, 'MMM')} ${date.getUTCDate()}`
-}
-
 const DateLink: React.FC<{date: DateUTC, prefix?: string, suffix?: string}> = ({date, prefix, suffix}) => {
   const router = useRouter()
   const link = `${date.getUTCFullYear()}-${format(date, 'MM')}-${date.getUTCDate()}`
-  const display = formatDateForDisplay(date)
+  const display = formatInTimeZone(date, 'UTC', 'MMM dd')
 
   const href = {
     pathname: router.pathname,
@@ -40,16 +36,9 @@ const DatePicker: React.FC<Props> = ({
 
   return (
     <Flex sx={{
-      flexDirection: 'column'
+      justifyContent: 'space-between'
     }}>
       <DateLink date={previousDate} prefix="<< " />
-      <Box my={2}>
-        {
-          selectedDate == startOfThisWeek ? `This week` : (
-            formatDateForDisplay(selectedDate)
-          )
-        }
-      </Box>
       {
         nextDate ? (
           <>

@@ -26,13 +26,13 @@ interface Props {
   user: User
 }
 
-const Dashboard: React.FC<Props> = ({
-  user
-}) => {
+const Dashboard: React.FC<Props> = ({ user }) => {
   const router = useRouter()
   const groupId = router.query.groupId as string
   const weekOfStr = router.query.weekOf
-  const weekOf = weekOfStr ? new Date(weekOfStr as string) : getStartOfWeek(new Date())
+  const weekOf = weekOfStr
+    ? new Date(weekOfStr as string)
+    : getStartOfWeek(new Date())
   const canPostResultsQuery = useCanPostResultsQuery()
   const resultsQueryVariables = {
     weekOf,
@@ -74,53 +74,48 @@ const Dashboard: React.FC<Props> = ({
       <Head>
         <title>Wordler</title>
       </Head>
-      {canPostResults && (
-        <Section>
-          <PostResultsForm
-            onSubmit={async (wordleResult) => {
-              await canPostResultsQuery.refetch()
-              client.cache.updateQuery<ResultsQuery>(
-                {
-                  query: ResultsDocument,
-                  variables: resultsQueryVariables,
-                },
-                (data) => {
-                  return {
-                    ...data,
-                    results: [wordleResult].concat(data?.results || []),
-                  }
+      <Section
+        headingAs="h1"
+        heading={`Week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}
+      >
+        {canPostResults && (
+          <Section headingAs="h3" heading="Post your results for today">
+            <PostResultsForm
+              onSubmit={() => {
+                canPostResultsQuery.refetch()
+                leaderboardQuery.refetch()
+                resultsQuery.refetch()
+              }}
+            />
+          </Section>
+        )}
+        {groups && groups.length > 1 && (
+          <Box mb={4}>
+            <GroupPicker
+              selectedGroupId={groupId}
+              groups={groups}
+              onChange={(newGroupId) => {
+                let newQuery = {
+                  ...router.query,
                 }
-              )
-            }}
-          />
-        </Section>
-      )}
-      {groups && groups.length > 1 && (
-        <Box mb={4}>
-          <GroupPicker
-            selectedGroupId={groupId}
-            groups={groups}
-            onChange={(newGroupId) => {
-              let newQuery = {
-                ...router.query,
-              }
-              if (!newGroupId) {
-                delete newQuery.groupId
-              } else {
-                newQuery.groupId = newGroupId
-              }
+                if (!newGroupId) {
+                  delete newQuery.groupId
+                } else {
+                  newQuery.groupId = newGroupId
+                }
 
-              router.replace({
-                query: newQuery,
-              })
-            }}
-          />
-        </Box>
-      )}
-      <Section headingAs="h1" heading={`Week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}>
-        {
-          selectedGroup && <Heading as="h2" mb={3}>{selectedGroup.name}</Heading>
-        }
+                router.replace({
+                  query: newQuery,
+                })
+              }}
+            />
+          </Box>
+        )}
+        {selectedGroup && (
+          <Heading as="h2" mb={3}>
+            {selectedGroup.name}
+          </Heading>
+        )}
         {leaderboard && (
           <Leaderboard currentUser={user} leaderboard={leaderboard} />
         )}
@@ -143,15 +138,16 @@ const Dashboard: React.FC<Props> = ({
       <Section>
         <DatePicker selectedDate={weekOf} />
       </Section>
-      {
-        user && groups && (
-          <Section heading="Your groups">
-            <Groups groups={groups} onStartGroup={() => {
+      {user && groups && (
+        <Section heading="Your groups">
+          <Groups
+            groups={groups}
+            onStartGroup={() => {
               groupsQuery.refetch()
-            }} />
-          </Section>
-        )
-      }
+            }}
+          />
+        </Section>
+      )}
       {user && (
         <Section>
           <Text as="p" mb={2}>

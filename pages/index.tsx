@@ -22,12 +22,14 @@ import { useMemo } from 'react'
 import { Group } from '@client/api'
 import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
+import Link from '@client/components/Link'
+import { getStartOfWeek } from '@common/utils/time'
 
 const Home: NextPage = () => {
   const router = useRouter()
   const groupId = router.query.groupId as string
   const weekOfStr = router.query.weekOf
-  const weekOf = weekOfStr ? new Date(weekOfStr as string) : new Date()
+  const weekOf = weekOfStr ? new Date(weekOfStr as string) : getStartOfWeek(new Date())
   const whoamiQuery = useWhoamiQuery()
   const canPostResultsQuery = useCanPostResultsQuery()
   const resultsQueryVariables = {
@@ -71,8 +73,8 @@ const Home: NextPage = () => {
       <Head>
         <title>Wordler</title>
       </Head>
-      <Box mb={1}>
-        <Text>wordler</Text>
+      <Box mb={3}>
+        <Link href="/">wordler</Link>
       </Box>
       {!user && (
         <div>
@@ -125,18 +127,16 @@ const Home: NextPage = () => {
           />
         </Box>
       )}
-      <Heading as="h1" mb={3}>
-        {selectedGroup ? selectedGroup.name : 'all results'}
-      </Heading>
-      <Section heading={`week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}>
-        <Box mb={4}>
-          {leaderboard && (
-            <Leaderboard currentUser={user} leaderboard={leaderboard} />
-          )}
-        </Box>
+      <Section headingAs="h1" heading={`Week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}>
+        {
+          selectedGroup && <Heading as="h2" mb={3}>{selectedGroup.name}</Heading>
+        }
+        {leaderboard && (
+          <Leaderboard currentUser={user} leaderboard={leaderboard} />
+        )}
       </Section>
       {results && results.length > 0 && (
-        <Section heading="submissions">
+        <Section heading="Submissions">
           <Grid columns={1} gap={2} mx={-4}>
             {results.map((result: any) => {
               return (

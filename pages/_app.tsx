@@ -1,10 +1,11 @@
 import { theme } from '@client/theme'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'theme-ui'
-import '@client/fonts.css'
 import Page from '@client/layouts/page'
 import { ApolloProvider } from '@apollo/client'
 import {client} from '@client/graphql';
+
+import '@client/base.css'
 
 function Worlder({ Component, pageProps }: AppProps) {
   return (

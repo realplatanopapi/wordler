@@ -1,23 +1,23 @@
-import WordleResult from '@client/components/WordleResult'
+import WordleResult from '@client/views/dashboard/wordle-result'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Box, Grid, Heading, Text } from 'theme-ui'
-import DatePicker from '@client/components/DatePicker'
-import GroupPicker from '@client/components/GroupPicker'
+import DatePicker from '@client/views/dashboard/date-picker'
+import GroupPicker from '@client/views/dashboard/group-picker'
 import {
   useCanPostResultsQuery,
   useGroupsQuery,
   useLeaderboardQuery,
   useResultsQuery,
 } from '@client/__gql__/api'
-import PostResultsForm from '@client/components/PostResultsForm'
-import Leaderboard from '@client/components/Leaderboard'
+import PostResultsForm from '@client/views/dashboard/post-results-form'
+import Leaderboard from '@client/views/dashboard/leaderboard'
 import { useMemo } from 'react'
 import { Group, User } from '@client/api'
 import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
 import { getStartOfWeek } from '@common/utils/time'
-import Groups from '@client/components/Groups'
+import Groups from '@client/views/dashboard/groups'
 
 interface Props {
   user: User

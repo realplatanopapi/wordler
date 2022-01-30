@@ -1,7 +1,7 @@
 import { Group } from "@client/api"
 import ClipboardCopy from "@client/components/clipboard-copy"
-import Link from "@client/components/Link"
-import StartGroupForm from "@client/components/StartGroupForm"
+import Link from "@client/components/link"
+import StartGroupForm from "@client/views/dashboard/start-group-form"
 import { useState } from "react"
 import { Box, Flex, Heading, Text } from "theme-ui"
 

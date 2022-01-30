@@ -1,4 +1,4 @@
-import Link from "@client/components/Link"
+import Link from "@client/components/link"
 import { Box } from "theme-ui"
 
 const Navigation: React.FC = () => {

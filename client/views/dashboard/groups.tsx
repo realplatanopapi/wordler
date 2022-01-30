@@ -2,8 +2,8 @@ import { Group } from '@client/api'
 import { copyToClipboard } from '@client/utils'
 import React from 'react'
 import { Heading, Flex, Text } from 'theme-ui'
-import ClipboardCopy from './clipboard-copy'
-import StartGroupForm from './StartGroupForm'
+import ClipboardCopy from '../../components/clipboard-copy'
+import StartGroupForm from './start-group-form'
 
 interface Props {
   groups: Group[]

@@ -1,6 +1,6 @@
 import { useGroupsQuery, useWhoamiQuery } from "@client/__gql__/api"
 import Dashboard from "./dashboard/dashboard"
-import Onboarding from "./Onboarding"
+import Onboarding from "./onboarding"
 import Preview from "./preview"
 
 const Home: React.FC = () => {

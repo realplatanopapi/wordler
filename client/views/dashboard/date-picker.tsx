@@ -1,5 +1,5 @@
 import {Flex} from 'theme-ui'
-import Link from '@client/components/Link'
+import Link from '@client/components/link'
 import { DateUTC, getStartOfWeek, getToday } from '@common/utils/time'
 import { addDays, subDays, format } from 'date-fns'
 import { useRouter } from 'next/router'

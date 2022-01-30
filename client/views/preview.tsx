@@ -1,4 +1,4 @@
-import Link from "@client/components/Link"
+import Link from "@client/components/link"
 
 const Preview: React.FC = () => {
   return (

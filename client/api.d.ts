@@ -25,6 +25,15 @@ export type Group = {
   name: Scalars['String']
 }
 
+export type Mutation = {
+  __typename?: 'Mutation'
+  postResults?: Maybe<WordleResult>
+}
+
+export type MutationPostResultsArgs = {
+  results: Scalars['String']
+}
+
 export type Query = {
   __typename?: 'Query'
   groups?: Maybe<Array<Group>>

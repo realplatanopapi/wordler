@@ -1,6 +1,6 @@
 import { User } from "@prisma/client"
 import { getGroupsForUser } from "@server/lib/groups"
-import { queryResults } from "@server/lib/wordles"
+import { addResultsForUser, queryResults } from "@server/lib/wordles"
 import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
 import {DateType, GroupType, WordleResultType} from './types'
 
@@ -50,8 +50,30 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
   }
 })
 
+const mutation = new GraphQLObjectType<any, GraphQLContext>({
+  name: 'Mutation',
+  fields: {
+    postResults: {
+      type: WordleResultType,
+      args: {
+        results: {
+          type: new GraphQLNonNull(GraphQLString)
+        }
+      },
+      resolve: (_source, args, context) => {
+        if (!context.user) { 
+          return null
+        }
+
+        return addResultsForUser(context.user, args.results)
+      }
+    }
+  }
+})
+
 const schema = new GraphQLSchema({
   query,
+  mutation
 })
 
 export default schema

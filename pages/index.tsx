@@ -12,7 +12,10 @@ import { cookieConfig } from '@server/lib/auth'
 import { startOfDay, toUTC } from '@common/utils/time'
 import DatePicker from '@client/components/DatePicker'
 import GroupPicker from '@client/components/GroupPicker'
-import { useGroupsQuery, useResultsQuery } from '@client/__gql__/api'
+import { ResultsDocument, ResultsQuery, useGroupsQuery, useResultsQuery } from '@client/__gql__/api'
+import PostResultsForm from '@client/components/PostResultsForm'
+import { client } from '@client/graphql'
+import { gql } from '@apollo/client'
 
 interface HomePageProps {
   user: any | null
@@ -71,11 +74,12 @@ const Home: NextPage<HomePageProps> = ({
   const router = useRouter()
   const groupId = router.query.groupId as string
   const groupsQuery = useGroupsQuery()
+  const resultsQueryVariables = {
+    date,
+    groupId
+  }
   const resultsQuery = useResultsQuery({
-    variables: {
-      date,
-      groupId
-    },
+    variables: resultsQueryVariables
   })
 
   const groups = groupsQuery.data?.groups
@@ -99,30 +103,17 @@ const Home: NextPage<HomePageProps> = ({
       )}
       {user && !hasPostedResultsToday && (
         <Box mb={5}>
-          <Heading as="h2">post your results</Heading>
-          <form
-            onSubmit={async (event) => {
-              event.preventDefault()
-              const form = event.target as HTMLFormElement
-              const data = new FormData(form)
-              const result = await axios.post('/api/results', {
-                results: data.get('results'),
-              })
-              form.reset()
-            }}
-          >
-            <textarea
-              name="results"
-              placeholder="Paste results from Wordle here"
-              required
-              style={{
-                height: 100,
-                width: 300,
-              }}
-            ></textarea>
-            <br />
-            <button type="submit">Post</button>
-          </form>
+          <PostResultsForm onSubmit={(wordleResult) => {
+            client.cache.updateQuery<ResultsQuery>({
+              query: ResultsDocument,
+              variables: resultsQueryVariables
+            }, (data) => {
+              return {
+                ...data,
+                results: [wordleResult].concat(data?.results || [])
+              }
+            })
+          }} />
         </Box>
       )}
       {groups?.length ? (

@@ -1,12 +1,16 @@
+fragment WordleResult on WordleResult {
+  id
+  createdAt
+  user {
+    id
+    displayName
+  }
+  guesses
+}
+
 query results($date: Date, $groupId: ID) {
   results(date: $date, groupId: $groupId) {
-    id
-    createdAt
-    user {
-      id
-      displayName
-    }
-    guesses
+    ...WordleResult
   }
 }
 
@@ -14,5 +18,11 @@ query groups {
   groups {
     id
     name
+  }
+}
+
+mutation postResults($results: String!) {
+  postResults(results: $results) {
+    ...WordleResult
   }
 }

@@ -3,6 +3,14 @@ import * as Types from '../api.d'
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
+export type WordleResultFragment = {
+  __typename?: 'WordleResult'
+  id: string
+  createdAt: any
+  guesses: Array<Array<Types.WordleGuessResult>>
+  user: { __typename?: 'User'; id: string; displayName: string }
+}
+
 export type ResultsQueryVariables = Types.Exact<{
   date?: Types.InputMaybe<Types.Scalars['Date']>
   groupId?: Types.InputMaybe<Types.Scalars['ID']>
@@ -29,18 +37,42 @@ export type GroupsQuery = {
     | undefined
 }
 
+export type PostResultsMutationVariables = Types.Exact<{
+  results: Types.Scalars['String']
+}>
+
+export type PostResultsMutation = {
+  __typename?: 'Mutation'
+  postResults?:
+    | {
+        __typename?: 'WordleResult'
+        id: string
+        createdAt: any
+        guesses: Array<Array<Types.WordleGuessResult>>
+        user: { __typename?: 'User'; id: string; displayName: string }
+      }
+    | null
+    | undefined
+}
+
+export const WordleResultFragmentDoc = gql`
+  fragment WordleResult on WordleResult {
+    id
+    createdAt
+    user {
+      id
+      displayName
+    }
+    guesses
+  }
+`
 export const ResultsDocument = gql`
   query results($date: Date, $groupId: ID) {
     results(date: $date, groupId: $groupId) {
-      id
-      createdAt
-      user {
-        id
-        displayName
-      }
-      guesses
+      ...WordleResult
     }
   }
+  ${WordleResultFragmentDoc}
 `
 
 /**
@@ -131,4 +163,55 @@ export type GroupsLazyQueryHookResult = ReturnType<typeof useGroupsLazyQuery>
 export type GroupsQueryResult = Apollo.QueryResult<
   GroupsQuery,
   GroupsQueryVariables
+>
+export const PostResultsDocument = gql`
+  mutation postResults($results: String!) {
+    postResults(results: $results) {
+      ...WordleResult
+    }
+  }
+  ${WordleResultFragmentDoc}
+`
+export type PostResultsMutationFn = Apollo.MutationFunction<
+  PostResultsMutation,
+  PostResultsMutationVariables
+>
+
+/**
+ * __usePostResultsMutation__
+ *
+ * To run a mutation, you first call `usePostResultsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostResultsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [postResultsMutation, { data, loading, error }] = usePostResultsMutation({
+ *   variables: {
+ *      results: // value for 'results'
+ *   },
+ * });
+ */
+export function usePostResultsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PostResultsMutation,
+    PostResultsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<PostResultsMutation, PostResultsMutationVariables>(
+    PostResultsDocument,
+    options
+  )
+}
+export type PostResultsMutationHookResult = ReturnType<
+  typeof usePostResultsMutation
+>
+export type PostResultsMutationResult =
+  Apollo.MutationResult<PostResultsMutation>
+export type PostResultsMutationOptions = Apollo.BaseMutationOptions<
+  PostResultsMutation,
+  PostResultsMutationVariables
 >

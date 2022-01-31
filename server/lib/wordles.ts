@@ -1,4 +1,4 @@
-import { PrismaClient, User, Wordle, WordleResult } from '@prisma/client'
+import { User, Wordle, WordleResult } from '@prisma/client'
 import db from '@server/services/db'
 import { Prisma } from '@prisma/client'
 import { addDays } from 'date-fns'

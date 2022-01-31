@@ -1,5 +1,5 @@
 import { merge, Theme } from 'theme-ui'
-import {system as baseTheme} from '@theme-ui/presets'
+import { system as baseTheme } from '@theme-ui/presets'
 
 const primaryColor = '#57AC4B'
 
@@ -15,18 +15,18 @@ export const theme: Theme = merge(baseTheme, {
       light: {
         primary: primaryColor,
         muted: '#dadada',
-      }
-    }
+      },
+    },
   },
   layout: {
     container: {
       maxWidth: 800,
-      p: 4
-    }
+      p: 4,
+    },
   },
   forms: {
     input: {
       fontFamily: 'body',
-    }
-  }
+    },
+  },
 })

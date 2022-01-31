@@ -50,26 +50,30 @@ const AcceptInvite: React.FC = () => {
             {group.name}
           </Heading>
           {user ? (
-            <TextButton onClick={async () => {
-              if (joinGroupResult.loading) {
-                return
-              }
-
-              const result = await joinGroup({
-                variables: {
-                  inviteCode
+            <TextButton
+              onClick={async () => {
+                if (joinGroupResult.loading) {
+                  return
                 }
-              })
 
-              const group = result.data?.joinGroup
-              if (group) {
-                router.replace('/', {
-                  query: {
-                    groupId: group.id
-                  }
+                const result = await joinGroup({
+                  variables: {
+                    inviteCode,
+                  },
                 })
-              }
-            }}>Click to join</TextButton>
+
+                const group = result.data?.joinGroup
+                if (group) {
+                  router.replace('/', {
+                    query: {
+                      groupId: group.id,
+                    },
+                  })
+                }
+              }}
+            >
+              Click to join
+            </TextButton>
           ) : (
             <Link href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}>
               sign in with twitter to join

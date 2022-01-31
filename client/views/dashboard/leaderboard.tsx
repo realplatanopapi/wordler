@@ -21,9 +21,11 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
         <>
           <Box mb={4}>
             {isCurrentUserLeading && (
-              <Text sx={{
-                fontSize: 4
-              }}>
+              <Text
+                sx={{
+                  fontSize: 4,
+                }}
+              >
                 Your rivals tremble in the splendor of your mastery of the
                 English language.
               </Text>
@@ -32,17 +34,29 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
           <Box>
             <Grid gap={0} columns={2} mx={-4}>
               <Box py={2} px={4}>
-              <Text sx={{
-                fontSize: 1
-              }}>user</Text>
+                <Text
+                  sx={{
+                    fontSize: 1,
+                  }}
+                >
+                  user
+                </Text>
               </Box>
-              <Box py={2} px={4} sx={{
-                borderLeft: '1px solid',
-                borderColor: 'muted'
-              }}>
-              <Text sx={{
-                fontSize: 1
-              }}>points</Text>
+              <Box
+                py={2}
+                px={4}
+                sx={{
+                  borderLeft: '1px solid',
+                  borderColor: 'muted',
+                }}
+              >
+                <Text
+                  sx={{
+                    fontSize: 1,
+                  }}
+                >
+                  points
+                </Text>
               </Box>
             </Grid>
             {entries.map((entry, index) => {
@@ -60,22 +74,30 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
                     fontWeight,
                   }}
                 >
-                  <Box py={3} px={4} sx={{
-                    borderTop: "1px solid",
-                    borderColor: 'muted'
-                  }}>
-                  <Text>
-                    {isFirstEntry && '👑 '}
-                    {user.displayName}{' '}
-                    {currentUser && user.id === currentUser.id && <>(you)</>}
-                  </Text>
+                  <Box
+                    py={3}
+                    px={4}
+                    sx={{
+                      borderTop: '1px solid',
+                      borderColor: 'muted',
+                    }}
+                  >
+                    <Text>
+                      {isFirstEntry && '👑 '}
+                      {user.displayName}{' '}
+                      {currentUser && user.id === currentUser.id && <>(you)</>}
+                    </Text>
                   </Box>
-                  <Box py={3} px={4} sx={{
-                    borderLeft: "1px solid",
-                    borderTop: "1px solid",
-                    borderColor: 'muted'
-                  }}>
-                  <Text>{score}</Text>
+                  <Box
+                    py={3}
+                    px={4}
+                    sx={{
+                      borderLeft: '1px solid',
+                      borderTop: '1px solid',
+                      borderColor: 'muted',
+                    }}
+                  >
+                    <Text>{score}</Text>
                   </Box>
                 </Grid>
               )

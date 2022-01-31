@@ -1,10 +1,10 @@
-import { ApolloError } from "@apollo/client";
+import { ApolloError } from '@apollo/client'
 
 export async function copyToClipboard(text: string) {
   if ('clipboard' in navigator) {
-    return await navigator.clipboard.writeText(text);
+    return await navigator.clipboard.writeText(text)
   } else {
-    return document.execCommand('copy', true, text);
+    return document.execCommand('copy', true, text)
   }
 }
 
@@ -13,7 +13,7 @@ export function getGraphqlErrorCode(error?: ApolloError): string | null {
     return null
   }
 
-  const errorsWithCodes = error.graphQLErrors.filter(error => {
+  const errorsWithCodes = error.graphQLErrors.filter((error) => {
     return typeof error.extensions.code === 'string'
   })
 
@@ -28,5 +28,5 @@ export const ERROR_CODE_MESSAGES: {
   [code: string]: string
 } = Object.freeze({
   INVALID_WORDLE: 'Not a valid Wordle. Please try again.',
-  NAME_ALREADY_TAKEN: 'Name already taken.'
+  NAME_ALREADY_TAKEN: 'Name already taken.',
 })

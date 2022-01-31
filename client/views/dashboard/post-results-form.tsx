@@ -1,13 +1,16 @@
-import ErrorCodeMessage from "@client/components/error-code-message"
-import { getGraphqlErrorCode } from "@client/utils"
-import { usePostResultsMutation, WordleResultFragment } from "@client/__gql__/api"
-import { Button, Textarea } from "theme-ui"
+import ErrorCodeMessage from '@client/components/error-code-message'
+import { getGraphqlErrorCode } from '@client/utils'
+import {
+  usePostResultsMutation,
+  WordleResultFragment,
+} from '@client/__gql__/api'
+import { Button, Textarea } from 'theme-ui'
 
 interface Props {
   onSubmit: (result: WordleResultFragment) => any
 }
 
-const PostResultsForm: React.FC<Props> = ({onSubmit}) => {
+const PostResultsForm: React.FC<Props> = ({ onSubmit }) => {
   const [postResults, postResultsResult] = usePostResultsMutation()
 
   return (
@@ -18,8 +21,8 @@ const PostResultsForm: React.FC<Props> = ({onSubmit}) => {
         const data = new FormData(form)
         const mutationResult = await postResults({
           variables: {
-            results: data.get("results") as string
-          }
+            results: data.get('results') as string,
+          },
         })
         const wordleResult = mutationResult.data?.postResults
         if (wordleResult) {

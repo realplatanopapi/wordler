@@ -1,6 +1,6 @@
 fragment Group on Group {
   id
-  name 
+  name
   inviteLink
 }
 

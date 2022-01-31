@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'theme-ui'
 import Page from '@client/layouts/page'
 import { ApolloProvider } from '@apollo/client'
-import {client} from '@client/graphql';
+import { client } from '@client/graphql'
 import Navigation from '@client/views/navigation'
 
 import '@client/base.css'
@@ -12,9 +12,7 @@ function Worlder({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <Page header={
-          <Navigation />
-        }>
+        <Page header={<Navigation />}>
           <Component {...pageProps} />
         </Page>
       </ThemeProvider>

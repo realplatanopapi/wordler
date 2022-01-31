@@ -26,8 +26,8 @@ const twitter = axios.create({
 
 const handler: NextApiHandler = async (req, res) => {
   const { code, state } = req.query
-  const {challenge} = await unsealData<StateData>(state as string, {
-    password: config.get('twitter.oauthStateSecret')
+  const { challenge } = await unsealData<StateData>(state as string, {
+    password: config.get('twitter.oauthStateSecret'),
   })
 
   const params = new URLSearchParams()

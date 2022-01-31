@@ -1,10 +1,6 @@
-import {
-  User,
-  Wordle,
-  WordleResult,
-} from '@prisma/client'
+import { User, Wordle, WordleResult } from '@prisma/client'
 import db from '@server/services/db'
-import {Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { addDays } from 'date-fns'
 import { getToday, startOfDay, toUTC } from '@common/utils/time'
 import { getById } from './accounts'
@@ -30,9 +26,9 @@ export async function getOrCreateWordle(number: number): Promise<Wordle> {
 }
 
 export enum WordleGuessResult {
-  EXACT_MATCH = "EXACT_MATCH",
-  IN_WORD = "IN_WORD",
-  NOT_IN_WORD = "NOT_IN_WORD"
+  EXACT_MATCH = 'EXACT_MATCH',
+  IN_WORD = 'IN_WORD',
+  NOT_IN_WORD = 'NOT_IN_WORD',
 }
 
 interface ResultData {
@@ -71,7 +67,7 @@ function calculateScore(data: ResultData) {
     return 0
   }
 
-  return ((data.maxAttempts - data.attemptsUsed) * 100) + 100
+  return (data.maxAttempts - data.attemptsUsed) * 100 + 100
 }
 
 function parseResultsFromString(resultsString: string): ResultData {
@@ -157,51 +153,51 @@ export async function queryResults({
         wordle: {
           date: {
             gte: startOfDay(from),
-            lt: addDays(
-              startOfDay(until)
-            , 1),
-          }
-        }
+            lt: addDays(startOfDay(until), 1),
+          },
+        },
       },
       {
         OR: [
           {
-            userId: userId
+            userId: userId,
           },
           {
             user: {
               groupMemberships: {
                 some: {
                   groupId: options.groupId,
-                  userId: userId
-                }
-              }
-            }
-          }
-        ]
-      }
-    ]
+                  userId: userId,
+                },
+              },
+            },
+          },
+        ],
+      },
+    ],
   }
 
   const total = await db.wordleResult.count({
-    where
+    where,
   })
 
   const data = await db.wordleResult.findMany({
     skip: options.cursor ? 1 : undefined,
-    cursor: options.cursor ? {
-      id: options.cursor
-    } : undefined,
+    cursor: options.cursor
+      ? {
+          id: options.cursor,
+        }
+      : undefined,
     orderBy: {
-      createdAt: 'desc'
+      createdAt: 'desc',
     },
     where,
   })
 
   return {
     total,
-    data, 
-    nextCursor: data.length > 0 ? data[data.length - 1].id : null
+    data,
+    nextCursor: data.length > 0 ? data[data.length - 1].id : null,
   }
 }
 
@@ -212,9 +208,9 @@ export async function canPostResults(user: User): Promise<boolean> {
       userId: user.id,
       createdAt: {
         gte: today,
-        lt: addDays(today, 1)
-      }
-    }
+        lt: addDays(today, 1),
+      },
+    },
   })
 
   return count === 0
@@ -230,42 +226,44 @@ export interface Leaderboard {
 }
 
 export interface LeaderboardQueryOptions {
-  from: Date 
-  until: Date 
+  from: Date
+  until: Date
 }
 
-export async function getLeaderboard(options: LeaderboardQueryOptions): Promise<Leaderboard> {
+export async function getLeaderboard(
+  options: LeaderboardQueryOptions
+): Promise<Leaderboard> {
   const results = await db.wordleResult.groupBy({
     by: ['userId'],
     _sum: {
-      score: true
+      score: true,
     },
     where: {
       createdAt: {
         gte: options.from,
-        lt: addDays(options.until, 1) 
-      }
+        lt: addDays(options.until, 1),
+      },
     },
     orderBy: {
       _sum: {
-        score: 'desc'
-      }
+        score: 'desc',
+      },
     },
   })
 
   const entries = await Promise.all(
-    results.map(async result => {
-      const user = await getById(result.userId) as User
+    results.map(async (result) => {
+      const user = (await getById(result.userId)) as User
       const score = result._sum.score as number
 
       return {
         user,
-        score
+        score,
       }
     })
   )
 
   return {
-    entries
+    entries,
   }
 }

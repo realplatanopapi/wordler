@@ -29,13 +29,13 @@ const server = new ApolloServer({
     }
   },
   formatError: (error) => {
-    const {originalError} = error
+    const { originalError } = error
     if (originalError instanceof ErrorWithCode) {
       return new ApolloError(originalError.message, originalError.code)
     }
 
-    return error 
-  }
+    return error
+  },
 })
 
 const startServer = server.start()

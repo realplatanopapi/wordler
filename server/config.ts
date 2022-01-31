@@ -68,7 +68,7 @@ const config = convict<{
       format: String,
       env: 'TWITTER_OAUTH_STATE_SECRET',
       default: null,
-    }
+    },
   },
 })
 

@@ -1,10 +1,8 @@
-import Home from "@client/views/home";
-import { NextPage } from "next";
+import Home from '@client/views/home'
+import { NextPage } from 'next'
 
 const Index: NextPage = () => {
-  return (
-    <Home />
-  )
+  return <Home />
 }
 
 export default Index

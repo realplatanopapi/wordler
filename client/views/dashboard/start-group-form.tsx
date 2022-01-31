@@ -1,17 +1,17 @@
-import { Group } from "@client/api"
-import ErrorCodeMessage from "@client/components/error-code-message"
-import { getGraphqlErrorCode } from "@client/utils"
-import { useStartGroupMutation } from "@client/__gql__/api"
-import { Button, Input } from "theme-ui"
+import { Group } from '@client/api'
+import ErrorCodeMessage from '@client/components/error-code-message'
+import { getGraphqlErrorCode } from '@client/utils'
+import { useStartGroupMutation } from '@client/__gql__/api'
+import { Button, Input } from 'theme-ui'
 
 interface Props {
   onSubmit: (group: Group) => any
 }
 
-const StartGroupForm: React.FC<Props> = ({onSubmit}) => {
+const StartGroupForm: React.FC<Props> = ({ onSubmit }) => {
   const [startGroup, startGroupResult] = useStartGroupMutation({
     onCompleted: (data) => {
-      const {startGroup: group} = data
+      const { startGroup: group } = data
       if (group) {
         onSubmit(group)
       }
@@ -26,8 +26,8 @@ const StartGroupForm: React.FC<Props> = ({onSubmit}) => {
         const data = new FormData(form)
         startGroup({
           variables: {
-            name: data.get('name') as string
-          }
+            name: data.get('name') as string,
+          },
         })
       }}
     >

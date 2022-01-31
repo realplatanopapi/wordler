@@ -46,8 +46,8 @@ export async function startGroup(user: User, name: string) {
 export async function isGroupSlugTaken(slug: string) {
   const count = await db.group.count({
     where: {
-      slug
-    }
+      slug,
+    },
   })
 
   return count > 0
@@ -79,8 +79,8 @@ export function getGroupsForUser(user: User) {
       },
     },
     orderBy: {
-      name: 'asc'
-    }
+      name: 'asc',
+    },
   })
 }
 
@@ -176,12 +176,15 @@ export async function joinGroup(user: User, inviteCode: string) {
   return group
 }
 
-export async function checkIsMemberOfGroup(group: Group, user: User): Promise<boolean> {
+export async function checkIsMemberOfGroup(
+  group: Group,
+  user: User
+): Promise<boolean> {
   const membership = await db.groupMembership.findFirst({
     where: {
       groupId: group.id,
-      userId: user.id
-    }
+      userId: user.id,
+    },
   })
 
   return Boolean(membership)
@@ -193,5 +196,5 @@ export async function getInviteLink(group: Group): Promise<string | null> {
     return null
   }
 
-  return `${config.get("appUrl")}/accept-invite?inviteCode=${inviteCode.code}`
+  return `${config.get('appUrl')}/accept-invite?inviteCode=${inviteCode.code}`
 }

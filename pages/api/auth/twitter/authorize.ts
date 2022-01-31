@@ -11,16 +11,19 @@ const handler: NextApiHandler = async (req, res) => {
   const redirectUri = `${config.get('appUrl')}/api/auth/twitter/callback`
   const scope = 'users.read%20tweet.read'
   const challenge = cryptoRandomString({
-    length: 32
+    length: 32,
   })
-  const state = await sealData({
-    challenge
-  } as StateData, {
-    password: config.get('twitter.oauthStateSecret'),
+  const state = await sealData(
+    {
+      challenge,
+    } as StateData,
+    {
+      password: config.get('twitter.oauthStateSecret'),
 
-    // Make valid for 5 minutes
-    ttl: 60 * 5
-  })
+      // Make valid for 5 minutes
+      ttl: 60 * 5,
+    }
+  )
 
   if (req.query.inviteCode) {
     req.session.inviteCode = req.query.inviteCode as string

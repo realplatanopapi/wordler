@@ -7,20 +7,23 @@ interface Props {
   label?: string
 }
 
-const ClipboardCopy: React.FC<Props> = ({textToCopy, label = 'Click to copy'}) => {
+const ClipboardCopy: React.FC<Props> = ({
+  textToCopy,
+  label = 'Click to copy',
+}) => {
   const [isCopied, setIsCopied] = useState(false)
 
   return (
-    <TextButton onClick={async () => {
-      await copyToClipboard(textToCopy)
-      setIsCopied(true)
-      setTimeout(() => {
-        setIsCopied(false)
-      }, 2000)
-    }}>
-      {
-        isCopied ? 'Copied!' : label
-      }
+    <TextButton
+      onClick={async () => {
+        await copyToClipboard(textToCopy)
+        setIsCopied(true)
+        setTimeout(() => {
+          setIsCopied(false)
+        }, 2000)
+      }}
+    >
+      {isCopied ? 'Copied!' : label}
     </TextButton>
   )
 }

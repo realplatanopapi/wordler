@@ -5,15 +5,16 @@ const primaryColor = '#57AC4B'
 
 export const theme: Theme = merge(baseTheme, {
   colors: {
-    muted: '#dadada',
     primary: primaryColor,
     modes: {
       dark: {
         background: '#141414',
-        primary: primaryColor
+        primary: primaryColor,
+        muted: '#7a7a7a',
       },
       light: {
-        primary: primaryColor
+        primary: primaryColor,
+        muted: '#dadada',
       }
     }
   },

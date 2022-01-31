@@ -13,6 +13,7 @@ const config = convict<{
     bearerToken: string
     oauthClientId: string
     oauthClientSecret: string
+    oauthStateSecret: string
   }
 }>({
   appUrl: {
@@ -63,6 +64,11 @@ const config = convict<{
       env: 'TWITTER_OAUTH_CLIENT_SECRET',
       default: null,
     },
+    oauthStateSecret: {
+      format: String,
+      env: 'TWITTER_OAUTH_STATE_SECRET',
+      default: null,
+    }
   },
 })
 

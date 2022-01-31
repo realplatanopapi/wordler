@@ -5,6 +5,8 @@ import { getOrCreateUserFromTwitter } from '../../../../server/lib/accounts'
 import { cookieConfig } from '../../../../server/lib/auth'
 import { joinGroup } from '@server/lib/groups'
 import config from '@server/config'
+import { unsealData } from 'iron-session'
+import { StateData } from './types'
 
 const twitterConfig = config.get('twitter')
 const clientId = twitterConfig.oauthClientId
@@ -24,12 +26,15 @@ const twitter = axios.create({
 
 const handler: NextApiHandler = async (req, res) => {
   const { code, state } = req.query
+  const {challenge} = await unsealData<StateData>(state as string, {
+    password: config.get('twitter.oauthStateSecret')
+  })
 
   const params = new URLSearchParams()
   params.append('code', code as string)
   params.append('grant_type', 'authorization_code')
   params.append('client_id', config.get('twitter.oauthClientId'))
-  params.append('code_verifier', 'fake_challenge')
+  params.append('code_verifier', challenge)
   params.append(
     'redirect_uri',
     `${config.get('appUrl')}/api/auth/twitter/callback`

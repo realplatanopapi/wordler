@@ -8,6 +8,8 @@ import {Prisma } from '@prisma/client'
 import { addDays } from 'date-fns'
 import { getToday, startOfDay, toUTC } from '@common/utils/time'
 import { getById } from './accounts'
+import { ErrorWithCode } from '@server/errors/error_with_code'
+import { INVALID_WORDLE } from '@server/errors/codes'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
@@ -42,7 +44,12 @@ interface ResultData {
 }
 
 export async function addResultsForUser(user: User, resultsString: string) {
-  const resultData = parseResultsFromString(resultsString)
+  let resultData: ResultData | null = null
+  try {
+    resultData = parseResultsFromString(resultsString)
+  } catch (error) {
+    throw new ErrorWithCode(INVALID_WORDLE)
+  }
   const score = calculateScore(resultData)
   const wordle = await getOrCreateWordle(resultData.wordleNumber)
 
@@ -69,18 +76,34 @@ function calculateScore(data: ResultData) {
 
 function parseResultsFromString(resultsString: string): ResultData {
   const lines = resultsString.trim().split('\n')
-  const header = lines[0].trim()
   const attempts = lines.slice(2)
 
+  // TODO: clean up this validation
+  if (attempts.length > 6) {
+    throw new ErrorWithCode(INVALID_WORDLE)
+  }
+
+  const header = lines[0].trim()
   const headerParts = header.split(' ')
+  if (headerParts.length !== 3) {
+    throw new ErrorWithCode(INVALID_WORDLE)
+  }
   const wordleNumber = parseInt(headerParts[1])
 
   const attemptsParts = headerParts[2].split('/')
   const attemptsUsedStr = attemptsParts[0]
   const maxAttempts = parseInt(attemptsParts[1])
   let attemptsUsed = parseInt(attemptsUsedStr)
+  if (isNaN(attemptsUsed) && isNaN(maxAttempts)) {
+    throw new ErrorWithCode(INVALID_WORDLE)
+  }
+
   if (isNaN(attemptsUsed)) {
     attemptsUsed = maxAttempts
+  }
+
+  if (attempts.length !== attemptsUsed) {
+    throw new ErrorWithCode(INVALID_WORDLE)
   }
 
   const parsedAttempts = attempts.map((attempt) => {
@@ -90,8 +113,10 @@ function parseResultsFromString(resultsString: string): ResultData {
         return WordleGuessResult.EXACT_MATCH
       } else if (guess == '🟨') {
         return WordleGuessResult.IN_WORD
-      } else {
+      } else if (guess == '⬛') {
         return WordleGuessResult.NOT_IN_WORD
+      } else {
+        throw new ErrorWithCode(INVALID_WORDLE)
       }
     })
   })

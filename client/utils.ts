@@ -27,5 +27,6 @@ export function getGraphqlErrorCode(error?: ApolloError): string | null {
 export const ERROR_CODE_MESSAGES: {
   [code: string]: string
 } = Object.freeze({
+  INVALID_WORDLE: 'Not a valid Wordle. Please try again.',
   NAME_ALREADY_TAKEN: 'Name already taken.'
 })

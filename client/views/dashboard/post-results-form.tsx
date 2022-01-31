@@ -1,3 +1,5 @@
+import ErrorCodeMessage from "@client/components/error-code-message"
+import { getGraphqlErrorCode } from "@client/utils"
 import { usePostResultsMutation, WordleResultFragment } from "@client/__gql__/api"
 import { Button, Textarea } from "theme-ui"
 
@@ -6,7 +8,7 @@ interface Props {
 }
 
 const PostResultsForm: React.FC<Props> = ({onSubmit}) => {
-  const [postResultsMutation] = usePostResultsMutation()
+  const [postResults, postResultsResult] = usePostResultsMutation()
 
   return (
     <form
@@ -14,7 +16,7 @@ const PostResultsForm: React.FC<Props> = ({onSubmit}) => {
         event.preventDefault()
         const form = event.target as HTMLFormElement
         const data = new FormData(form)
-        const mutationResult = await postResultsMutation({
+        const mutationResult = await postResults({
           variables: {
             results: data.get("results") as string
           }
@@ -26,6 +28,7 @@ const PostResultsForm: React.FC<Props> = ({onSubmit}) => {
         }
       }}
     >
+      <ErrorCodeMessage code={getGraphqlErrorCode(postResultsResult.error)} />
       <Textarea
         name="results"
         placeholder="Paste results from Wordle here"

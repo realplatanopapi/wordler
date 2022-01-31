@@ -5,11 +5,6 @@ export const theme: Theme = merge(base, {
   colors: {
     muted: '#dadada'
   },
-  fonts: {
-    body: "'Cutive Mono', monospace",
-    heading: "'Cutive Mono', monospace",
-    monospace: 'Menlo, monospace',
-  },
   layout: {
     container: {
       maxWidth: 800,

@@ -46,6 +46,7 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
             </Text>
           </Box>
           <Box>
+            <Heading as="h3" mb={4}>Leaderboard</Heading>
             <Grid gap={0} columns={2} mx={-4}>
               <Box py={2} px={4}>
                 <Text

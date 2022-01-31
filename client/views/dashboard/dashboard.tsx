@@ -72,6 +72,11 @@ const Dashboard: React.FC<Props> = ({ user }) => {
       <Head>
         <title>Wordler</title>
       </Head>
+      <Section sx={{
+        mb: 4
+      }}>
+        <WeekPicker selectedDate={weekOf} />
+      </Section>
       <Section
         headingAs="h1"
         heading={`Week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}
@@ -133,9 +138,6 @@ const Dashboard: React.FC<Props> = ({ user }) => {
           </Grid>
         </Section>
       )}
-      <Section>
-        <WeekPicker selectedDate={weekOf} />
-      </Section>
       {user && groups && (
         <Section heading="Your groups">
           <Groups

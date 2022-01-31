@@ -29,7 +29,7 @@ const Groups: React.FC<Props> = ({ groups, onStartGroup }) => {
           </Flex>
         )
       })}
-      <Heading as="h3" mb={3} mt={4}>
+      <Heading as="h4" mb={3} mt={5}>
         Start a new group
       </Heading>
       <StartGroupForm onSubmit={onStartGroup} />

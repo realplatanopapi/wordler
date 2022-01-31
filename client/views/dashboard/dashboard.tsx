@@ -18,6 +18,7 @@ import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
 import { getStartOfWeek } from '@common/utils/time'
 import Groups from '@client/views/dashboard/groups'
+import Link from '@client/components/link'
 
 interface Props {
   user: User
@@ -151,8 +152,9 @@ const Dashboard: React.FC<Props> = ({ user }) => {
             Signed in as {user.displayName}
           </Text>
           <Text as="p">
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a href="/api/auth/logout">Sign out</a>
+            <Link isExternal href="/api/auth/logout">
+              Sign out
+            </Link>
           </Text>
         </Section>
       )}

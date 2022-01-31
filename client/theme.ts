@@ -1,21 +1,25 @@
 import { merge, Theme } from 'theme-ui'
-import {base} from '@theme-ui/presets'
+import {system as baseTheme} from '@theme-ui/presets'
 
-export const theme: Theme = merge(base, {
+const primaryColor = '#57AC4B'
+
+export const theme: Theme = merge(baseTheme, {
   colors: {
-    muted: '#dadada'
+    muted: '#dadada',
+    primary: primaryColor,
+    modes: {
+      dark: {
+        primary: primaryColor
+      },
+      light: {
+        primary: primaryColor
+      }
+    }
   },
   layout: {
     container: {
       maxWidth: 800,
       p: 4
-    }
-  },
-  buttons: {
-    primary: {
-      background: 'black',
-      color: 'white',
-      fontFamily: 'body'
     }
   },
   forms: {

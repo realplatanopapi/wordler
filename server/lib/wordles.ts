@@ -151,8 +151,8 @@ export async function queryResults({
     AND: [
       {
         createdAt: {
-          gte: startOfDay(from),
-          lt: addDays(startOfDay(until), 1),
+          gte: from,
+          lt: until,
         },
       },
       {

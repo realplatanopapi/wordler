@@ -80,15 +80,18 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         weekOf: {
           type: new GraphQLNonNull(DateType),
         },
+        timezoneOffset: {
+          type: new GraphQLNonNull(GraphQLInt)
+        },
       },
-      resolve: (_source, { weekOf }, {user}) => {
-        const from = weekOf
+      resolve: (_source, { weekOf, timezoneOffset }, {user}) => {
+        const from = addMinutes(weekOf, timezoneOffset)
         const until = addDays(from, 7)
 
         return getLeaderboard({
           from,
           until,
-          userId: user?.id
+          userId: user?.id,
         })
       },
     },
@@ -103,9 +106,12 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         groupId: {
           type: GraphQLID,
         },
+        timezoneOffset: {
+          type: new GraphQLNonNull(GraphQLInt)
+        }
       },
-      resolve: async (_, { weekOf, groupId }, { user }) => {
-        const from = weekOf
+      resolve: async (_, { weekOf, groupId, timezoneOffset }, { user }) => {
+        const from = addMinutes(weekOf, timezoneOffset)
         const until = addDays(from, 7)
 
         const results = await queryResults({

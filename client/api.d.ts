@@ -75,11 +75,13 @@ export type QueryGroupWithInviteCodeArgs = {
 }
 
 export type QueryLeaderboardArgs = {
+  timezoneOffset: Scalars['Int']
   weekOf: Scalars['Date']
 }
 
 export type QueryResultsArgs = {
   groupId?: InputMaybe<Scalars['ID']>
+  timezoneOffset: Scalars['Int']
   weekOf: Scalars['Date']
 }
 

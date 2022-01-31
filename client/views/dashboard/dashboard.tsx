@@ -29,21 +29,24 @@ const Dashboard: React.FC<Props> = ({ user }) => {
   const groupId = router.query.groupId as string
   const weekOfStr = router.query.weekOf
   const now = new Date()
+  const timezoneOffset = now.getTimezoneOffset()
   const weekOf = weekOfStr
     ? new Date(weekOfStr as string)
     : getStartOfWeek(now)
   const canPostResultsQuery = useCanPostResultsQuery({
     variables: {
-      timezoneOffset: now.getTimezoneOffset()
+      timezoneOffset,
     }
   })
   const resultsQueryVariables = {
     weekOf,
     groupId,
+    timezoneOffset
   }
   const leaderboardQuery = useLeaderboardQuery({
     variables: {
       weekOf,
+      timezoneOffset,
     },
   })
   const groupsQuery = useGroupsQuery()

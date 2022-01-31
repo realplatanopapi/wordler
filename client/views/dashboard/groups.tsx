@@ -17,12 +17,21 @@ const Groups: React.FC<Props> = ({ groups, onStartGroup }) => {
         return (
           <Flex mb={3} key={group.id}>
             <Text>{group.name}</Text>
-            <Text mx={2}>-</Text>
-            <ClipboardCopy textToCopy={group.inviteLink} label="Copy invite link" />
+            {group.inviteLink && (
+              <>
+                <Text mx={2}>-</Text>
+                <ClipboardCopy
+                  textToCopy={group.inviteLink}
+                  label="Copy invite link"
+                />
+              </>
+            )}
           </Flex>
         )
       })}
-      <Heading as="h3" mb={3} mt={4}>Start a new group</Heading>
+      <Heading as="h3" mb={3} mt={4}>
+        Start a new group
+      </Heading>
       <StartGroupForm onSubmit={onStartGroup} />
     </>
   )

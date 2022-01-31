@@ -15,5 +15,17 @@ export const theme: Theme = merge(base, {
       maxWidth: 800,
       p: 4
     }
+  },
+  buttons: {
+    primary: {
+      background: 'black',
+      color: 'white',
+      fontFamily: 'body'
+    }
+  },
+  forms: {
+    input: {
+      fontFamily: 'body',
+    }
   }
 })

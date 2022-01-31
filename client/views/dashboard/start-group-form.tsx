@@ -1,6 +1,6 @@
 import { Group } from "@client/api"
 import { useStartGroupMutation } from "@client/__gql__/api"
-import { Input } from "theme-ui"
+import { Button, Input } from "theme-ui"
 
 interface Props {
   onSubmit: (group: Group) => any
@@ -29,7 +29,7 @@ const StartGroupForm: React.FC<Props> = ({onSubmit}) => {
     >
       <Input name="name" placeholder="name your group" required />
       <br />
-      <button type="submit">start</button>
+      <Button type="submit">Start</Button>
     </form>
   )
 }

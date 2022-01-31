@@ -1,5 +1,5 @@
 import { usePostResultsMutation, WordleResultFragment } from "@client/__gql__/api"
-import { Textarea } from "theme-ui"
+import { Button, Textarea } from "theme-ui"
 
 interface Props {
   onSubmit: (result: WordleResultFragment) => any
@@ -36,7 +36,7 @@ const PostResultsForm: React.FC<Props> = ({onSubmit}) => {
         }}
       ></Textarea>
       <br />
-      <button type="submit">Post</button>
+      <Button type="submit">Post</Button>
     </form>
   )
 }

@@ -3,7 +3,7 @@ import ClipboardCopy from "@client/components/clipboard-copy"
 import Link from "@client/components/link"
 import StartGroupForm from "@client/views/dashboard/start-group-form"
 import { useState } from "react"
-import { Box, Flex, Heading, Text } from "theme-ui"
+import { Box, Button, Flex, Heading, Text } from "theme-ui"
 
 interface Props {
   onCompleteOnboarding: () => any
@@ -12,7 +12,7 @@ interface Props {
 const Onboarding: React.FC<Props> = ({onCompleteOnboarding}) => {
   const [group, setGroup] = useState<Group | null>(null)
 
-  if (group) {
+  if (group && group.inviteLink) {
     return (
       <>
         <Text as="p" mb={1}>Well done! You&apos;ve started:</Text>
@@ -34,9 +34,9 @@ const Onboarding: React.FC<Props> = ({onCompleteOnboarding}) => {
         <Flex sx={{
           justifyContent: 'center'
         }}>
-          <button onClick={() => {
+          <Button onClick={() => {
             onCompleteOnboarding()
-          }}>start wordle-ing</button>
+          }}>start wordle-ing</Button>
         </Flex>
       </>
     )

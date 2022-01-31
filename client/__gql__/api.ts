@@ -58,7 +58,9 @@ export type PostResultsMutation = {
     | undefined
 }
 
-export type CanPostResultsQueryVariables = Types.Exact<{ [key: string]: never }>
+export type CanPostResultsQueryVariables = Types.Exact<{
+  timezoneOffset: Types.Scalars['Int']
+}>
 
 export type CanPostResultsQuery = {
   __typename?: 'Query'
@@ -283,8 +285,8 @@ export type PostResultsMutationOptions = Apollo.BaseMutationOptions<
   PostResultsMutationVariables
 >
 export const CanPostResultsDocument = gql`
-  query canPostResults {
-    canPostResults
+  query canPostResults($timezoneOffset: Int!) {
+    canPostResults(timezoneOffset: $timezoneOffset)
   }
 `
 
@@ -300,11 +302,12 @@ export const CanPostResultsDocument = gql`
  * @example
  * const { data, loading, error } = useCanPostResultsQuery({
  *   variables: {
+ *      timezoneOffset: // value for 'timezoneOffset'
  *   },
  * });
  */
 export function useCanPostResultsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     CanPostResultsQuery,
     CanPostResultsQueryVariables
   >

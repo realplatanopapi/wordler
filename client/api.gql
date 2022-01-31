@@ -30,8 +30,8 @@ mutation postResults($results: String!) {
   }
 }
 
-query canPostResults {
-  canPostResults
+query canPostResults($timezoneOffset: Int!) {
+  canPostResults(timezoneOffset: $timezoneOffset)
 }
 
 query groups {

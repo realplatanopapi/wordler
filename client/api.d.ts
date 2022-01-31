@@ -66,6 +66,10 @@ export type Query = {
   whoami?: Maybe<User>
 }
 
+export type QueryCanPostResultsArgs = {
+  timezoneOffset: Scalars['Int']
+}
+
 export type QueryGroupWithInviteCodeArgs = {
   inviteCode: Scalars['String']
 }

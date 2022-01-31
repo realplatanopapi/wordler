@@ -11,10 +11,11 @@ import {
   getLeaderboard,
   queryResults,
 } from '@server/lib/wordles'
-import { addDays } from 'date-fns'
+import { addDays, addMinutes, subMinutes } from 'date-fns'
 import {
   GraphQLBoolean,
   GraphQLID,
+  GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -39,12 +40,17 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
   fields: {
     canPostResults: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      resolve: (_source, _args, { user }) => {
+      args: {
+        timezoneOffset: {
+          type: new GraphQLNonNull(GraphQLInt)
+        } 
+      },
+      resolve: (_source, {timezoneOffset}, { user }) => {
         if (!user) {
           return false
         }
 
-        return canPostResults(user)
+        return canPostResults(user, timezoneOffset)
       },
     },
     groups: {

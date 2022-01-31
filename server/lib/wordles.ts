@@ -1,8 +1,8 @@
 import { User, Wordle, WordleResult } from '@prisma/client'
 import db from '@server/services/db'
 import { Prisma } from '@prisma/client'
-import { addDays } from 'date-fns'
-import { getToday, startOfDay, toUTC } from '@common/utils/time'
+import { addDays, addMinutes } from 'date-fns'
+import { startOfDay, toUTC } from '@common/utils/time'
 import { getById } from './accounts'
 import { ErrorWithCode } from '@server/errors/error_with_code'
 import { INVALID_WORDLE } from '@server/errors/codes'
@@ -179,14 +179,16 @@ export async function queryResults({
   }
 }
 
-export async function canPostResults(user: User): Promise<boolean> {
-  const today = getToday()
+export async function canPostResults(user: User, timezoneOffset: number): Promise<boolean> {
+  const offsetDateTime = addMinutes(new Date(), timezoneOffset)
+  const startOfNextDay = addMinutes(startOfDay(addDays(offsetDateTime, 1)), timezoneOffset)
+
   const count = await db.wordleResult.count({
     where: {
       userId: user.id,
       createdAt: {
-        gte: today,
-        lt: addDays(today, 1),
+        gte: offsetDateTime,
+        lt: startOfNextDay,
       },
     },
   })

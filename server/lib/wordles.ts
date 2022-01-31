@@ -152,7 +152,7 @@ export async function queryResults({
       {
         createdAt: {
           gte: from,
-          lt: until,
+          lt: addDays(until, 1),
         },
       },
       {

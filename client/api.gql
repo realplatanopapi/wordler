@@ -68,3 +68,9 @@ mutation startGroup($name: String!) {
     ...Group
   }
 }
+
+mutation joinGroup($inviteCode: String!) {
+  joinGroup(inviteCode: $inviteCode) {
+    ...Group
+  }
+}

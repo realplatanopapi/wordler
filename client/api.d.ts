@@ -22,7 +22,7 @@ export type Scalars = {
 export type Group = {
   __typename?: 'Group'
   id: Scalars['ID']
-  inviteLink: Scalars['String']
+  inviteLink?: Maybe<Scalars['String']>
   name: Scalars['String']
 }
 
@@ -39,8 +39,13 @@ export type LeaderboardEntry = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  joinGroup?: Maybe<Group>
   postResults?: Maybe<WordleResult>
   startGroup?: Maybe<Group>
+}
+
+export type MutationJoinGroupArgs = {
+  inviteCode: Scalars['String']
 }
 
 export type MutationPostResultsArgs = {

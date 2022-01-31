@@ -86,7 +86,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
         <WeekPicker selectedDate={weekOf} />
       </Section>
       <Section
-        headingAs="h1"
+        headingAs="h3"
         heading={`Week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}
       >
         {canPostResults && (
@@ -123,7 +123,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
           </Box>
         )}
         {selectedGroup && (
-          <Heading as="h2" mb={3}>
+          <Heading as="h3" mb={3}>
             {selectedGroup.name}
           </Heading>
         )}

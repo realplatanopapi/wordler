@@ -50,9 +50,6 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
             <Grid gap={0} columns={2} mx={-4}>
               <Box py={2} px={4}>
                 <Text
-                  sx={{
-                    fontSize: 1,
-                  }}
                 >
                   user
                 </Text>

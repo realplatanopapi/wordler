@@ -1,10 +1,11 @@
-import { ApolloServer } from 'apollo-server-micro'
+import { ApolloServer, ApolloError } from 'apollo-server-micro'
 import schema, { GraphQLContext } from '@server/graphql/schema'
 import { NextApiHandler, NextApiRequest } from 'next'
 import { getById } from '@server/lib/accounts'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { cookieConfig } from '@server/lib/auth'
+import { ErrorWithCode } from '@server/errors/error_with_code'
 
 export const config = {
   api: {
@@ -27,6 +28,14 @@ const server = new ApolloServer({
       user,
     }
   },
+  formatError: (error) => {
+    const {originalError} = error
+    if (originalError instanceof ErrorWithCode) {
+      return new ApolloError(originalError.message, originalError.code)
+    }
+
+    return error 
+  }
 })
 
 const startServer = server.start()

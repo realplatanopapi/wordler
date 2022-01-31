@@ -3,14 +3,21 @@ import { Group, GroupRole, User } from '@prisma/client'
 import db from '@server/services/db'
 import slugify from 'slugify'
 import config from '@server/config'
+import { ErrorWithCode } from '@server/errors/error_with_code'
+import { NAME_ALREADY_TAKEN } from '@server/errors/codes'
 
-export function startGroup(user: User, name: string) {
+export async function startGroup(user: User, name: string) {
   const slug = slugify(name, {
     lower: true,
     replacement: '_',
     strict: true,
     trim: true,
   })
+
+  const isNameTaken = await isGroupSlugTaken(slug)
+  if (isNameTaken) {
+    throw new ErrorWithCode(NAME_ALREADY_TAKEN)
+  }
 
   return db.group.create({
     data: {
@@ -34,6 +41,16 @@ export function startGroup(user: User, name: string) {
       },
     },
   })
+}
+
+export async function isGroupSlugTaken(slug: string) {
+  const count = await db.group.count({
+    where: {
+      slug
+    }
+  })
+
+  return count > 0
 }
 
 export function getGroupById(id: string) {

@@ -1,4 +1,6 @@
 import { Group } from "@client/api"
+import ErrorCodeMessage from "@client/components/error-code-message"
+import { getGraphqlErrorCode } from "@client/utils"
 import { useStartGroupMutation } from "@client/__gql__/api"
 import { Button, Input } from "theme-ui"
 
@@ -7,26 +9,29 @@ interface Props {
 }
 
 const StartGroupForm: React.FC<Props> = ({onSubmit}) => {
-  const [startGroup] = useStartGroupMutation()
+  const [startGroup, startGroupResult] = useStartGroupMutation({
+    onCompleted: (data) => {
+      const {startGroup: group} = data
+      if (group) {
+        onSubmit(group)
+      }
+    },
+  })
 
   return (
     <form
-      onSubmit={async (event) => {
+      onSubmit={(event) => {
         event.preventDefault()
         const form = event.target as HTMLFormElement
         const data = new FormData(form)
-        const result = await startGroup({
+        startGroup({
           variables: {
             name: data.get('name') as string
           }
         })
-        const newGroup = result.data?.startGroup
-
-        if (newGroup) {
-          onSubmit(newGroup)
-        }
       }}
     >
+      <ErrorCodeMessage code={getGraphqlErrorCode(startGroupResult.error)} />
       <Input name="name" placeholder="name your group" required />
       <br />
       <Button type="submit">Start</Button>

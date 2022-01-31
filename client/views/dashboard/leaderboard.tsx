@@ -20,7 +20,7 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
         <Text>No results for this week.</Text>
       ) : (
         <>
-          <Box mb={4}>
+          <Box mb={5}>
             <Text
               sx={{
                 fontWeight: 'bold',

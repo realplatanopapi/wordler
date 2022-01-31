@@ -1,3 +1,4 @@
+import Link from '@client/components/link'
 import TextButton from '@client/components/text-button'
 import {
   useGroupWithInviteCodeQuery,
@@ -5,14 +6,25 @@ import {
   useWhoamiQuery,
 } from '@client/__gql__/api'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Flex, Heading, Text } from 'theme-ui'
+import { Button, Flex, Heading, Text } from 'theme-ui'
 
 const AcceptInvite: React.FC = () => {
   const router = useRouter()
   const inviteCode = router.query.inviteCode as string
-  const [joinGroup, joinGroupResult] = useJoinGroupMutation()
+  const [joinGroup, joinGroupResult] = useJoinGroupMutation({
+    onCompleted: (data) => {
+      const { joinGroup: group } = data
+      if (group) {
+        router.replace({
+          pathname: '/',
+          query: {
+            groupId: group.id,
+          },
+        })
+      }
+    },
+  })
   const whoamiQuery = useWhoamiQuery()
   const groupQuery = useGroupWithInviteCodeQuery({
     variables: {
@@ -38,7 +50,7 @@ const AcceptInvite: React.FC = () => {
         sx={{
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100vh',
+          py: 6,
           textAlign: 'center',
         }}
       >
@@ -46,38 +58,41 @@ const AcceptInvite: React.FC = () => {
           <Text as="p" mb={1}>
             Congratulations! You&apos;ve been invited to join:
           </Text>
-          <Heading as="h1" mb={3}>
+          <Heading
+            as="h1"
+            mb={3}
+            sx={{
+              fontSize: 6,
+            }}
+          >
             {group.name}
           </Heading>
           {user ? (
-            <TextButton
-              onClick={async () => {
+            <Button
+              onClick={() => {
                 if (joinGroupResult.loading) {
                   return
                 }
 
-                const result = await joinGroup({
+                joinGroup({
                   variables: {
                     inviteCode,
                   },
                 })
-
-                const group = result.data?.joinGroup
-                if (group) {
-                  router.replace('/', {
-                    query: {
-                      groupId: group.id,
-                    },
-                  })
-                }
               }}
             >
-              Click to join
-            </TextButton>
+              {joinGroupResult.loading
+                ? 'Joining...'
+                : 'Click to join the group'}
+            </Button>
           ) : (
-            <Link href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}>
-              sign in with twitter to join
-            </Link>
+            <Button
+              as={Link}
+              // @ts-ignore
+              href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}
+            >
+              Sign in with twitter to join the group
+            </Button>
           )}
         </div>
       </Flex>

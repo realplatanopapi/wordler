@@ -27,7 +27,6 @@ model Wordle {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  date DateTime @unique
   number BigInt @unique
 
   results WordleResult[]

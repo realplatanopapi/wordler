@@ -2,7 +2,7 @@ import { User, Wordle, WordleResult } from '@prisma/client'
 import db from '@server/services/db'
 import { Prisma } from '@prisma/client'
 import { addDays, addMinutes } from 'date-fns'
-import { startOfDay, toUTC } from '@common/utils/time'
+import { startOfDay } from '@common/utils/time'
 import { getById } from './accounts'
 import { ErrorWithCode } from '@server/errors/error_with_code'
 import { INVALID_WORDLE } from '@server/errors/codes'
@@ -20,7 +20,6 @@ export async function getOrCreateWordle(number: number): Promise<Wordle> {
   return await db.wordle.create({
     data: {
       number,
-      date: startOfDay(toUTC(new Date())),
     },
   })
 }

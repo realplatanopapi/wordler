@@ -9,8 +9,9 @@ interface Props {
 const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
   const { entries } = leaderboard
   const firstEntry = entries[0] || null
+  const leadingUser = firstEntry?.user
   const isCurrentUserLeading = currentUser
-    ? firstEntry?.user.id === currentUser.id
+    ? leadingUser?.id === currentUser.id
     : false
 
   return (
@@ -19,22 +20,32 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
         <Text>No results for this week.</Text>
       ) : (
         <>
-          {isCurrentUserLeading && (
-            <Box mb={5}>
-              <Text
-                sx={{
-                  fontWeight: 'bold',
-                  fontSize: 5,
-                }}
-              >
-                Your rivals tremble in the splendor of your mastery of the
-                English language.
-                <br />
-                <br />
-                All hail {currentUser?.displayName}!
-              </Text>
-            </Box>
-          )}
+          <Box mb={4}>
+            <Text
+              sx={{
+                fontWeight: 'bold',
+                fontSize: 6,
+                lineHeight: '1.1'
+              }}
+            >
+              {
+                !isCurrentUserLeading ? (
+                  <>
+                    Your rivals tremble in the splendor of your mastery of the
+                    English language.
+                    <br />
+                    <br />
+                    All hail {currentUser?.displayName}!
+                  </>
+                ) : (
+                  <>
+                    All hail {leadingUser?.displayName}!
+                  </>
+                )
+              }
+
+            </Text>
+          </Box>
           <Box>
             <Grid gap={0} columns={2} mx={-4}>
               <Box py={2} px={4}>

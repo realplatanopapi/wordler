@@ -22,7 +22,7 @@ export const Section: React.FC<SectionProps> = ({
       }}
     >
       {heading && (
-        <Heading as={headingAs} mb={3}>
+        <Heading as={headingAs} mb={4}>
           {heading}
         </Heading>
       )}

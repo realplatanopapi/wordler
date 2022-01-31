@@ -3,6 +3,7 @@ import { getGroupWithInviteCode, getGroupsForUser, startGroup, joinGroup } from 
 import { addResultsForUser, canPostResults, getLeaderboard, queryResults } from "@server/lib/wordles"
 import { addDays } from "date-fns"
 import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
+import sanitize from "sanitize-html"
 import {DateType, GroupType, LeaderboardType, UserType, WordleResultType} from './types'
 
 export interface GraphQLContext {
@@ -109,12 +110,12 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
           type: new GraphQLNonNull(GraphQLString)
         }
       },
-      resolve: (_source, args, context) => {
+      resolve: (_source, {results}, context) => {
         if (!context.user) { 
           return null
         }
 
-        return addResultsForUser(context.user, args.results)
+        return addResultsForUser(context.user, sanitize(results))
       }
     },
     joinGroup: {
@@ -129,7 +130,7 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
           return null
         }
 
-        return joinGroup(user, inviteCode)
+        return joinGroup(user, sanitize(inviteCode))
       }
     },
     startGroup: {
@@ -144,7 +145,7 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
           return null
         }
 
-        return startGroup(user, name)
+        return startGroup(user, sanitize(name))
       }
     }
   }

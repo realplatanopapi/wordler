@@ -150,11 +150,9 @@ export async function queryResults({
   const where: Prisma.WordleResultWhereInput = {
     AND: [
       {
-        wordle: {
-          date: {
-            gte: startOfDay(from),
-            lt: addDays(startOfDay(until), 1),
-          },
+        createdAt: {
+          gte: startOfDay(from),
+          lt: addDays(startOfDay(until), 1),
         },
       },
       {

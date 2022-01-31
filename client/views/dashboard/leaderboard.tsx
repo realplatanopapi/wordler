@@ -31,8 +31,7 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
               {
                 isCurrentUserLeading ? (
                   <>
-                    Your rivals tremble in the splendor of your mastery of the
-                    English language.
+                    Your rivals tremble in awe of your mastery of our cherished Anglo-Saxon tradition. 
                     <br />
                     <br />
                     All hail {currentUser?.displayName}!

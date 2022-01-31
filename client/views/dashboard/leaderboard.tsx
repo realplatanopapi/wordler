@@ -19,18 +19,22 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
         <Text>No results for this week.</Text>
       ) : (
         <>
-          <Box mb={4}>
-            {isCurrentUserLeading && (
+          {isCurrentUserLeading && (
+            <Box mb={5}>
               <Text
                 sx={{
-                  fontSize: 4,
+                  fontWeight: 'bold',
+                  fontSize: 5,
                 }}
               >
                 Your rivals tremble in the splendor of your mastery of the
                 English language.
+                <br />
+                <br />
+                All hail {currentUser?.displayName}!
               </Text>
-            )}
-          </Box>
+            </Box>
+          )}
           <Box>
             <Grid gap={0} columns={2} mx={-4}>
               <Box py={2} px={4}>

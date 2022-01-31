@@ -29,7 +29,7 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
               }}
             >
               {
-                !isCurrentUserLeading ? (
+                isCurrentUserLeading ? (
                   <>
                     Your rivals tremble in the splendor of your mastery of the
                     English language.

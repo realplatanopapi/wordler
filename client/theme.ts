@@ -9,6 +9,7 @@ export const theme: Theme = merge(baseTheme, {
     primary: primaryColor,
     modes: {
       dark: {
+        background: '#141414',
         primary: primaryColor
       },
       light: {

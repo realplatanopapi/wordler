@@ -75,13 +75,14 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
           type: new GraphQLNonNull(DateType),
         },
       },
-      resolve: (_source, { weekOf }, _context) => {
+      resolve: (_source, { weekOf }, {user}) => {
         const from = weekOf
         const until = addDays(from, 7)
 
         return getLeaderboard({
           from,
           until,
+          userId: user?.id
         })
       },
     },

@@ -1,4 +1,4 @@
-import { User, Wordle, WordleResult } from '@prisma/client'
+import { PrismaClient, User, Wordle, WordleResult } from '@prisma/client'
 import db from '@server/services/db'
 import { Prisma } from '@prisma/client'
 import { addDays } from 'date-fns'
@@ -142,38 +142,18 @@ interface ResultsQueryResult {
 }
 
 export async function queryResults({
+  groupId,
   userId,
   from,
   until,
   ...options
 }: ResultQueryOptions): Promise<ResultsQueryResult> {
-  const where: Prisma.WordleResultWhereInput = {
-    AND: [
-      {
-        createdAt: {
-          gte: from,
-          lt: addDays(until, 1),
-        },
-      },
-      {
-        OR: [
-          {
-            userId: userId,
-          },
-          {
-            user: {
-              groupMemberships: {
-                some: {
-                  groupId: options.groupId,
-                  userId: userId,
-                },
-              },
-            },
-          },
-        ],
-      },
-    ],
-  }
+  const where = buildResultsFilter({
+    from,
+    until,
+    groupId,
+    userId
+  })
 
   const total = await db.wordleResult.count({
     where,
@@ -226,22 +206,29 @@ export interface Leaderboard {
 export interface LeaderboardQueryOptions {
   from: Date
   until: Date
+  userId?: string
+  groupId?: string
 }
 
 export async function getLeaderboard(
-  options: LeaderboardQueryOptions
+  {
+    from,
+    until,
+    userId,
+    groupId
+  }: LeaderboardQueryOptions
 ): Promise<Leaderboard> {
   const results = await db.wordleResult.groupBy({
     by: ['userId'],
     _sum: {
       score: true,
     },
-    where: {
-      createdAt: {
-        gte: options.from,
-        lt: addDays(options.until, 1),
-      },
-    },
+    where: buildResultsFilter({
+      from,
+      until,
+      userId,
+      groupId,
+    }),
     orderBy: {
       _sum: {
         score: 'desc',
@@ -263,5 +250,55 @@ export async function getLeaderboard(
 
   return {
     entries,
+  }
+}
+
+interface ResultsFilterOptions {
+  from: Date
+  until: Date
+  userId?: string
+  groupId?: string
+}
+
+function buildResultsFilter({
+  from,
+  until,
+  userId,
+  groupId,
+}: ResultsFilterOptions): Prisma.WordleResultWhereInput {
+  return {
+    AND: [
+      {
+        createdAt: {
+          gte: from,
+          lte: until,
+        },
+      },
+      {
+        OR: [
+          {
+            userId: userId,
+          },
+          {
+            user: {
+              groupMemberships: {
+                some: {
+                  group: {
+                    memberships: {
+                      every: {
+                        groupId
+                      },
+                      some: {
+                        userId
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }     
+    ]
   }
 }

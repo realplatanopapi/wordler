@@ -11,7 +11,7 @@ export const toUTC = (date: Date): DateUTC => {
   )
 }
 
-export const startOfDay = (date: DateUTC): DateUTC => {
+export const getStartOfDay = (date: DateUTC): DateUTC => {
   return new Date(
     Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
   )
@@ -20,11 +20,11 @@ export const startOfDay = (date: DateUTC): DateUTC => {
 export const getToday = (): DateUTC => {
   const now = new Date()
 
-  return startOfDay(toUTC(now))
+  return getStartOfDay(toUTC(now))
 }
 
 export const getStartOfWeek = (date: Date): DateUTC => {
-  return toUTC(startOfDay(startOfWeek(date, {
+  return toUTC(getStartOfDay(startOfWeek(date, {
     weekStartsOn: 1
   })))
 }

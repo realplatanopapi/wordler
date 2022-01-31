@@ -103,7 +103,7 @@ export function getGroupInviteCode(group: Group) {
   })
 }
 
-export function getGroupByInviteCode(inviteCode: string) {
+export async function getGroupWithInviteCode(inviteCode: string) {
   return db.group.findFirst({
     where: {
       inviteCodes: {

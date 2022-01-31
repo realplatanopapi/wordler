@@ -1,5 +1,5 @@
 import { User } from "@prisma/client"
-import { getGroupsForUser, startGroup } from "@server/lib/groups"
+import { getGroupWithInviteCode, getGroupsForUser, startGroup } from "@server/lib/groups"
 import { addResultsForUser, canPostResults, getLeaderboard, queryResults } from "@server/lib/wordles"
 import { addDays } from "date-fns"
 import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
@@ -30,6 +30,17 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         }
 
         return getGroupsForUser(context.user)
+      }
+    },
+    groupWithInviteCode: {
+      type: GroupType,
+      args: {
+        inviteCode: {
+          type: new GraphQLNonNull(GraphQLString)
+        }
+      },
+      resolve: (_source, {inviteCode}) => {
+        return getGroupWithInviteCode(inviteCode)
       }
     },
     leaderboard: {

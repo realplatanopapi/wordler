@@ -40,6 +40,12 @@ query groups {
   }
 }
 
+query groupWithInviteCode($inviteCode: String!) {
+  groupWithInviteCode(inviteCode: $inviteCode) {
+    ...Group
+  }
+}
+
 query leaderboard($weekOf: Date!) {
   leaderboard(weekOf: $weekOf) {
     entries {

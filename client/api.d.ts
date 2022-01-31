@@ -54,10 +54,15 @@ export type MutationStartGroupArgs = {
 export type Query = {
   __typename?: 'Query'
   canPostResults: Scalars['Boolean']
+  groupWithInviteCode?: Maybe<Group>
   groups?: Maybe<Array<Group>>
   leaderboard: Leaderboard
   results: Array<WordleResult>
   whoami?: Maybe<User>
+}
+
+export type QueryGroupWithInviteCodeArgs = {
+  inviteCode: Scalars['String']
 }
 
 export type QueryLeaderboardArgs = {

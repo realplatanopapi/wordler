@@ -80,6 +80,18 @@ export type GroupsQuery = {
     | undefined
 }
 
+export type GroupWithInviteCodeQueryVariables = Types.Exact<{
+  inviteCode: Types.Scalars['String']
+}>
+
+export type GroupWithInviteCodeQuery = {
+  __typename?: 'Query'
+  groupWithInviteCode?:
+    | { __typename?: 'Group'; id: string; name: string; inviteLink: string }
+    | null
+    | undefined
+}
+
 export type LeaderboardQueryVariables = Types.Exact<{
   weekOf: Types.Scalars['Date']
 }>
@@ -345,6 +357,65 @@ export type GroupsLazyQueryHookResult = ReturnType<typeof useGroupsLazyQuery>
 export type GroupsQueryResult = Apollo.QueryResult<
   GroupsQuery,
   GroupsQueryVariables
+>
+export const GroupWithInviteCodeDocument = gql`
+  query groupWithInviteCode($inviteCode: String!) {
+    groupWithInviteCode(inviteCode: $inviteCode) {
+      ...Group
+    }
+  }
+  ${GroupFragmentDoc}
+`
+
+/**
+ * __useGroupWithInviteCodeQuery__
+ *
+ * To run a query within a React component, call `useGroupWithInviteCodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupWithInviteCodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupWithInviteCodeQuery({
+ *   variables: {
+ *      inviteCode: // value for 'inviteCode'
+ *   },
+ * });
+ */
+export function useGroupWithInviteCodeQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GroupWithInviteCodeQuery,
+    GroupWithInviteCodeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    GroupWithInviteCodeQuery,
+    GroupWithInviteCodeQueryVariables
+  >(GroupWithInviteCodeDocument, options)
+}
+export function useGroupWithInviteCodeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GroupWithInviteCodeQuery,
+    GroupWithInviteCodeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    GroupWithInviteCodeQuery,
+    GroupWithInviteCodeQueryVariables
+  >(GroupWithInviteCodeDocument, options)
+}
+export type GroupWithInviteCodeQueryHookResult = ReturnType<
+  typeof useGroupWithInviteCodeQuery
+>
+export type GroupWithInviteCodeLazyQueryHookResult = ReturnType<
+  typeof useGroupWithInviteCodeLazyQuery
+>
+export type GroupWithInviteCodeQueryResult = Apollo.QueryResult<
+  GroupWithInviteCodeQuery,
+  GroupWithInviteCodeQueryVariables
 >
 export const LeaderboardDocument = gql`
   query leaderboard($weekOf: Date!) {

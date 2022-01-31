@@ -44,7 +44,7 @@ export const GroupType = new GraphQLObjectType<Group, GraphQLContext>({
       type: new GraphQLNonNull(GraphQLString)
     },
     inviteLink: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
       resolve: async (group, _args, context) => {
         if (!context.user) {
           return null

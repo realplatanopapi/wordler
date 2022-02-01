@@ -93,6 +93,12 @@ const Dashboard: React.FC<Props> = ({ user }) => {
       >
         {canPostResults && (
           <Section headingAs="h3" heading="Post your results for today">
+            <Text as="p" sx={{
+              fontWeight: 'bold',
+              mb: 4
+            }}>
+              <Link href="https://www.powerlanguage.co.uk/wordle/">Click here to play today&apos;s Wordle</Link>
+            </Text>
             <PostResultsForm
               onSubmit={() => {
                 canPostResultsQuery.refetch()

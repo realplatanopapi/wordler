@@ -21,7 +21,7 @@ const Onboarding: React.FC<Props> = ({ onCompleteOnboarding }) => {
         <Heading as="h1" mb={4}>
           {group.name}
         </Heading>
-        <Text as="p" mb={3}>
+        <Text as="p" mb={4}>
           Copy this link and send it to your friend(s) so they can join:
         </Text>
         <Box
@@ -38,22 +38,19 @@ const Onboarding: React.FC<Props> = ({ onCompleteOnboarding }) => {
           <Text mx="3">-</Text>
           <ClipboardCopy textToCopy={group.inviteLink} />
         </Box>
-        <Text as="p" mb={3}>
+        <Text as="p" mb={4}>
           You&apos;ll be able to invite your friend(s) later also.
         </Text>
-        <Flex
+        <Button
           sx={{
-            justifyContent: 'center',
+            cursor: 'pointer',
+          }}
+          onClick={() => {
+            onCompleteOnboarding()
           }}
         >
-          <Button
-            onClick={() => {
-              onCompleteOnboarding()
-            }}
-          >
-            start wordle-ing
-          </Button>
-        </Flex>
+          start wordle-ing!
+        </Button>
       </>
     )
   }
@@ -87,7 +84,7 @@ const Onboarding: React.FC<Props> = ({ onCompleteOnboarding }) => {
       <Heading as="h2" mb={3}>
         2. Ask a friend to send you an invite link to their group.
       </Heading>
-      <Text as="p">If you have any that is.</Text>
+      <Text as="p">This option requires friends.</Text>
       <Text
         as="p"
         my={4}
@@ -101,7 +98,7 @@ const Onboarding: React.FC<Props> = ({ onCompleteOnboarding }) => {
         3. Leave.
       </Heading>
       <Text as="p" mb={3}>
-        No friends? Leaving is a perfectly valid option.
+        A perfectly valid option.
       </Text>
       <Link href="https://www.youtube.com/watch?v=UqfLVDIZcP8" isExternal>
         Bye!

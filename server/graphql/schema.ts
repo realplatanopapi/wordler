@@ -84,8 +84,8 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
           type: new GraphQLNonNull(GraphQLInt)
         },
       },
-      resolve: (_source, { weekOf, timezoneOffset }, {user}) => {
-        const from = addMinutes(weekOf, timezoneOffset)
+      resolve: (_source, { weekOf }, {user}) => {
+        const from = weekOf
         const until = addDays(from, 7)
 
         return getLeaderboard({
@@ -110,8 +110,8 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
           type: new GraphQLNonNull(GraphQLInt)
         }
       },
-      resolve: async (_, { weekOf, groupId, timezoneOffset }, { user }) => {
-        const from = addMinutes(weekOf, timezoneOffset)
+      resolve: async (_, { weekOf, groupId }, { user }) => {
+        const from = weekOf
         const until = addDays(from, 7)
 
         const results = await queryResults({

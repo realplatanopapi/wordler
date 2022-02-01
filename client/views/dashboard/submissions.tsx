@@ -39,7 +39,7 @@ const Submissions: React.FC<Props> = ({ currentUser, results }) => {
 
           return (
             <Box key={day}>
-              <Heading as="h4" mb={4}>{isToday ? 'Today' : format(dayDate, 'EEEE')}</Heading>
+              <Heading as="h4" my={4}>{isToday ? 'Today' : format(dayDate, 'EEEE')}</Heading>
               <Grid columns={[1, 2]} gap={4} mx={-4}>
               {
                 resultsForDay.map(result => {

@@ -1,7 +1,6 @@
-import WordleResult from '@client/views/dashboard/wordle-result'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Box, Grid, Heading, Text } from 'theme-ui'
+import { Box, Heading, Text } from 'theme-ui'
 import WeekPicker from '@client/views/dashboard/week-picker'
 import GroupPicker from '@client/views/dashboard/group-picker'
 import {
@@ -13,12 +12,13 @@ import {
 import PostResultsForm from '@client/views/dashboard/post-results-form'
 import Leaderboard from '@client/views/dashboard/leaderboard'
 import { useMemo } from 'react'
-import { Group, User } from '@client/api'
+import { Group, User, WordleResult } from '@client/api'
 import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
 import Groups from '@client/views/dashboard/groups'
 import Link from '@client/components/link'
 import { startOfWeek } from 'date-fns'
+import Submissions from './submissions'
 
 interface Props {
   user: User
@@ -135,17 +135,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
       </Section>
       {results && results.length > 0 && (
         <Section heading="Submissions">
-          <Grid columns={1} gap={2} mx={-4}>
-            {results.map((result) => {
-              return (
-                <WordleResult
-                  key={result.id}
-                  currentUser={user}
-                  result={result}
-                />
-              )
-            })}
-          </Grid>
+          <Submissions currentUser={user} results={results as WordleResult[]} />
         </Section>
       )}
       {user && groups && (

@@ -18,6 +18,11 @@ export const theme: Theme = merge(baseTheme, {
       },
     },
   },
+  buttons: {
+    primary: {
+      fontWeight: 'bold'
+    }
+  },
   layout: {
     container: {
       maxWidth: 960,

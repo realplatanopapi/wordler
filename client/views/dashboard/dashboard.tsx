@@ -136,7 +136,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
       {results && results.length > 0 && (
         <Section heading="Submissions">
           <Grid columns={1} gap={2} mx={-4}>
-            {results.map((result: any) => {
+            {results.map((result) => {
               return (
                 <WordleResult
                   key={result.id}

@@ -1,4 +1,4 @@
-import { WordleGuessResult } from '@client/api'
+import { WordleGuessResult, WordleResult } from '@client/api'
 import { formatRelative } from 'date-fns'
 import { Box, Flex, Text } from 'theme-ui'
 
@@ -6,14 +6,7 @@ interface Props {
   currentUser: {
     id: string
   } | null
-  result: {
-    user: {
-      id: string
-      displayName: string
-    }
-    guesses: WordleGuessResult[][]
-    createdAt: string
-  }
+  result: WordleResult
 }
 
 const getEmojiForGuess = (guess: WordleGuessResult) => {

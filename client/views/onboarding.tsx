@@ -61,7 +61,7 @@ const Onboarding: React.FC<Props> = ({ onCompleteOnboarding }) => {
   return (
     <>
       <Text as="p" mb={3}>
-        Worldler only works if you have friends. You can either:
+        Wordler only works if you have friends. You can either:
       </Text>
       <Heading as="h2" mb={3}>
         1. Start a new group to get started.

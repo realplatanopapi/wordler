@@ -1,6 +1,6 @@
 import { WordleGuessResult } from '@client/api'
 import { formatRelative } from 'date-fns'
-import { Box, Text } from 'theme-ui'
+import { Box, Flex, Text } from 'theme-ui'
 
 interface Props {
   currentUser: {
@@ -13,6 +13,16 @@ interface Props {
     }
     guesses: WordleGuessResult[][]
     createdAt: string
+  }
+}
+
+const getEmojiForGuess = (guess: WordleGuessResult) => {
+  if (guess == 'EXACT_MATCH') {
+    return '🟩'
+  } else if (guess == 'IN_WORD') {
+    return '🟨'
+  } else {
+    return '⬛️'
   }
 }
 
@@ -49,19 +59,18 @@ const WordleResult: React.FC<Props> = ({ currentUser, result }) => {
       >
         submitted <time>{submittedAtFormatted}</time>
       </Text>
-      {result.guesses.map((guesses, index) => {
+      {result.guesses.map((guesses, attemptIndex) => {
         return (
-          <div key={index}>
-            {guesses.map((guess) => {
-              if (guess == 'EXACT_MATCH') {
-                return '🟩'
-              } else if (guess == 'IN_WORD') {
-                return '🟨'
-              } else {
-                return '⬛️'
-              }
+          <Flex key={attemptIndex} sx={{
+            alignItems: 'center',
+            mx: -1,
+          }}>
+            {guesses.map((guess, guessIndex) => {
+              return (
+                <Box key={guessIndex} mx="6px" my="2px">{getEmojiForGuess(guess)}</Box>
+              )
             })}
-          </div>
+          </Flex>
         )
       })}
     </Box>

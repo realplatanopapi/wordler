@@ -10,25 +10,24 @@ import {
   GraphQLScalarType,
   GraphQLString,
   Kind,
-  ValueNode,
 } from 'graphql'
 import { GraphQLContext } from './schema'
 import { WordleGuessResult } from '@server/lib/wordles'
-import { toUTC } from '@common/utils/time'
 import { checkIsMemberOfGroup, getInviteLink } from '@server/lib/groups'
 
 export const DateType = new GraphQLScalarType<Date | null, string>({
   name: 'Date',
   serialize(value: any) {
-    return toUTC(value).toISOString()
+    return new Date(value).toISOString()
   },
   parseValue(value) {
-    return value ? toUTC(new Date(value as string)) : null
+    return value ? new Date(value as string) : null
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.STRING) {
-      return toUTC(new Date(ast.value))
+      return new Date(ast.value)
     }
+
     return null
   },
 })

@@ -3,7 +3,7 @@ import { Group, GroupRole, User } from '@prisma/client'
 import db from '@server/services/db'
 import slugify from 'slugify'
 import config from '@server/config'
-import { ErrorWithCode } from '@server/errors/error_with_code'
+import { ErrorWithCode } from '@server/errors';
 import { NAME_ALREADY_TAKEN } from '@server/errors/codes'
 
 export async function startGroup(user: User, name: string) {

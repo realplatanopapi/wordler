@@ -1,4 +1,4 @@
-export class ErrorWithCode extends Error {
+class ErrorWithCode extends Error {
   code: string
 
   constructor(code: string) {
@@ -7,3 +7,5 @@ export class ErrorWithCode extends Error {
     this.code = code
   }
 }
+
+export default ErrorWithCode

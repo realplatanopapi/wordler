@@ -1,3 +1,3 @@
-export interface StateData {
+export interface TwitterStateData {
   challenge: string
 }

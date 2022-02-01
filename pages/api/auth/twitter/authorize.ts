@@ -4,7 +4,7 @@ import cryptoRandomString from 'crypto-random-string'
 import { sealData } from 'iron-session'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { NextApiHandler } from 'next'
-import { StateData } from './types'
+import { TwitterStateData } from './types'
 
 const handler: NextApiHandler = async (req, res) => {
   const clientId = config.get('twitter.oauthClientId')
@@ -16,7 +16,7 @@ const handler: NextApiHandler = async (req, res) => {
   const state = await sealData(
     {
       challenge,
-    } as StateData,
+    } as TwitterStateData,
     {
       password: config.get('twitter.oauthStateSecret'),
 

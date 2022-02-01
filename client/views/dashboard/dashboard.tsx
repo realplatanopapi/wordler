@@ -16,9 +16,9 @@ import { useMemo } from 'react'
 import { Group, User } from '@client/api'
 import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
-import { getStartOfWeek } from '@common/utils/time'
 import Groups from '@client/views/dashboard/groups'
 import Link from '@client/components/link'
+import { startOfWeek } from 'date-fns'
 
 interface Props {
   user: User
@@ -32,7 +32,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
   const timezoneOffset = now.getTimezoneOffset()
   const weekOf = weekOfStr
     ? new Date(weekOfStr as string)
-    : getStartOfWeek(now)
+    : startOfWeek(now)
   const canPostResultsQuery = useCanPostResultsQuery({
     variables: {
       timezoneOffset,
@@ -162,7 +162,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
             Signed in as {user.displayName}
           </Text>
           <Text as="p">
-            <Link isExternal href="/api/auth/logout">
+            <Link isExternal href="/api/auth/log-out">
               Sign out
             </Link>
           </Text>

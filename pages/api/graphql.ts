@@ -5,7 +5,7 @@ import { getById } from '@server/lib/accounts'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { cookieConfig } from '@server/lib/auth'
-import { ErrorWithCode } from '@server/errors/error_with_code'
+import { ErrorWithCode } from '@server/errors'
 
 export const config = {
   api: {

@@ -1,32 +1,16 @@
 import { NextApiHandler } from 'next'
-import axios from 'axios'
 import { withIronSessionApiRoute } from 'iron-session/next'
-import { getOrCreateUserFromTwitter } from '../../../../server/lib/accounts'
-import { cookieConfig } from '../../../../server/lib/auth'
+import { getOrCreateUserFromTwitter } from '@server/lib/accounts'
+import { cookieConfig } from '@server/lib/auth'
 import { joinGroup } from '@server/lib/groups'
 import config from '@server/config'
 import { unsealData } from 'iron-session'
-import { StateData } from './types'
-
-const twitterConfig = config.get('twitter')
-const clientId = twitterConfig.oauthClientId
-const clientSecret = twitterConfig.oauthClientSecret
-
-const twitter = axios.create({
-  baseURL: 'https://api.twitter.com/2',
-  headers: {
-    Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString(
-      'base64'
-    )}`,
-  },
-  validateStatus: (status) => {
-    return status < 500
-  },
-})
+import { TwitterStateData } from './types'
+import twitter from '@server/services/twitter'
 
 const handler: NextApiHandler = async (req, res) => {
   const { code, state } = req.query
-  const { challenge } = await unsealData<StateData>(state as string, {
+  const { challenge } = await unsealData<TwitterStateData>(state as string, {
     password: config.get('twitter.oauthStateSecret'),
   })
 

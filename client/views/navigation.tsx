@@ -4,7 +4,10 @@ import { Box } from 'theme-ui'
 const Navigation: React.FC = () => {
   return (
     <Box as="nav" mb={4}>
-      <Link href="/">Wordler</Link>
+      <Link href="/" sx={{
+        fontWeight: '900',
+        textDecoration: 'none',
+      }}>Wordler</Link>
     </Box>
   )
 }

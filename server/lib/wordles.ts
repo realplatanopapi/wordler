@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client'
 import { startOfDay, subMinutes } from 'date-fns'
 import { getById } from './accounts'
 import { ErrorWithCode } from '@server/errors';
-import { INVALID_WORDLE } from '@server/errors/codes'
+import { INVALID_WORDLE, NOT_AUTHORIZED } from '@server/errors/codes'
 
 export async function getOrCreateWordle(number: number): Promise<Wordle> {
   const existingWordle = await db.wordle.findFirst({
@@ -38,6 +38,10 @@ interface ResultData {
 }
 
 export async function addResultsForUser(user: User, resultsString: string) {
+  if (!canPostResults(user)) {
+    throw new ErrorWithCode(NOT_AUTHORIZED)
+  }
+  
   let resultData: ResultData | null = null
   try {
     resultData = parseResultsFromString(resultsString)
@@ -177,7 +181,22 @@ export async function queryResults({
   }
 }
 
-export async function canPostResults(user: User, timezoneOffset: number): Promise<boolean> {
+export async function canPostResults(user: User, timezoneOffset?: number): Promise<boolean> {
+  // If no offset is supplied, restrict user to a max of 2 results per day
+  if (!timezoneOffset) {
+    const now = new Date()
+    const count = await db.wordleResult.count({
+      where: {
+        userId: user.id,
+        createdAt: {
+          lte: now,
+        },
+      },
+    })
+  
+    return count < 2
+  }
+
   const localTime = subMinutes(new Date(), timezoneOffset)
   const start = startOfDay(localTime)
 

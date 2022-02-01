@@ -4,6 +4,8 @@
 
 A lil' app that turns our favorite game into a friendly competition.
 
+<img width="888" alt="Screen Shot 2022-01-31 at 9 14 49 PM" src="https://user-images.githubusercontent.com/6979137/151904463-f323cefc-90cd-4706-9e2d-d1a49c02b6d4.png">
+
 ## Developing
 
 Node, Yarn, Docker, and Docker Compose will need to be installed on your machine.

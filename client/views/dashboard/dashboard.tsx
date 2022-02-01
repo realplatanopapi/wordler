@@ -32,7 +32,9 @@ const Dashboard: React.FC<Props> = ({ user }) => {
   const timezoneOffset = now.getTimezoneOffset()
   const weekOf = weekOfStr
     ? new Date(weekOfStr as string)
-    : startOfWeek(now)
+    : startOfWeek(now, {
+      weekStartsOn: 1
+    })
   const canPostResultsQuery = useCanPostResultsQuery({
     variables: {
       timezoneOffset,

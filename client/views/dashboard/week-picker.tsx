@@ -1,6 +1,6 @@
 import { Flex } from 'theme-ui'
 import Link from '@client/components/link'
-import { addDays, subDays, format, startOfWeek } from 'date-fns'
+import { addDays, subDays, format, startOfWeek, startOfDay } from 'date-fns'
 import { useRouter } from 'next/router'
 import { formatInTimeZone } from 'date-fns-tz'
 
@@ -14,10 +14,7 @@ const DateLink: React.FC<{
   suffix?: string
 }> = ({ date, prefix, suffix }) => {
   const router = useRouter()
-  const link = `${date.getUTCFullYear()}-${format(
-    date,
-    'MM'
-  )}-${date.getUTCDate()}`
+  const link = date.toISOString()
   const display = formatInTimeZone(date, 'UTC', 'MMM dd')
 
   const href = {
@@ -37,7 +34,9 @@ const DateLink: React.FC<{
 }
 
 const WeekPicker: React.FC<Props> = ({ selectedDate }) => {
-  const startOfThisWeek = startOfWeek(new Date())
+  const startOfThisWeek = startOfWeek(new Date(), {
+    weekStartsOn: 1,
+  })
   const nextDate =
     selectedDate < startOfThisWeek ? addDays(selectedDate, 7) : null
   const previousDate = subDays(selectedDate, 7)

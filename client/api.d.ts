@@ -99,8 +99,11 @@ export enum WordleGuessResult {
 
 export type WordleResult = {
   __typename?: 'WordleResult'
+  attemptsUsed: Scalars['Int']
   createdAt: Scalars['Date']
   guesses: Array<Array<WordleGuessResult>>
   id: Scalars['ID']
+  maxAttempts: Scalars['Int']
+  score: Scalars['Int']
   user: User
 }

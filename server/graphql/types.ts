@@ -98,6 +98,15 @@ export const WordleResultType = new GraphQLObjectType<
     createdAt: {
       type: new GraphQLNonNull(DateType),
     },
+    attemptsUsed: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    maxAttempts: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    score: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
     guesses: {
       type: new GraphQLNonNull(
         new GraphQLList(

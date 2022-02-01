@@ -21,6 +21,9 @@ export type WordleResultFragment = {
   id: string
   createdAt: any
   guesses: Array<Array<Types.WordleGuessResult>>
+  attemptsUsed: number
+  maxAttempts: number
+  score: number
   user: { __typename?: 'User'; id: string; displayName: string }
 }
 
@@ -37,6 +40,9 @@ export type ResultsQuery = {
     id: string
     createdAt: any
     guesses: Array<Array<Types.WordleGuessResult>>
+    attemptsUsed: number
+    maxAttempts: number
+    score: number
     user: { __typename?: 'User'; id: string; displayName: string }
   }>
 }
@@ -53,6 +59,9 @@ export type PostResultsMutation = {
         id: string
         createdAt: any
         guesses: Array<Array<Types.WordleGuessResult>>
+        attemptsUsed: number
+        maxAttempts: number
+        score: number
         user: { __typename?: 'User'; id: string; displayName: string }
       }
     | null
@@ -182,6 +191,9 @@ export const WordleResultFragmentDoc = gql`
       ...User
     }
     guesses
+    attemptsUsed
+    maxAttempts
+    score
   }
   ${UserFragmentDoc}
 `

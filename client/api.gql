@@ -16,6 +16,9 @@ fragment WordleResult on WordleResult {
     ...User
   }
   guesses
+  attemptsUsed
+  maxAttempts
+  score
 }
 
 query results($weekOf: Date!, $groupId: ID, $timezoneOffset: Int!) {

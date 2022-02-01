@@ -20,7 +20,7 @@ export const theme: Theme = merge(baseTheme, {
   },
   layout: {
     container: {
-      maxWidth: 800,
+      maxWidth: 960,
       p: 4,
     },
   },

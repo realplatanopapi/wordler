@@ -1,5 +1,5 @@
 import { WordleGuessResult, WordleResult } from '@client/api'
-import { formatRelative } from 'date-fns'
+import { format } from 'date-fns'
 import { Box, Flex, Grid, Text } from 'theme-ui'
 
 interface Props {
@@ -35,7 +35,7 @@ const renderAttribute = (content: React.ReactNode) => {
 
 const WordleResult: React.FC<Props> = ({ currentUser, result }) => {
   const submittedAt = Date.parse(result.createdAt)
-  const submittedAtFormatted = formatRelative(submittedAt, new Date())
+  const submittedAtFormatted = format(submittedAt, 'h:mm aaaa')
   const isResultForCurrentUser = currentUser?.id == result.user.id
 
   return (
@@ -62,7 +62,7 @@ const WordleResult: React.FC<Props> = ({ currentUser, result }) => {
         </Text>
         {renderAttribute(<><strong>{result.score}</strong> points</>)}
         {renderAttribute(<>{result.attemptsUsed} / {result.maxAttempts} attempts</>)}
-        {renderAttribute(<>submitted <time>{submittedAtFormatted}</time></>)}
+        {renderAttribute(<>submitted at <time>{submittedAtFormatted}</time></>)}
       </Box>
       <Box>
         {result.guesses.map((guesses, attemptIndex) => {

@@ -76,9 +76,13 @@ const WordleResult: React.FC<Props> = ({ currentUser, result }) => {
             >
               {guesses.map((guess, guessIndex) => {
                 return (
-                  <Box key={guessIndex} mx="6px" my="2px">
+                  <Text key={guessIndex} sx={{
+                    fontSize: -1,
+                    mx: '4px',
+                    my: '2px',
+                  }}>
                     {getEmojiForGuess(guess)}
-                  </Box>
+                  </Text>
                 )
               })}
             </Flex>

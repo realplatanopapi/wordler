@@ -154,17 +154,17 @@ export async function joinGroup(user: User, inviteCode: string) {
     return null
   }
 
-  const isUserAMember = await db.group.findFirst({
+  const isUserAleadyAMember = await db.groupMembership.findFirst({
     where: {
-      memberships: {
-        some: {
-          userId: user.id,
-        },
-      },
+      groupId: inviteCodeRecord.groupId,
+      userId: user.id
     },
+    include: {
+      group: true
+    }
   })
-  if (isUserAMember) {
-    return isUserAMember
+  if (isUserAleadyAMember) {
+    return isUserAleadyAMember.group
   }
 
   const { group } = await db.groupMembership.create({

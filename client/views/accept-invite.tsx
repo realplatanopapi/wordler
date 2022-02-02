@@ -1,4 +1,3 @@
-import Link from '@client/components/link'
 import {
   useGroupWithInviteCodeQuery,
   useJoinGroupMutation,
@@ -83,7 +82,7 @@ const AcceptInvite: React.FC<UserFromSsrProps> = ({user}) => {
             </Button>
           ) : (
             <Button
-              as={Link}
+              as="a"
               // @ts-ignore
               href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}
             >

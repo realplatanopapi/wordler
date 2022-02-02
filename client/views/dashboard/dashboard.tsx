@@ -135,16 +135,20 @@ const Dashboard: React.FC<Props> = ({ user }) => {
             {selectedGroup.name}
           </Heading>
         )}
-        {leaderboard && (
+        {leaderboard ? (
           <Leaderboard currentUser={user} leaderboard={leaderboard} />
-        )}
+        ) : 'Loading leaderboard...'}
       </Section>
-      {results && results.length > 0 && (
-        <Section heading="Submissions">
-          <Submissions currentUser={user} results={results as WordleResult[]} />
-        </Section>
-      )}
-      {user && groups && (
+      {
+        results ? (
+          <Section heading="Submissions">
+            <Submissions currentUser={user} results={results as WordleResult[]} />
+          </Section>
+        ) : (
+          'Loading submissions...'
+        )
+      }
+      {groups ? (
         <Section heading="Your groups">
           <Groups
             groups={groups}
@@ -153,19 +157,19 @@ const Dashboard: React.FC<Props> = ({ user }) => {
             }}
           />
         </Section>
+      ) : (
+        'Loading your groups...'
       )}
-      {user && (
-        <Section>
-          <Text as="p" mb={2}>
-            Signed in as {user.displayName}
-          </Text>
-          <Text as="p">
-            <Link isExternal href="/api/auth/log-out">
-              Sign out
-            </Link>
-          </Text>
-        </Section>
-      )}
+      <Section>
+        <Text as="p" mb={2}>
+          Signed in as {user.displayName}
+        </Text>
+        <Text as="p">
+          <Link isExternal href="/api/auth/log-out">
+            Sign out
+          </Link>
+        </Text>
+      </Section>
     </>
   )
 }

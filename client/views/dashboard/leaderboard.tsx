@@ -94,8 +94,14 @@ const Leaderboard: React.FC<Props> = ({ currentUser, leaderboard }) => {
                       borderColor: 'muted',
                     }}
                   >
+                    {
+                      isFirstEntry && (
+                        <Text mr={2}>
+                          👑
+                        </Text>
+                      )
+                    }
                     <Text>
-                      {isFirstEntry && '👑 '}
                       {user.displayName}{' '}
                       {currentUser && user.id === currentUser.id && <>(you)</>}
                     </Text>

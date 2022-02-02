@@ -1,5 +1,4 @@
 import Link from '@client/components/link'
-import TextButton from '@client/components/text-button'
 import {
   useGroupWithInviteCodeQuery,
   useJoinGroupMutation,

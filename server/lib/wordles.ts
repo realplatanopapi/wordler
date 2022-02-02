@@ -96,7 +96,9 @@ function parseResultsFromString(resultsString: string): ResultData {
     throw new ErrorWithCode(INVALID_WORDLE)
   }
 
+  let didSolve = true
   if (isNaN(attemptsUsed)) {
+    didSolve = false
     attemptsUsed = maxAttempts
   }
 
@@ -122,7 +124,7 @@ function parseResultsFromString(resultsString: string): ResultData {
   return {
     wordleNumber,
     attempts: parsedAttempts,
-    didSolve: true,
+    didSolve,
     maxAttempts: maxAttempts,
     attemptsUsed,
   }

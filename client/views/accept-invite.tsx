@@ -1,3 +1,4 @@
+import { Group } from '@client/api'
 import {
   useGroupWithInviteCodeQuery,
   useJoinGroupMutation,
@@ -5,11 +6,15 @@ import {
 import { UserFromSsrProps } from '@common/sessions'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Button, Flex, Heading, Text } from 'theme-ui'
+import { Box, Button, Flex, Heading, Text } from 'theme-ui'
 
-const AcceptInvite: React.FC<UserFromSsrProps> = ({user}) => {
+interface Props extends UserFromSsrProps {
+  group: Pick<Group, 'id' | 'name'> | null
+  inviteCode: string
+}
+
+const AcceptInvite: React.FC<Props> = ({inviteCode, group, user}) => {
   const router = useRouter()
-  const inviteCode = router.query.inviteCode as string
   const [joinGroup, joinGroupResult] = useJoinGroupMutation({
     onCompleted: (data) => {
       const { joinGroup: group } = data
@@ -23,18 +28,6 @@ const AcceptInvite: React.FC<UserFromSsrProps> = ({user}) => {
       }
     },
   })
-  const groupQuery = useGroupWithInviteCodeQuery({
-    variables: {
-      inviteCode,
-    },
-  })
-  const group = groupQuery.data?.groupWithInviteCode
-
-  if (groupQuery.loading) {
-    return <Text>Loading...</Text>
-  } else if (!group) {
-    return <Text>errr</Text>
-  }
 
   return (
     <>
@@ -49,47 +42,55 @@ const AcceptInvite: React.FC<UserFromSsrProps> = ({user}) => {
           textAlign: 'center',
         }}
       >
-        <div>
-          <Text as="p" mb={1}>
-            Congratulations! You&apos;ve been invited to join:
-          </Text>
-          <Heading
-            as="h1"
-            mb={3}
-            sx={{
-              fontSize: 6,
-            }}
-          >
-            {group.name}
-          </Heading>
-          {user ? (
-            <Button
-              onClick={() => {
-                if (joinGroupResult.loading) {
-                  return
-                }
-
-                joinGroup({
-                  variables: {
-                    inviteCode,
-                  },
-                })
+        {
+          group ? (
+            <Box>
+            <Text as="p" mb={1}>
+              Congratulations! You&apos;ve been invited to join:
+            </Text>
+            <Heading
+              as="h1"
+              mb={3}
+              sx={{
+                fontSize: 6,
               }}
             >
-              {joinGroupResult.loading
-                ? 'Joining...'
-                : 'Click to join the group'}
-            </Button>
+              {group.name}
+            </Heading>
+            {user ? (
+              <Button
+                onClick={() => {
+                  if (joinGroupResult.loading) {
+                    return
+                  }
+  
+                  joinGroup({
+                    variables: {
+                      inviteCode,
+                    },
+                  })
+                }}
+              >
+                {joinGroupResult.loading
+                  ? 'Joining...'
+                  : 'Click to join the group'}
+              </Button>
+            ) : (
+              <Button
+                as="a"
+                // @ts-ignore
+                href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}
+              >
+                Sign in with twitter to join the group
+              </Button>
+            )}
+          </Box>
           ) : (
-            <Button
-              as="a"
-              // @ts-ignore
-              href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}
-            >
-              Sign in with twitter to join the group
-            </Button>
-          )}
-        </div>
+            <Box>
+              <Heading>Could not find this group.</Heading>
+            </Box>
+          )
+        }
       </Flex>
     </>
   )

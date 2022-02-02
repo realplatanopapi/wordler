@@ -47,6 +47,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
   const leaderboardQuery = useLeaderboardQuery({
     variables: {
       weekOf,
+      groupId,
     },
   })
   const groupsQuery = useGroupsQuery()

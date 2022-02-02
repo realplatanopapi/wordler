@@ -49,8 +49,8 @@ query groupWithInviteCode($inviteCode: String!) {
   }
 }
 
-query leaderboard($weekOf: Date!) {
-  leaderboard(weekOf: $weekOf) {
+query leaderboard($weekOf: Date!, $groupId: ID) {
+  leaderboard(weekOf: $weekOf, groupId: $groupId) {
     entries {
       user {
         ...User

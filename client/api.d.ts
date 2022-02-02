@@ -75,6 +75,7 @@ export type QueryGroupWithInviteCodeArgs = {
 }
 
 export type QueryLeaderboardArgs = {
+  groupId?: InputMaybe<Scalars['ID']>
   weekOf: Scalars['Date']
 }
 

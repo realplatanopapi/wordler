@@ -80,6 +80,9 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         weekOf: {
           type: new GraphQLNonNull(DateType),
         },
+        groupId: {
+          type: GraphQLID,
+        },
       },
       resolve: (_source, { weekOf, groupId }, {user}) => {
         const from = weekOf

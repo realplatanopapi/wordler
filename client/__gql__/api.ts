@@ -110,6 +110,7 @@ export type GroupWithInviteCodeQuery = {
 
 export type LeaderboardQueryVariables = Types.Exact<{
   weekOf: Types.Scalars['Date']
+  groupId?: Types.InputMaybe<Types.Scalars['ID']>
 }>
 
 export type LeaderboardQuery = {
@@ -450,8 +451,8 @@ export type GroupWithInviteCodeQueryResult = Apollo.QueryResult<
   GroupWithInviteCodeQueryVariables
 >
 export const LeaderboardDocument = gql`
-  query leaderboard($weekOf: Date!) {
-    leaderboard(weekOf: $weekOf) {
+  query leaderboard($weekOf: Date!, $groupId: ID) {
+    leaderboard(weekOf: $weekOf, groupId: $groupId) {
       entries {
         user {
           ...User
@@ -476,6 +477,7 @@ export const LeaderboardDocument = gql`
  * const { data, loading, error } = useLeaderboardQuery({
  *   variables: {
  *      weekOf: // value for 'weekOf'
+ *      groupId: // value for 'groupId'
  *   },
  * });
  */

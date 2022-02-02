@@ -80,16 +80,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
       <Head>
         <title>Wordler</title>
       </Head>
-      <Section sx={{
-        mb: 4
-      }}>
-        <WeekPicker selectedDate={weekOf} />
-      </Section>
-      <Section
-        headingAs="h3"
-        heading={`Week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}
-      >
-        {canPostResults && (
+      {canPostResults && (
           <Section headingAs="h3" heading="Post your results for today">
             <Text as="p" sx={{
               fontWeight: 'bold',
@@ -106,6 +97,15 @@ const Dashboard: React.FC<Props> = ({ user }) => {
             />
           </Section>
         )}
+      <Section sx={{
+        mb: 4
+      }}>
+        <WeekPicker selectedDate={weekOf} />
+      </Section>
+      <Section
+        headingAs="h3"
+        heading={`Week of ${formatInTimeZone(weekOf, 'UTC', 'MMM dd')}`}
+      >
         {groups && groups.length > 1 && (
           <Box mb={4}>
             <GroupPicker

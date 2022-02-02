@@ -4,10 +4,15 @@ import db from '@server/services/db'
 import slugify from 'slugify'
 import config from '@server/config'
 import { ErrorWithCode } from '@server/errors';
-import { NAME_ALREADY_TAKEN } from '@server/errors/codes'
+import { BAD_INPUT, NAME_ALREADY_TAKEN } from '@server/errors/codes'
 
 export async function startGroup(user: User, name: string) {
-  const slug = slugify(name, {
+  const nameTrimmed = name.trim()
+  if (nameTrimmed.length === 0) {
+    throw new ErrorWithCode(BAD_INPUT)
+  }
+
+  const slug = slugify(nameTrimmed, {
     lower: true,
     replacement: '_',
     strict: true,
@@ -21,7 +26,7 @@ export async function startGroup(user: User, name: string) {
 
   return db.group.create({
     data: {
-      name,
+      name: nameTrimmed,
       slug,
       inviteCodes: {
         create: [

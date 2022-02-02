@@ -62,7 +62,6 @@ const WordleResult: React.FC<Props> = ({ currentUser, result }) => {
         </Text>
         {renderAttribute(<><strong>{result.score}</strong> points</>)}
         {renderAttribute(<>{result.attemptsUsed} / {result.maxAttempts} attempts</>)}
-        {renderAttribute(<>submitted at <time>{submittedAtFormatted}</time></>)}
       </Box>
       <Box>
         {result.guesses.map((guesses, attemptIndex) => {

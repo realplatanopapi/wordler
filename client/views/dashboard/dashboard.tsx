@@ -43,12 +43,10 @@ const Dashboard: React.FC<Props> = ({ user }) => {
   const resultsQueryVariables = {
     weekOf,
     groupId,
-    timezoneOffset
   }
   const leaderboardQuery = useLeaderboardQuery({
     variables: {
       weekOf,
-      timezoneOffset,
     },
   })
   const groupsQuery = useGroupsQuery()

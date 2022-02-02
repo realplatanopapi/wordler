@@ -21,8 +21,8 @@ fragment WordleResult on WordleResult {
   score
 }
 
-query results($weekOf: Date!, $groupId: ID, $timezoneOffset: Int!) {
-  results(weekOf: $weekOf, groupId: $groupId, timezoneOffset: $timezoneOffset) {
+query results($weekOf: Date!, $groupId: ID) {
+  results(weekOf: $weekOf, groupId: $groupId) {
     ...WordleResult
   }
 }
@@ -49,8 +49,8 @@ query groupWithInviteCode($inviteCode: String!) {
   }
 }
 
-query leaderboard($weekOf: Date!, $timezoneOffset: Int!) {
-  leaderboard(weekOf: $weekOf, timezoneOffset: $timezoneOffset) {
+query leaderboard($weekOf: Date!) {
+  leaderboard(weekOf: $weekOf) {
     entries {
       user {
         ...User

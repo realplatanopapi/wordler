@@ -80,9 +80,6 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         weekOf: {
           type: new GraphQLNonNull(DateType),
         },
-        timezoneOffset: {
-          type: new GraphQLNonNull(GraphQLInt)
-        },
       },
       resolve: (_source, { weekOf }, {user}) => {
         const from = weekOf
@@ -106,9 +103,6 @@ const query = new GraphQLObjectType<any, GraphQLContext>({
         groupId: {
           type: GraphQLID,
         },
-        timezoneOffset: {
-          type: new GraphQLNonNull(GraphQLInt)
-        }
       },
       resolve: async (_, { weekOf, groupId }, { user }) => {
         const from = weekOf

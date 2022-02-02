@@ -30,7 +30,6 @@ export type WordleResultFragment = {
 export type ResultsQueryVariables = Types.Exact<{
   weekOf: Types.Scalars['Date']
   groupId?: Types.InputMaybe<Types.Scalars['ID']>
-  timezoneOffset: Types.Scalars['Int']
 }>
 
 export type ResultsQuery = {
@@ -111,7 +110,6 @@ export type GroupWithInviteCodeQuery = {
 
 export type LeaderboardQueryVariables = Types.Exact<{
   weekOf: Types.Scalars['Date']
-  timezoneOffset: Types.Scalars['Int']
 }>
 
 export type LeaderboardQuery = {
@@ -188,12 +186,8 @@ export const WordleResultFragmentDoc = gql`
   ${UserFragmentDoc}
 `
 export const ResultsDocument = gql`
-  query results($weekOf: Date!, $groupId: ID, $timezoneOffset: Int!) {
-    results(
-      weekOf: $weekOf
-      groupId: $groupId
-      timezoneOffset: $timezoneOffset
-    ) {
+  query results($weekOf: Date!, $groupId: ID) {
+    results(weekOf: $weekOf, groupId: $groupId) {
       ...WordleResult
     }
   }
@@ -214,7 +208,6 @@ export const ResultsDocument = gql`
  *   variables: {
  *      weekOf: // value for 'weekOf'
  *      groupId: // value for 'groupId'
- *      timezoneOffset: // value for 'timezoneOffset'
  *   },
  * });
  */
@@ -457,8 +450,8 @@ export type GroupWithInviteCodeQueryResult = Apollo.QueryResult<
   GroupWithInviteCodeQueryVariables
 >
 export const LeaderboardDocument = gql`
-  query leaderboard($weekOf: Date!, $timezoneOffset: Int!) {
-    leaderboard(weekOf: $weekOf, timezoneOffset: $timezoneOffset) {
+  query leaderboard($weekOf: Date!) {
+    leaderboard(weekOf: $weekOf) {
       entries {
         user {
           ...User
@@ -483,7 +476,6 @@ export const LeaderboardDocument = gql`
  * const { data, loading, error } = useLeaderboardQuery({
  *   variables: {
  *      weekOf: // value for 'weekOf'
- *      timezoneOffset: // value for 'timezoneOffset'
  *   },
  * });
  */

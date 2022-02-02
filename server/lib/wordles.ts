@@ -113,10 +113,8 @@ function parseResultsFromString(resultsString: string): ResultData {
         return WordleGuessResult.EXACT_MATCH
       } else if (guess == '🟨') {
         return WordleGuessResult.IN_WORD
-      } else if (guess == '⬛') {
-        return WordleGuessResult.NOT_IN_WORD
       } else {
-        throw new ErrorWithCode(INVALID_WORDLE)
+        return WordleGuessResult.NOT_IN_WORD
       }
     })
   })

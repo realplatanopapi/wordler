@@ -2,13 +2,13 @@ import Link from '@client/components/link'
 import {
   useGroupWithInviteCodeQuery,
   useJoinGroupMutation,
-  useWhoamiQuery,
 } from '@client/__gql__/api'
+import { UserFromSsrProps } from '@common/sessions'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Button, Flex, Heading, Text } from 'theme-ui'
 
-const AcceptInvite: React.FC = () => {
+const AcceptInvite: React.FC<UserFromSsrProps> = ({user}) => {
   const router = useRouter()
   const inviteCode = router.query.inviteCode as string
   const [joinGroup, joinGroupResult] = useJoinGroupMutation({
@@ -24,17 +24,14 @@ const AcceptInvite: React.FC = () => {
       }
     },
   })
-  const whoamiQuery = useWhoamiQuery()
   const groupQuery = useGroupWithInviteCodeQuery({
     variables: {
       inviteCode,
     },
   })
-
   const group = groupQuery.data?.groupWithInviteCode
-  const user = whoamiQuery.data?.whoami
 
-  if (groupQuery.loading || whoamiQuery.loading) {
+  if (groupQuery.loading) {
     return <Text>Loading...</Text>
   } else if (!group) {
     return <Text>errr</Text>

@@ -58,6 +58,10 @@ Contains front-end specific code.
 
 Contains back-end specific code. Most of the core logic for the app, such as parsing Wordle results and calculating scores, lives here.
 
+#### `common/`
+
+Code that is shared by both the client and server, for example, for server side rendering.
+
 #### `pages/`
 
 Contains skeleton components and code for all the pages and API routes in the app. Most of the core components and logic live in either `client/` or `server/`.

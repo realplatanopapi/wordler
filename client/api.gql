@@ -60,12 +60,6 @@ query leaderboard($weekOf: Date!, $timezoneOffset: Int!) {
   }
 }
 
-query whoami {
-  whoami {
-    ...User
-  }
-}
-
 mutation startGroup($name: String!) {
   startGroup(name: $name) {
     ...Group

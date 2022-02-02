@@ -1,23 +1,18 @@
-import { useGroupsQuery, useWhoamiQuery } from '@client/__gql__/api'
+import { useGroupsQuery } from '@client/__gql__/api'
+import { UserFromSsrProps } from '@common/sessions'
 import Dashboard from './dashboard/dashboard'
 import Onboarding from './onboarding'
 import Preview from './preview'
 
-const Home: React.FC = () => {
-  const whoamiResult = useWhoamiQuery()
-  const user = whoamiResult.data?.whoami
-
+const Home: React.FC<UserFromSsrProps> = ({user}) => {
   const groupsResult = useGroupsQuery({
     skip: !user,
   })
   const groups = groupsResult.data?.groups
-
-  const isLoading = whoamiResult.loading || groupsResult.loading
+  const isLoading = groupsResult.loading
 
   if (isLoading) {
     return <div>Loading...</div>
-  } else if (!whoamiResult.data) {
-    return <div>error</div>
   }
 
   if (!user) {

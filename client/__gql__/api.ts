@@ -126,16 +126,6 @@ export type LeaderboardQuery = {
   }
 }
 
-export type WhoamiQueryVariables = Types.Exact<{ [key: string]: never }>
-
-export type WhoamiQuery = {
-  __typename?: 'Query'
-  whoami?:
-    | { __typename?: 'User'; id: string; displayName: string }
-    | null
-    | undefined
-}
-
 export type StartGroupMutationVariables = Types.Exact<{
   name: Types.Scalars['String']
 }>
@@ -528,54 +518,6 @@ export type LeaderboardLazyQueryHookResult = ReturnType<
 export type LeaderboardQueryResult = Apollo.QueryResult<
   LeaderboardQuery,
   LeaderboardQueryVariables
->
-export const WhoamiDocument = gql`
-  query whoami {
-    whoami {
-      ...User
-    }
-  }
-  ${UserFragmentDoc}
-`
-
-/**
- * __useWhoamiQuery__
- *
- * To run a query within a React component, call `useWhoamiQuery` and pass it any options that fit your needs.
- * When your component renders, `useWhoamiQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWhoamiQuery({
- *   variables: {
- *   },
- * });
- */
-export function useWhoamiQuery(
-  baseOptions?: Apollo.QueryHookOptions<WhoamiQuery, WhoamiQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<WhoamiQuery, WhoamiQueryVariables>(
-    WhoamiDocument,
-    options
-  )
-}
-export function useWhoamiLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<WhoamiQuery, WhoamiQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<WhoamiQuery, WhoamiQueryVariables>(
-    WhoamiDocument,
-    options
-  )
-}
-export type WhoamiQueryHookResult = ReturnType<typeof useWhoamiQuery>
-export type WhoamiLazyQueryHookResult = ReturnType<typeof useWhoamiLazyQuery>
-export type WhoamiQueryResult = Apollo.QueryResult<
-  WhoamiQuery,
-  WhoamiQueryVariables
 >
 export const StartGroupDocument = gql`
   mutation startGroup($name: String!) {

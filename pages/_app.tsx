@@ -7,9 +7,14 @@ import { client } from '@client/graphql'
 import Navigation from '@client/views/navigation'
 
 import '@client/base.css'
+import Head from 'next/head'
 
 function Worlder({ Component, pageProps }: AppProps) {
   return (
+    <>
+    <Head>
+      <title>Wordler</title>
+    </Head>
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <Page header={<Navigation />}>
@@ -17,6 +22,7 @@ function Worlder({ Component, pageProps }: AppProps) {
         </Page>
       </ThemeProvider>
     </ApolloProvider>
+    </>
   )
 }
 

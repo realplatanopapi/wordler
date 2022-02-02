@@ -1,7 +1,7 @@
 import { User, Wordle, WordleResult } from '@prisma/client'
 import db from '@server/services/db'
 import { Prisma } from '@prisma/client'
-import { startOfDay, subMinutes } from 'date-fns'
+import { addMinutes, startOfDay } from 'date-fns'
 import { getById } from './accounts'
 import { ErrorWithCode } from '@server/errors';
 import { INVALID_WORDLE, NOT_AUTHORIZED } from '@server/errors/codes'
@@ -199,8 +199,9 @@ export async function canPostResults(user: User, timezoneOffset?: number): Promi
     return count < 2
   }
 
-  const localTime = subMinutes(new Date(), timezoneOffset)
-  const start = startOfDay(localTime)
+  const start = startOfDay(
+    addMinutes(new Date(), timezoneOffset)
+  )
 
   const count = await db.wordleResult.count({
     where: {

@@ -1,10 +1,12 @@
 import { useGroupsQuery } from '@client/__gql__/api'
 import { UserFromSsrProps } from '@common/sessions'
+import { useRouter } from 'next/router'
 import Dashboard from './dashboard/dashboard'
 import Onboarding from './onboarding'
 import Preview from './preview'
 
 const Home: React.FC<UserFromSsrProps> = ({user}) => {
+  const router = useRouter()
   const groupsResult = useGroupsQuery({
     skip: !user,
   })
@@ -20,14 +22,17 @@ const Home: React.FC<UserFromSsrProps> = ({user}) => {
   }
 
   const hasDisplayName = Boolean(user.displayName)
-  const isInAGroup = groups && groups.length > 0
+  const isInAGroup = groups ? groups.length > 0 : false
   const isOnboarded = hasDisplayName && isInAGroup
   if (!isOnboarded) {
     return (
       <Onboarding
+        isInAGroup={isInAGroup}
         user={user}
         onCompleteOnboarding={() => {
           groupsResult.refetch()
+
+          router.replace('/')
         }}
       />
     )

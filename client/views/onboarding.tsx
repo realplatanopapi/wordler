@@ -5,14 +5,16 @@ import StartGroupForm from '@client/views/dashboard/start-group-form'
 import { useUpdateDisplayNameMutation } from '@client/__gql__/api'
 import { UserFromSsr } from '@common/sessions'
 import { useState } from 'react'
-import { Box, Button, Flex, Heading, Input, Label, Text } from 'theme-ui'
+import { Box, Button, Heading, Input, Text } from 'theme-ui'
 
 interface Props {
+  isInAGroup: boolean
   user: UserFromSsr
   onCompleteOnboarding: () => any
 }
 
-const Onboarding: React.FC<Props> = ({ onCompleteOnboarding, user }) => {
+const Onboarding: React.FC<Props> = ({ isInAGroup, onCompleteOnboarding, user }) => {
+  console.log(isInAGroup)
   const [group, setGroup] = useState<Group | null>(null)
   const [displayName, setDisplayName] = useState<string | null>(user.displayName)
   const hasDisplayName = Boolean(displayName)
@@ -20,6 +22,10 @@ const Onboarding: React.FC<Props> = ({ onCompleteOnboarding, user }) => {
     onCompleted: (result) => {
       const displayName = result.updateDisplayName?.displayName as string | null
       setDisplayName(displayName)
+
+      if (isInAGroup) {
+        onCompleteOnboarding()
+      }
     }
   })
   const isUpdatingName = updateDisplayNameResult.loading

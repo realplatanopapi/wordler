@@ -82,7 +82,7 @@ const AcceptInvite: React.FC<Props> = ({ inviteCode, group, user }) => {
                   // @ts-ignore
                   href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}
                 >
-                  Sign in with twitter to join the group
+                  Log in with twitter to join the group
                 </Button>
                 <Text as="p" my={4}>
                   or

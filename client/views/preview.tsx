@@ -17,7 +17,7 @@ const Preview: React.FC = () => {
       <Button as="a" href="/api/auth/twitter/authorize" sx={{
         fontSize: 3,
       }}>
-        Sign in with Twitter
+        Log in with Twitter
       </Button>
       <Box>
         <Text as="p" my={4}>or</Text>

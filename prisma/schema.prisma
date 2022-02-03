@@ -14,7 +14,7 @@ model User {
 
   email String? @unique
   twitterId String? @unique
-  displayName String
+  displayName String?
 
   groupMemberships GroupMembership[]
   results WordleResult[]

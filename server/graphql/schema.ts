@@ -174,7 +174,7 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
         }
       },
       resolve: async (_source, {email}) => {
-        await sendLogInEmail(email)
+        await sendLogInEmail(sanitize(email))
         return true
       }
     },

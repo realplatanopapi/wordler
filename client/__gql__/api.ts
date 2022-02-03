@@ -159,6 +159,15 @@ export type JoinGroupMutation = {
     | undefined
 }
 
+export type SendLoginEmailMutationVariables = Types.Exact<{
+  email: Types.Scalars['String']
+}>
+
+export type SendLoginEmailMutation = {
+  __typename?: 'Mutation'
+  sendLoginEmail?: boolean | null | undefined
+}
+
 export const GroupFragmentDoc = gql`
   fragment Group on Group {
     id
@@ -612,4 +621,52 @@ export type JoinGroupMutationResult = Apollo.MutationResult<JoinGroupMutation>
 export type JoinGroupMutationOptions = Apollo.BaseMutationOptions<
   JoinGroupMutation,
   JoinGroupMutationVariables
+>
+export const SendLoginEmailDocument = gql`
+  mutation sendLoginEmail($email: String!) {
+    sendLoginEmail(email: $email)
+  }
+`
+export type SendLoginEmailMutationFn = Apollo.MutationFunction<
+  SendLoginEmailMutation,
+  SendLoginEmailMutationVariables
+>
+
+/**
+ * __useSendLoginEmailMutation__
+ *
+ * To run a mutation, you first call `useSendLoginEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendLoginEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendLoginEmailMutation, { data, loading, error }] = useSendLoginEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useSendLoginEmailMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SendLoginEmailMutation,
+    SendLoginEmailMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    SendLoginEmailMutation,
+    SendLoginEmailMutationVariables
+  >(SendLoginEmailDocument, options)
+}
+export type SendLoginEmailMutationHookResult = ReturnType<
+  typeof useSendLoginEmailMutation
+>
+export type SendLoginEmailMutationResult =
+  Apollo.MutationResult<SendLoginEmailMutation>
+export type SendLoginEmailMutationOptions = Apollo.BaseMutationOptions<
+  SendLoginEmailMutation,
+  SendLoginEmailMutationVariables
 >

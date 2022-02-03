@@ -2,6 +2,7 @@ import convict from 'convict'
 
 const config = convict<{
   appUrl: string
+  authTokenSecret: string
   cookieSecret: {
     auth: string
   }
@@ -20,6 +21,11 @@ const config = convict<{
   appUrl: {
     format: String,
     env: 'APP_URL',
+    default: null,
+  },
+  authTokenSecret: {
+    format: String,
+    env: 'AUTH_TOKEN_SECRET',
     default: null,
   },
   cookieSecret: {

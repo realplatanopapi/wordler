@@ -1,8 +1,7 @@
 import { getById } from "@server/lib/accounts";
-import { EmailAuthTokenPayload } from "@server/lib/auth";
-import { getGroupWithInviteCode, joinGroup } from "@server/lib/groups";
+import { authenticateWithToken } from "@server/lib/auth";
+import { joinGroup } from "@server/lib/groups";
 import { cookieConfig } from "@server/lib/sessions";
-import { unsealData } from "iron-session";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiHandler } from "next";
 
@@ -13,9 +12,13 @@ const handler: NextApiHandler = async (req, res) => {
     return
   }
 
-  console.log(req.query)
+  const user = await authenticateWithToken(token)
+  if (!user) {
+    res.redirect('/')
+    return
+  }
 
-  const {userId} = await unsealData<EmailAuthTokenPayload>(token, cookieConfig)
+  const userId = user.id
   req.session.userId = userId
   await req.session.save()
 

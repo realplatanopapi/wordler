@@ -2,15 +2,57 @@ import { Group } from '@client/api'
 import ClipboardCopy from '@client/components/clipboard-copy'
 import Link from '@client/components/link'
 import StartGroupForm from '@client/views/dashboard/start-group-form'
+import { useUpdateDisplayNameMutation } from '@client/__gql__/api'
+import { UserFromSsr } from '@common/sessions'
 import { useState } from 'react'
-import { Box, Button, Flex, Heading, Text } from 'theme-ui'
+import { Box, Button, Flex, Heading, Input, Label, Text } from 'theme-ui'
 
 interface Props {
+  user: UserFromSsr
   onCompleteOnboarding: () => any
 }
 
-const Onboarding: React.FC<Props> = ({ onCompleteOnboarding }) => {
+const Onboarding: React.FC<Props> = ({ onCompleteOnboarding, user }) => {
   const [group, setGroup] = useState<Group | null>(null)
+  const [displayName, setDisplayName] = useState<string | null>(user.displayName)
+  const hasDisplayName = Boolean(displayName)
+  const [updateDisplayName, updateDisplayNameResult] = useUpdateDisplayNameMutation({
+    onCompleted: (result) => {
+      const displayName = result.updateDisplayName?.displayName as string | null
+      setDisplayName(displayName)
+    }
+  })
+  const isUpdatingName = updateDisplayNameResult.loading
+
+  if (!hasDisplayName) {
+    return (
+      <form onSubmit={(event) => {
+        event.preventDefault()
+
+        if (isUpdatingName) {
+          return
+        }
+
+        const form = event.target as HTMLFormElement
+        const data = new FormData(form)
+        const displayName = data.get('displayName') as string
+        updateDisplayName({
+          variables: {
+            displayName
+          }
+        })
+      }}>
+        { /* @ts-ignore */ }
+        <Heading as="label" htmlFor="displayName" sx={{
+          display: 'block',
+          fontSize: 4,
+          mb: 3,
+        }}>What do you call yourself?</Heading>
+        <Input name="displayName" placeholder="avidWordler45" required mb={3} />
+        <Button type="submit">Set your display name</Button>
+      </form>
+    )
+  }
 
   if (group && group.inviteLink) {
     return (
@@ -57,7 +99,8 @@ const Onboarding: React.FC<Props> = ({ onCompleteOnboarding }) => {
 
   return (
     <>
-      <Text as="p" mb={3}>
+      <Heading as="h1" mb={4}>Welcome {displayName}!</Heading>
+      <Text as="p" mb={4}>
         Wordler only works if you have friends. You can either:
       </Text>
       <Heading as="h2" mb={3}>
@@ -73,8 +116,7 @@ const Onboarding: React.FC<Props> = ({ onCompleteOnboarding }) => {
       />
       <Text
         as="p"
-        mb={5}
-        mt={6}
+        my={4}
         sx={{
           textAlign: 'center',
         }}

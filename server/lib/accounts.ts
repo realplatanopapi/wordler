@@ -62,3 +62,14 @@ export async function getById(id: string): Promise<User | null> {
     },
   })
 }
+
+export async function updateDisplayName(user: User, displayName: string) {
+  return await db.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      displayName
+    }
+  })
+}

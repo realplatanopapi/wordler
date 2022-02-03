@@ -19,10 +19,13 @@ const Home: React.FC<UserFromSsrProps> = ({user}) => {
     return <Preview />
   }
 
+  const hasDisplayName = Boolean(user.displayName)
   const isInAGroup = groups && groups.length > 0
-  if (!isInAGroup) {
+  const isOnboarded = hasDisplayName && isInAGroup
+  if (!isOnboarded) {
     return (
       <Onboarding
+        user={user}
         onCompleteOnboarding={() => {
           groupsResult.refetch()
         }}

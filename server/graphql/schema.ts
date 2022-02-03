@@ -1,4 +1,7 @@
 import { User } from '@prisma/client'
+import { ErrorWithCode } from '@server/errors'
+import { NOT_AUTHORIZED } from '@server/errors/codes'
+import { updateDisplayName } from '@server/lib/accounts'
 import { sendLogInEmail } from '@server/lib/auth'
 import {
   getGroupWithInviteCode,
@@ -193,6 +196,21 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
         return startGroup(user, sanitize(name))
       },
     },
+    updateDisplayName: {
+      type: UserType,
+      args: {
+        displayName: {
+          type: new GraphQLNonNull(GraphQLString),
+        }
+      },
+      resolve: (_source, {displayName}, {user}) => {
+        if (!user) {
+          throw new ErrorWithCode(NOT_AUTHORIZED)
+        }
+
+        return updateDisplayName(user, displayName)
+      }
+    }
   },
 })
 

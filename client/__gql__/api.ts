@@ -168,6 +168,18 @@ export type SendLoginEmailMutation = {
   sendLoginEmail?: boolean | null | undefined
 }
 
+export type UpdateDisplayNameMutationVariables = Types.Exact<{
+  displayName: Types.Scalars['String']
+}>
+
+export type UpdateDisplayNameMutation = {
+  __typename?: 'Mutation'
+  updateDisplayName?:
+    | { __typename?: 'User'; id: string; displayName: string }
+    | null
+    | undefined
+}
+
 export const GroupFragmentDoc = gql`
   fragment Group on Group {
     id
@@ -669,4 +681,55 @@ export type SendLoginEmailMutationResult =
 export type SendLoginEmailMutationOptions = Apollo.BaseMutationOptions<
   SendLoginEmailMutation,
   SendLoginEmailMutationVariables
+>
+export const UpdateDisplayNameDocument = gql`
+  mutation updateDisplayName($displayName: String!) {
+    updateDisplayName(displayName: $displayName) {
+      id
+      displayName
+    }
+  }
+`
+export type UpdateDisplayNameMutationFn = Apollo.MutationFunction<
+  UpdateDisplayNameMutation,
+  UpdateDisplayNameMutationVariables
+>
+
+/**
+ * __useUpdateDisplayNameMutation__
+ *
+ * To run a mutation, you first call `useUpdateDisplayNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDisplayNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDisplayNameMutation, { data, loading, error }] = useUpdateDisplayNameMutation({
+ *   variables: {
+ *      displayName: // value for 'displayName'
+ *   },
+ * });
+ */
+export function useUpdateDisplayNameMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateDisplayNameMutation,
+    UpdateDisplayNameMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateDisplayNameMutation,
+    UpdateDisplayNameMutationVariables
+  >(UpdateDisplayNameDocument, options)
+}
+export type UpdateDisplayNameMutationHookResult = ReturnType<
+  typeof useUpdateDisplayNameMutation
+>
+export type UpdateDisplayNameMutationResult =
+  Apollo.MutationResult<UpdateDisplayNameMutation>
+export type UpdateDisplayNameMutationOptions = Apollo.BaseMutationOptions<
+  UpdateDisplayNameMutation,
+  UpdateDisplayNameMutationVariables
 >

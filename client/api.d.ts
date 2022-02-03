@@ -43,6 +43,7 @@ export type Mutation = {
   postResults?: Maybe<WordleResult>
   sendLoginEmail?: Maybe<Scalars['Boolean']>
   startGroup?: Maybe<Group>
+  updateDisplayName?: Maybe<User>
 }
 
 export type MutationJoinGroupArgs = {
@@ -59,6 +60,10 @@ export type MutationSendLoginEmailArgs = {
 
 export type MutationStartGroupArgs = {
   name: Scalars['String']
+}
+
+export type MutationUpdateDisplayNameArgs = {
+  displayName: Scalars['String']
 }
 
 export type Query = {

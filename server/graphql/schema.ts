@@ -1,4 +1,5 @@
 import { User } from '@prisma/client'
+import { sendLogInEmail } from '@server/lib/auth'
 import {
   getGroupWithInviteCode,
   getGroupsForUser,
@@ -164,6 +165,18 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
 
         return joinGroup(user, sanitize(inviteCode))
       },
+    },
+    sendLoginEmail: {
+      type: GraphQLBoolean,
+      args: {
+        email: {
+          type: new GraphQLNonNull(GraphQLString),
+        }
+      },
+      resolve: async (_source, {email}) => {
+        await sendLogInEmail(email)
+        return true
+      }
     },
     startGroup: {
       type: GroupType,

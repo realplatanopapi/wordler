@@ -5,6 +5,28 @@ interface AccountData {
   displayName: string
 }
 
+export interface UserWithEmail extends User {
+  email: string
+}
+
+export async function getOrCreateUserFromEmail(
+  email: string
+): Promise<UserWithEmail> {
+  const user = await db.user.upsert({
+    where: {
+      email,
+    },
+    create: {
+      email
+    },
+    update: {
+      email
+    }
+  })
+
+  return user as UserWithEmail
+}
+
 export async function getOrCreateUserFromTwitter(
   twitterId: string,
   { displayName }: AccountData

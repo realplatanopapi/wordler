@@ -5,7 +5,7 @@ import { sealData } from "iron-session";
 import { getOrCreateUserFromEmail } from "./accounts";
 import { cookieConfig } from "./sessions";
 
-export interface EmailAuthToken {
+export interface EmailAuthTokenPayload {
   userId: string
 }
 

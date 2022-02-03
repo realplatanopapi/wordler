@@ -45,7 +45,7 @@ const LogInWithEmailButton: React.FC<Props> = ({inviteCode, sx}) => {
         })
       }}>
         <Label htmlFor="email" mb={3}>What&apos;s your email address?</Label>
-        <Input name="email" type="email" placeholder="avid-wordler@gmail.com" required mb={3} />
+        <Input name="email" type="email" placeholder="avidWordler420@gmail.com" required mb={3} />
         <Button type="submit" sx={sx}>{
           isSending ? 'Sending...' : sendLinkButtonLabel
         }</Button>

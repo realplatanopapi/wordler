@@ -182,6 +182,10 @@ export async function queryResults({
 }
 
 export async function canPostResults(user: User, timezoneOffset?: number): Promise<boolean> {
+  if (!user.displayName) {
+    return false
+  }
+
   // If no offset is supplied, restrict user to a max of 2 results per day
   if (!timezoneOffset) {
     const now = new Date()
@@ -291,6 +295,11 @@ function buildResultsFilter({
         createdAt: {
           gte: from,
           lte: until,
+        },
+        user: {
+          displayName: {
+            not: null
+          }
         },
       },
       {

@@ -13,7 +13,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   const {userId} = await unsealData<EmailAuthTokenPayload>(token, cookieConfig)
   req.session.userId = userId
-  req.session.save()
+  await req.session.save()
+  
   res.redirect('/')
 }
 

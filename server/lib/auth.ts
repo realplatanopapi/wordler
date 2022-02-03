@@ -12,7 +12,7 @@ export interface EmailAuthTokenPayload {
 export async function sendLogInEmail(email: string) {
   const user = await getOrCreateUserFromEmail(email)
   const token = await sealData({
-    userId: user
+    userId: user.id
   }, cookieConfig)
   const loginUrl = new URL('/api/auth/email', config.get('appUrl')) + `?token=${token}`
   const loginEmail = buildLoginEmail({loginUrl})

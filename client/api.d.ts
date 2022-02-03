@@ -41,7 +41,7 @@ export type Mutation = {
   __typename?: 'Mutation'
   joinGroup?: Maybe<Group>
   postResults?: Maybe<WordleResult>
-  sendLoginEmail?: Maybe<Scalars['Boolean']>
+  sendLoginEmail?: Maybe<Scalars['String']>
   startGroup?: Maybe<Group>
   updateDisplayName?: Maybe<User>
 }

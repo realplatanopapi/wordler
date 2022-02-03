@@ -166,7 +166,7 @@ export type SendLoginEmailMutationVariables = Types.Exact<{
 
 export type SendLoginEmailMutation = {
   __typename?: 'Mutation'
-  sendLoginEmail?: boolean | null | undefined
+  sendLoginEmail?: string | null | undefined
 }
 
 export type UpdateDisplayNameMutationVariables = Types.Exact<{

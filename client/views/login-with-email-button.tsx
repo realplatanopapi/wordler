@@ -1,28 +1,27 @@
 import { useSendLoginEmailMutation } from "@client/__gql__/api"
 import { useState } from "react"
-import { Button, Input, Text, ThemeUIStyleObject } from "theme-ui"
+import { Button, Input, Label, Text, ThemeUIStyleObject } from "theme-ui"
 
 interface Props {
   inviteCode?: string
   sx?: ThemeUIStyleObject
 }
 
+const sendLinkButtonLabel = 'Get a link to log in via email'
+
 const LogInWithEmailButton: React.FC<Props> = ({inviteCode, sx}) => {
   const [isShowingEmailInput, setIsShowingEmailInput] = useState(false)
-  const [didSend, setDidSend] = useState(false)
-  const [sendLoginEmail, sendLoginEmailResult] = useSendLoginEmailMutation({
-    onCompleted: () => {
-      setDidSend(true)
-    }
-  })
+  const [sendLoginEmail, sendLoginEmailResult] = useSendLoginEmailMutation()
   const isSending = sendLoginEmailResult.loading
+  const emailSentTo = sendLoginEmailResult.data?.sendLoginEmail
+  const didSend = Boolean(emailSentTo)
 
   if (didSend) {
     return (
       <Text sx={{
         textAlign: 'center'
       }}>
-        Sent!
+        We emailed a link to log in to <strong>{emailSentTo}</strong>.
       </Text>
     )
   }
@@ -45,9 +44,10 @@ const LogInWithEmailButton: React.FC<Props> = ({inviteCode, sx}) => {
           }
         })
       }}>
-        <Input name="email" type="email" placeholder="avid-wordler@gmail.com" required />
+        <Label htmlFor="email" mb={3}>What&apos;s your email address?</Label>
+        <Input name="email" type="email" placeholder="avid-wordler@gmail.com" required mb={3} />
         <Button type="submit" sx={sx}>{
-          isSending ? 'Sending...' : 'Send link to login'
+          isSending ? 'Sending...' : sendLinkButtonLabel
         }</Button>
       </form>
     )
@@ -56,7 +56,7 @@ const LogInWithEmailButton: React.FC<Props> = ({inviteCode, sx}) => {
   return (
     <Button onClick={() => {
       setIsShowingEmailInput(true)
-    }} sx={sx}>Send link to login</Button>
+    }} sx={sx}>{sendLinkButtonLabel}</Button>
   )
 }
 

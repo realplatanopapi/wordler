@@ -170,7 +170,7 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
       },
     },
     sendLoginEmail: {
-      type: GraphQLBoolean,
+      type: GraphQLString,
       args: {
         email: {
           type: new GraphQLNonNull(GraphQLString),
@@ -183,7 +183,7 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
         await sendLogInEmail(sanitize(email), {
           inviteCode
         })
-        return true
+        return email
       }
     },
     startGroup: {

@@ -72,8 +72,8 @@ mutation joinGroup($inviteCode: String!) {
   }
 }
 
-mutation sendLoginEmail($email: String!) {
-  sendLoginEmail(email: $email)
+mutation sendLoginEmail($email: String!, $inviteCode: String) {
+  sendLoginEmail(email: $email, inviteCode: $inviteCode)
 }
 
 mutation updateDisplayName($displayName: String!) {

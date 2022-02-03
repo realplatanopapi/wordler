@@ -161,6 +161,7 @@ export type JoinGroupMutation = {
 
 export type SendLoginEmailMutationVariables = Types.Exact<{
   email: Types.Scalars['String']
+  inviteCode?: Types.InputMaybe<Types.Scalars['String']>
 }>
 
 export type SendLoginEmailMutation = {
@@ -635,8 +636,8 @@ export type JoinGroupMutationOptions = Apollo.BaseMutationOptions<
   JoinGroupMutationVariables
 >
 export const SendLoginEmailDocument = gql`
-  mutation sendLoginEmail($email: String!) {
-    sendLoginEmail(email: $email)
+  mutation sendLoginEmail($email: String!, $inviteCode: String) {
+    sendLoginEmail(email: $email, inviteCode: $inviteCode)
   }
 `
 export type SendLoginEmailMutationFn = Apollo.MutationFunction<
@@ -658,6 +659,7 @@ export type SendLoginEmailMutationFn = Apollo.MutationFunction<
  * const [sendLoginEmailMutation, { data, loading, error }] = useSendLoginEmailMutation({
  *   variables: {
  *      email: // value for 'email'
+ *      inviteCode: // value for 'inviteCode'
  *   },
  * });
  */

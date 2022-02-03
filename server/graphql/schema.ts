@@ -15,7 +15,7 @@ import {
   getLeaderboard,
   queryResults,
 } from '@server/lib/wordles'
-import { addDays, addMinutes, subMinutes } from 'date-fns'
+import { addDays } from 'date-fns'
 import {
   GraphQLBoolean,
   GraphQLID,
@@ -174,10 +174,15 @@ const mutation = new GraphQLObjectType<any, GraphQLContext>({
       args: {
         email: {
           type: new GraphQLNonNull(GraphQLString),
+        },
+        inviteCode: {
+          type: GraphQLString
         }
       },
-      resolve: async (_source, {email}) => {
-        await sendLogInEmail(sanitize(email))
+      resolve: async (_source, {email, inviteCode}) => {
+        await sendLogInEmail(sanitize(email), {
+          inviteCode
+        })
         return true
       }
     },

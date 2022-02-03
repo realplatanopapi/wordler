@@ -9,12 +9,24 @@ export interface EmailAuthTokenPayload {
   userId: string
 }
 
-export async function sendLogInEmail(email: string) {
+export async function sendLogInEmail(email: string, {
+  inviteCode
+}: {
+  inviteCode: string
+}) {
   const user = await getOrCreateUserFromEmail(email)
   const token = await sealData({
     userId: user.id
   }, cookieConfig)
-  const loginUrl = new URL('/api/auth/email', config.get('appUrl')) + `?token=${token}`
+
+  const params = new URLSearchParams({
+    token: token
+  })
+  if (inviteCode) {
+    params.set('inviteCode', inviteCode)
+  }
+  const loginUrl = new URL('/api/auth/email', config.get('appUrl')).toString() + '?' + params.toString()
+
   const loginEmail = buildLoginEmail({loginUrl})
   return await mailer.sendMail({
     ...loginEmail,

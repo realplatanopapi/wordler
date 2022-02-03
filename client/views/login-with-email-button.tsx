@@ -3,10 +3,11 @@ import { useState } from "react"
 import { Button, Input, Text, ThemeUIStyleObject } from "theme-ui"
 
 interface Props {
+  inviteCode?: string
   sx?: ThemeUIStyleObject
 }
 
-const LogInWithEmailButton: React.FC<Props> = ({sx}) => {
+const LogInWithEmailButton: React.FC<Props> = ({inviteCode, sx}) => {
   const [isShowingEmailInput, setIsShowingEmailInput] = useState(false)
   const [didSend, setDidSend] = useState(false)
   const [sendLoginEmail, sendLoginEmailResult] = useSendLoginEmailMutation({
@@ -39,7 +40,8 @@ const LogInWithEmailButton: React.FC<Props> = ({sx}) => {
         const email = data.get('email') as string
         sendLoginEmail({
           variables: {
-            email
+            email,
+            inviteCode,
           }
         })
       }}>

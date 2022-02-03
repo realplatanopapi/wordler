@@ -7,13 +7,14 @@ import { UserFromSsrProps } from '@common/sessions'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Box, Button, Flex, Heading, Text } from 'theme-ui'
+import LogInWithEmailButton from './login-with-email-button'
 
 interface Props extends UserFromSsrProps {
   group: Pick<Group, 'id' | 'name'> | null
   inviteCode: string
 }
 
-const AcceptInvite: React.FC<Props> = ({inviteCode, group, user}) => {
+const AcceptInvite: React.FC<Props> = ({ inviteCode, group, user }) => {
   const router = useRouter()
   const [joinGroup, joinGroupResult] = useJoinGroupMutation({
     onCompleted: (data) => {
@@ -42,9 +43,8 @@ const AcceptInvite: React.FC<Props> = ({inviteCode, group, user}) => {
           textAlign: 'center',
         }}
       >
-        {
-          group ? (
-            <Box>
+        {group ? (
+          <Box>
             <Text as="p" mb={1}>
               Congratulations! You&apos;ve been invited to join:
             </Text>
@@ -63,7 +63,7 @@ const AcceptInvite: React.FC<Props> = ({inviteCode, group, user}) => {
                   if (joinGroupResult.loading) {
                     return
                   }
-  
+
                   joinGroup({
                     variables: {
                       inviteCode,
@@ -76,21 +76,26 @@ const AcceptInvite: React.FC<Props> = ({inviteCode, group, user}) => {
                   : 'Click to join the group'}
               </Button>
             ) : (
-              <Button
-                as="a"
-                // @ts-ignore
-                href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}
-              >
-                Sign in with twitter to join the group
-              </Button>
+              <>
+                <Button
+                  as="a"
+                  // @ts-ignore
+                  href={`/api/auth/twitter/authorize?inviteCode=${inviteCode}`}
+                >
+                  Sign in with twitter to join the group
+                </Button>
+                <Text as="p" my={4}>
+                  or
+                </Text>
+                <LogInWithEmailButton inviteCode={inviteCode} />
+              </>
             )}
           </Box>
-          ) : (
-            <Box>
-              <Heading>Could not find this group.</Heading>
-            </Box>
-          )
-        }
+        ) : (
+          <Box>
+            <Heading>Could not find this group.</Heading>
+          </Box>
+        )}
       </Flex>
     </>
   )

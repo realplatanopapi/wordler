@@ -56,6 +56,7 @@ export type MutationPostResultsArgs = {
 
 export type MutationSendLoginEmailArgs = {
   email: Scalars['String']
+  inviteCode?: InputMaybe<Scalars['String']>
 }
 
 export type MutationStartGroupArgs = {

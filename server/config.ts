@@ -7,6 +7,7 @@ const config = convict<{
   }
   databaseUrl: string
   env: 'production' | 'development'
+  sendgridApiKey: string,
   twitter: {
     apiKey: string
     apiSecret: string
@@ -37,6 +38,11 @@ const config = convict<{
     format: ['production', 'development'],
     env: 'NODE_ENV',
     default: null,
+  },
+  sendgridApiKey: {
+    format: String,
+    env: 'SENDGRID_API_KEY',
+    default: null
   },
   twitter: {
     apiKey: {

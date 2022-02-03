@@ -1,7 +1,7 @@
 import { NextApiHandler } from 'next'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { getOrCreateUserFromTwitter } from '@server/lib/accounts'
-import { cookieConfig } from '@server/lib/auth'
+import { cookieConfig } from '@server/lib/sessions'
 import { joinGroup } from '@server/lib/groups'
 import config from '@server/config'
 import { unsealData } from 'iron-session'

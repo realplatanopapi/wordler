@@ -4,7 +4,7 @@ import { NextApiHandler, NextApiRequest } from 'next'
 import { getById } from '@server/lib/accounts'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import { withIronSessionApiRoute } from 'iron-session/next'
-import { cookieConfig } from '@server/lib/auth'
+import { cookieConfig } from '@server/lib/sessions'
 import { ErrorWithCode } from '@server/errors'
 
 export const config = {

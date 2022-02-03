@@ -1,5 +1,5 @@
 import config from '@server/config'
-import { cookieConfig } from '@server/lib/auth'
+import { cookieConfig } from '@server/lib/sessions'
 import cryptoRandomString from 'crypto-random-string'
 import { sealData } from 'iron-session'
 import { withIronSessionApiRoute } from 'iron-session/next'

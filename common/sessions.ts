@@ -1,5 +1,5 @@
 import { getById } from '@server/lib/accounts'
-import { cookieConfig } from '@server/lib/auth'
+import { cookieConfig } from '@server/lib/sessions'
 import { withIronSessionSsr } from 'iron-session/next'
 import { GetServerSidePropsContext } from 'next'
 

@@ -1,7 +1,7 @@
 import { Group } from '@client/api'
 import AcceptInvite from '@client/views/accept-invite'
 import { getUserFromSsrContext, UserFromSsr, UserFromSsrProps } from '@common/sessions'
-import { cookieConfig } from '@server/lib/auth'
+import { cookieConfig } from '@server/lib/sessions'
 import { getGroupWithInviteCode } from '@server/lib/groups'
 import { withIronSessionSsr } from 'iron-session/next'
 import { NextPage } from 'next'

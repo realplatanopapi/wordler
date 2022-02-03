@@ -1,5 +1,6 @@
 import Link from '@client/components/link'
 import { Box, Button, Heading, Text } from 'theme-ui'
+import LogInWithEmailButton from './login-with-email-button'
 
 const Preview: React.FC = () => {
   return (
@@ -18,6 +19,14 @@ const Preview: React.FC = () => {
       }}>
         Sign in with Twitter
       </Button>
+      <Box>
+        <Text as="p" my={4}>or</Text>
+      </Box>
+      <Box>
+        <LogInWithEmailButton sx={{
+          fontSize: 3
+        }} /> 
+      </Box>
       <Box mt={6}>
         <Box mb={3}>
           <Text>

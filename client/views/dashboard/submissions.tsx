@@ -1,11 +1,12 @@
-import { User, WordleResult as WordleResultType } from '@client/api'
+import { WordleResult as WordleResultType } from '@client/api'
+import { UserFromSsr } from '@common/sessions'
 import { format, startOfDay } from 'date-fns'
 import React from 'react'
 import { Box, Grid, Heading } from 'theme-ui'
 import WordleResult from './wordle-result'
 
 interface Props {
-  currentUser: User
+  currentUser: UserFromSsr
   results: WordleResultType[]
 }
 

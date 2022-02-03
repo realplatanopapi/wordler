@@ -12,16 +12,17 @@ import {
 import PostResultsForm from '@client/views/dashboard/post-results-form'
 import Leaderboard from '@client/views/dashboard/leaderboard'
 import { useMemo } from 'react'
-import { Group, User, WordleResult } from '@client/api'
+import { Group, WordleResult } from '@client/api'
 import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
 import Groups from '@client/views/dashboard/groups'
 import Link from '@client/components/link'
 import { startOfWeek } from 'date-fns'
 import Submissions from './submissions'
+import { UserFromSsr } from '@common/sessions'
 
 interface Props {
-  user: User
+  user: UserFromSsr
 }
 
 const Dashboard: React.FC<Props> = ({ user }) => {

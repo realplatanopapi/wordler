@@ -1,8 +1,9 @@
-import { Leaderboard, User } from '@client/api'
+import { Leaderboard } from '@client/api'
+import { UserFromSsr } from '@common/sessions'
 import { Box, Grid, Heading, Text } from 'theme-ui'
 
 interface Props {
-  currentUser: Pick<User, 'id' | 'displayName'> | null
+  currentUser: Pick<UserFromSsr, 'id' | 'displayName'> | null
   leaderboard: Leaderboard
 }
 

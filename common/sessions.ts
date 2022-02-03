@@ -5,7 +5,7 @@ import { GetServerSidePropsContext } from 'next'
 
 export interface UserFromSsr {
   id: string
-  displayName: string
+  displayName: string | null
 }
 
 export interface UserFromSsrProps {

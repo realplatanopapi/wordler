@@ -7,11 +7,13 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) => {
-  const token = req.query.token
+  let token = req.query.token
   if (typeof token !== 'string') {
     res.redirect('/')
     return
   }
+
+  token = decodeURIComponent(token)
 
   let user
   try {

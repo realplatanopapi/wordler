@@ -19,7 +19,6 @@ const handler: NextApiHandler = async (req, res) => {
   try {
     user = await authenticateWithToken(token)
   } catch (error) {
-    console.log('huh', error)
     if (error instanceof ErrorWithCode) {
       res.redirect(`/?errorCode=${error.code}`)
       return

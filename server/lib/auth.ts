@@ -42,7 +42,7 @@ function createAuthToken (userId: string): Promise<string> {
   return new Promise((resolve, reject) => {
     jwt.sign({
       userId
-    }, config.get('authTokenSecret'), {expiresIn: '5m'}, (error: Error | null, token: string | undefined) => {
+    }, config.get('authTokenSecret'), {expiresIn: '1d'}, (error: Error | null, token: string | undefined) => {
       if (error || !token) {
         return reject(error)
       }

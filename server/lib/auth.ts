@@ -1,9 +1,11 @@
 import config from "@server/config";
 import { buildLoginEmail } from "@server/emails/log-in";
-import jwt from 'jsonwebtoken'
+import jwt, { TokenExpiredError } from 'jsonwebtoken'
 import mailer from "@server/services/mailer";
 import { getById, getOrCreateUserFromEmail } from "./accounts";
 import { User } from "@prisma/client";
+import { ErrorWithCode } from "@server/errors";
+import { TOKEN_EXPIRED } from "@server/errors/codes";
 
 export interface AuthTokenPayload {
   userId: string
@@ -18,7 +20,7 @@ export async function sendLogInEmail(email: string, {
   const token = await createAuthToken(user.id)
 
   const params = new URLSearchParams({
-    token: token
+    token: encodeURIComponent(token)
   })
   if (inviteCode) {
     params.set('inviteCode', inviteCode)
@@ -34,8 +36,16 @@ export async function sendLogInEmail(email: string, {
 }
 
 export async function authenticateWithToken(token: string): Promise<User | null> {
-  const {userId} = await decodeAuthToken(token)
-  return await getById(userId)
+  try {
+    const {userId} = await decodeAuthToken(token)
+    return await getById(userId)
+  } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      throw new ErrorWithCode(TOKEN_EXPIRED)
+    }
+
+    throw error
+  }
 }
 
 function createAuthToken (userId: string): Promise<string> {

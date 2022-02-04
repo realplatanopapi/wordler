@@ -8,8 +8,12 @@ import Navigation from '@client/views/navigation'
 
 import '@client/base.css'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 function Worlder({ Component, pageProps }: AppProps) {
+  const router = useRouter()
+  const errorCode = router.query.errorCode as string | undefined
+
   return (
     <>
     <Head>
@@ -17,7 +21,7 @@ function Worlder({ Component, pageProps }: AppProps) {
     </Head>
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <Page header={<Navigation />}>
+        <Page header={<Navigation errorCode={errorCode} />}>
           <Component {...pageProps} />
         </Page>
       </ThemeProvider>

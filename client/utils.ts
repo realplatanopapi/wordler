@@ -29,4 +29,5 @@ export const ERROR_CODE_MESSAGES: {
 } = Object.freeze({
   INVALID_WORDLE: 'Not a valid Wordle. Please try again.',
   NAME_ALREADY_TAKEN: 'Name already taken.',
+  TOKEN_EXPIRED: 'This link has expired. Please request a new one.',
 })

@@ -1,3 +1,4 @@
+import { ErrorWithCode } from "@server/errors";
 import { getById } from "@server/lib/accounts";
 import { authenticateWithToken } from "@server/lib/auth";
 import { joinGroup } from "@server/lib/groups";
@@ -12,7 +13,19 @@ const handler: NextApiHandler = async (req, res) => {
     return
   }
 
-  const user = await authenticateWithToken(token)
+  let user
+  try {
+    user = await authenticateWithToken(token)
+  } catch (error) {
+    console.log('huh', error)
+    if (error instanceof ErrorWithCode) {
+      res.redirect(`/?errorCode=${error.code}`)
+      return
+    }
+
+    throw error
+  }
+
   if (!user) {
     res.redirect('/')
     return

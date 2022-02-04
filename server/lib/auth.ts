@@ -30,7 +30,7 @@ export async function sendLogInEmail(email: string, {
   const loginEmail = buildLoginEmail({loginUrl})
   return await mailer.sendMail({
     ...loginEmail,
-    from: 'no-reply@wordler.xyz',
+    from: 'Wordler <no-reply@wordler.xyz>',
     to: user.email
   })
 }

@@ -26,7 +26,7 @@ export const withLogging = (handler: NextApiHandler) => {
       const user = {
         id: getUserIdFromRequest(req)
       }
-      const errorDetails = {
+      const errorExtra = {
         ...req,
         requestId,
         user
@@ -35,13 +35,13 @@ export const withLogging = (handler: NextApiHandler) => {
       if (error instanceof Error) {
         logger.error({
           ...error,
-          ...errorDetails
+          ...errorExtra
         }, `${error.name}: ${error.message}`)
-        rollbar.error(error, errorDetails)
+        rollbar.error(error, errorExtra)
         throw error
       } else {
-        logger.error(errorDetails, `Unknown error: ${error}`)
-        rollbar.error('Unknown error', errorDetails)
+        logger.error(errorExtra, `Unknown error: ${error}`)
+        rollbar.error('Unknown error', errorExtra)
         throw error
       }
     }

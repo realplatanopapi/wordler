@@ -1,3 +1,4 @@
+import { withLogging } from "@server/api/middleware/with-logging";
 import { ErrorWithCode } from "@server/errors";
 import { getById } from "@server/lib/accounts";
 import { authenticateWithToken } from "@server/lib/auth";
@@ -47,4 +48,4 @@ const handler: NextApiHandler = async (req, res) => {
   res.redirect('/')
 }
 
-export default withIronSessionApiRoute(handler, cookieConfig)
+export default withLogging(withIronSessionApiRoute(handler, cookieConfig))

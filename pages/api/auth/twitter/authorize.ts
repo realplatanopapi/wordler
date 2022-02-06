@@ -1,3 +1,4 @@
+import { withLogging } from '@server/api/middleware/with-logging'
 import config from '@server/config'
 import { cookieConfig } from '@server/lib/sessions'
 import cryptoRandomString from 'crypto-random-string'
@@ -35,4 +36,4 @@ const handler: NextApiHandler = async (req, res) => {
   )
 }
 
-export default withIronSessionApiRoute(handler, cookieConfig)
+export default withLogging(withIronSessionApiRoute(handler, cookieConfig))

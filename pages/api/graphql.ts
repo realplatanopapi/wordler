@@ -6,6 +6,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { cookieConfig } from '@server/lib/sessions'
 import { ErrorWithCode } from '@server/errors'
+import { withLogging } from '@server/api/middleware/with-logging'
 
 export const config = {
   api: {
@@ -59,4 +60,4 @@ const handler: NextApiHandler = async (req, res) => {
   return graphqlHandler(req, res)
 }
 
-export default handler
+export default withLogging(handler)

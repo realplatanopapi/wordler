@@ -7,6 +7,7 @@ import config from '@server/config'
 import { unsealData } from 'iron-session'
 import { TwitterStateData } from './types'
 import twitter from '@server/services/twitter'
+import { withLogging } from '@server/api/middleware/with-logging'
 
 const handler: NextApiHandler = async (req, res) => {
   const { code, state } = req.query
@@ -51,4 +52,4 @@ const handler: NextApiHandler = async (req, res) => {
   }
 }
 
-export default withIronSessionApiRoute(handler, cookieConfig)
+export default withLogging(withIronSessionApiRoute(handler, cookieConfig))

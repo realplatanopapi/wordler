@@ -6,6 +6,7 @@ if (!global.rollbar) {
     accessToken: config.get('rollbarToken'),
     captureUncaught: true,
     captureUnhandledRejections: true,
+    nodeSourceMaps: true,
   })
 }
 

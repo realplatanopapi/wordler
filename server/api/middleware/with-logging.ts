@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 import { NextApiHandler } from "next";
 import { IncomingHttpHeaders } from "http";
 import { OutgoingHttpHeaders } from "http2";
+import rollbar from '@server/services/rollbar';
 
 export const withLogging = (handler: NextApiHandler) => {
   const handlerWithLogging: NextApiHandler = async (req, res) => {    
@@ -19,7 +20,20 @@ export const withLogging = (handler: NextApiHandler) => {
     logger.info(requestInfo, 'Request received')
 
     const requestStartTime = Date.now()
-    await handler(req, res)
+    try {
+      await handler(req, res)
+    } catch (error) {
+      logger.error(error)
+
+      if (error instanceof Error) {
+        rollbar.error(error, req)
+        throw error
+      } else {
+        rollbar.error('An unknown error ocurred', req)
+        throw error
+      }
+    }
+
     const requestFinishTime = Date.now()
 
     const durationInMs = (requestFinishTime - requestStartTime)

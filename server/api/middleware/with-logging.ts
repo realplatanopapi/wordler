@@ -1,7 +1,7 @@
 import logger from "@server/logger";
 import {pick} from 'lodash';
 import { randomUUID } from "crypto";
-import { NextApiHandler } from "next";
+import { NextApiHandler, NextApiRequest } from "next";
 import { IncomingHttpHeaders } from "http";
 import { OutgoingHttpHeaders } from "http2";
 import rollbar from '@server/services/rollbar';
@@ -25,11 +25,19 @@ export const withLogging = (handler: NextApiHandler) => {
     } catch (error) {
       logger.error(error)
 
+      const user = {
+        id: getUserIdFromRequest(req)
+      }
+      const errorDetails = {
+        ...req,
+        user
+      }
+
       if (error instanceof Error) {
-        rollbar.error(error, req)
+        rollbar.error(error, errorDetails)
         throw error
       } else {
-        rollbar.error('An unknown error ocurred', req)
+        rollbar.error('An unknown error ocurred', errorDetails)
         throw error
       }
     }
@@ -42,7 +50,8 @@ export const withLogging = (handler: NextApiHandler) => {
       ...requestInfo,
       status: res.statusCode,
       durationInMs,
-      responseHeaders: getHeadersToLog(res.getHeaders())
+      responseHeaders: getHeadersToLog(res.getHeaders()),
+      userId: getUserIdFromRequest(req),
     }, 'Request handled')
   }
 
@@ -51,4 +60,8 @@ export const withLogging = (handler: NextApiHandler) => {
 
 const getHeadersToLog = (headers: IncomingHttpHeaders | OutgoingHttpHeaders) => {
   return pick(headers, 'referrer', 'content-length', 'content-type', 'user-agent', 'x-forwarded-for')
+}
+
+const getUserIdFromRequest = (req: NextApiRequest): string | null => {
+  return req.session?.userId || null
 }

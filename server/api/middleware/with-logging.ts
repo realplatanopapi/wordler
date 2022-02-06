@@ -28,6 +28,7 @@ export const withLogging = (handler: NextApiHandler) => {
       }
       const errorExtra = {
         ...req,
+        headers: getHeadersToLog(req.headers),
         requestId,
         user
       }

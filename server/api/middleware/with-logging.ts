@@ -6,7 +6,7 @@ import { IncomingHttpHeaders } from "http";
 import { OutgoingHttpHeaders } from "http2";
 
 export const withLogging = (handler: NextApiHandler) => {
-  const handlerWithLogging: NextApiHandler = async (req, res) => {
+  const handlerWithLogging: NextApiHandler = async (req, res) => {    
     const requestId = randomUUID()
     const requestInfo = {
       requestId,

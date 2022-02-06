@@ -8,6 +8,7 @@ const config = convict<{
   }
   databaseUrl: string
   env: 'production' | 'development'
+  rollbarToken: string,
   sendgridApiKey: string,
   twitter: {
     apiKey: string
@@ -43,6 +44,11 @@ const config = convict<{
   env: {
     format: ['production', 'development'],
     env: 'NODE_ENV',
+    default: null,
+  },
+  rollbarToken: {
+    format: String,
+    env: 'ROLLBAR_TOKEN',
     default: null,
   },
   sendgridApiKey: {

@@ -1,5 +1,6 @@
 import { PrismaClient, User } from '@prisma/client';
 import { IronSessionData } from 'iron-session'
+import Rollbar from 'rollbar';
 
 declare module 'iron-session' {
   interface IronSessionData {
@@ -10,4 +11,5 @@ declare module 'iron-session' {
 
 declare global {
   var prismaClient: PrismaClient | undefined
+  var rollbar: Rollbar | undefined
 }

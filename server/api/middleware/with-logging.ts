@@ -40,7 +40,7 @@ export const withLogging = (handler: NextApiHandler) => {
         rollbar.error(error, errorDetails)
         throw error
       } else {
-        logger.error(errorDetails, 'Unknown error')
+        logger.error(errorDetails, `Unknown error: ${error}`)
         rollbar.error('Unknown error', errorDetails)
         throw error
       }

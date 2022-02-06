@@ -23,27 +23,30 @@ export const withLogging = (handler: NextApiHandler) => {
     try {
       await handler(req, res)
     } catch (error) {
-      logger.error(error)
-
       const user = {
         id: getUserIdFromRequest(req)
       }
       const errorDetails = {
         ...req,
+        requestId,
         user
       }
 
       if (error instanceof Error) {
+        logger.error({
+          ...error,
+          ...errorDetails
+        }, `${error.name}: ${error.message}`)
         rollbar.error(error, errorDetails)
         throw error
       } else {
-        rollbar.error('An unknown error ocurred', errorDetails)
+        logger.error(errorDetails, 'Unknown error')
+        rollbar.error('Unknown error', errorDetails)
         throw error
       }
     }
 
     const requestFinishTime = Date.now()
-
     const durationInMs = (requestFinishTime - requestStartTime)
 
     logger.info({

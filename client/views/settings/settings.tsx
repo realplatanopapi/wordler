@@ -14,6 +14,9 @@ const Settings: React.FC<Props> = ({user}) => {
       <Box mb={3}>
         <Link href="/settings/profile">Profile</Link>
       </Box>
+      <Box mb={3}>
+        <Link href="/settings/groups">Groups</Link>
+      </Box>
       <Section sx={{
         mt: 5
       }}>

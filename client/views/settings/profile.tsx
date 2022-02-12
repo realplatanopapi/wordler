@@ -20,6 +20,7 @@ const Profile: React.FC<Props> = ({user}) => {
     }
   })
   const [displayName, setDisplayName] = useState(user.displayName || '')
+  const didNameChange = displayName !== user.displayName 
 
   return (
     <Box>
@@ -45,7 +46,7 @@ const Profile: React.FC<Props> = ({user}) => {
         <Input name="displayName" placeholder="avidWordler45" mb={3} value={displayName} onChange={(event) => {
           setDisplayName(event.target.value)
         }} required />
-        <Button type="submit" disabled={updateDisplayNameResult.loading}>Save</Button>
+        <Button type="submit" disabled={updateDisplayNameResult.loading || !didNameChange}>Save</Button>
       </form>
     </Box>
   )

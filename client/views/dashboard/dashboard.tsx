@@ -160,16 +160,6 @@ const Dashboard: React.FC<Props> = ({ user }) => {
       ) : (
         'Loading your groups...'
       )}
-      <Section>
-        <Text as="p" mb={2}>
-          Signed in as {user.displayName}
-        </Text>
-        <Text as="p">
-          <Link isExternal href="/api/auth/log-out">
-            Sign out
-          </Link>
-        </Text>
-      </Section>
     </>
   )
 }

@@ -15,7 +15,6 @@ import { useMemo } from 'react'
 import { Group, WordleResult } from '@client/api'
 import { formatInTimeZone } from 'date-fns-tz'
 import { Section } from '@client/layouts/page'
-import Groups from '@client/views/dashboard/groups'
 import Link from '@client/components/link'
 import { startOfWeek } from 'date-fns'
 import Submissions from './submissions'
@@ -148,28 +147,6 @@ const Dashboard: React.FC<Props> = ({ user }) => {
           'Loading submissions...'
         )
       }
-      {groups ? (
-        <Section heading="Your groups">
-          <Groups
-            groups={groups}
-            onStartGroup={() => {
-              groupsQuery.refetch()
-            }}
-          />
-        </Section>
-      ) : (
-        'Loading your groups...'
-      )}
-      <Section>
-        <Text as="p" mb={2}>
-          Signed in as {user.displayName}
-        </Text>
-        <Text as="p">
-          <Link isExternal href="/api/auth/log-out">
-            Sign out
-          </Link>
-        </Text>
-      </Section>
     </>
   )
 }

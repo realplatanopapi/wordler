@@ -1,7 +1,7 @@
 import { Group } from '@client/api'
 import ClipboardCopy from '@client/components/clipboard-copy'
 import Link from '@client/components/link'
-import StartGroupForm from '@client/views/dashboard/start-group-form'
+import StartGroupForm from '@client/views/settings/start-group-form'
 import { useUpdateDisplayNameMutation } from '@client/__gql__/api'
 import { UserFromSsr } from '@common/sessions'
 import { useState } from 'react'

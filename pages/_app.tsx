@@ -9,6 +9,7 @@ import Navigation from '@client/views/navigation'
 import '@client/base.css'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import ToastContainer from '@client/components/toast-container'
 
 function Worlder({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -16,16 +17,17 @@ function Worlder({ Component, pageProps }: AppProps) {
 
   return (
     <>
-    <Head>
-      <title>Wordler</title>
-    </Head>
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <Page header={<Navigation errorCode={errorCode} />}>
-          <Component {...pageProps} />
-        </Page>
-      </ThemeProvider>
-    </ApolloProvider>
+      <Head>
+        <title>Wordler</title>
+      </Head>
+      <ApolloProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <Page header={<Navigation errorCode={errorCode} />}>
+            <Component {...pageProps} />
+          </Page>
+        </ThemeProvider>
+      </ApolloProvider>
+      <ToastContainer />
     </>
   )
 }

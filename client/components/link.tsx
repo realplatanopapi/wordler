@@ -1,13 +1,14 @@
 import NextLink, { LinkProps as NextLinkProps } from 'next/link'
-import { Link as A, LinkProps as AProps } from 'theme-ui'
+import { Link as A, LinkProps as AProps, ThemeUIStyleObject } from 'theme-ui'
 
 type BaseProps = NextLinkProps & Omit<AProps, 'href'>
 
-interface Props extends BaseProps {
+export interface LinkProps extends BaseProps {
   isExternal?: boolean
+  sx?: ThemeUIStyleObject
 }
 
-const Link: React.FC<Props> = (props) => {
+const Link: React.FC<LinkProps> = (props) => {
   const { href, passHref, isExternal, ...aProps } = props
 
   const link = <A href={href.toString()} {...aProps} />

@@ -2,6 +2,7 @@ import { Group } from '@client/api'
 import ErrorCodeMessage from '@client/components/error-code-message'
 import { getGraphqlErrorCode } from '@client/utils'
 import { useStartGroupMutation } from '@client/__gql__/api'
+import { toast } from 'react-toastify'
 import { Button, Input } from 'theme-ui'
 
 interface Props {
@@ -13,6 +14,9 @@ const StartGroupForm: React.FC<Props> = ({ onSubmit }) => {
     onCompleted: (data) => {
       const { startGroup: group } = data
       if (group) {
+        toast.success('Group started!', {
+          toastId: 'groupStarted'
+        })
         onSubmit(group)
       }
     },
